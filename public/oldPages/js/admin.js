@@ -273,6 +273,7 @@ var baseReportObj = {
 
 var admin = {
     init : function(pageId, obj) {
+        /** yang **/
         if (!admin.hasAdminAccess()) {
             admin.disablePage();
             return false;
@@ -302,8 +303,9 @@ var admin = {
         return typeof biscuit.k() != 'undefined';
     },
     disablePage : function() {
-        $("input[type=button]").attr("disabled", "disabled");
-        $(":input").attr("disabled","disabled");
+        // yang
+        // $("input[type=button]").attr("disabled", "disabled");
+        // $(":input").attr("disabled","disabled");
     },
     initPage : function() {
         $(document).on('pagecreate', "#printingSetupPage", function() {

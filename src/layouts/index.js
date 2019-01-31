@@ -14,7 +14,9 @@ class App extends React.Component {
   };
 
   linkTo(page,parent) {
-    document.getElementById("mainFrame").src = "./oldPages/" + page.url;
+    if (document.getElementById("mainFrame").src.indexOf(page.url)<0){
+      document.getElementById("mainFrame").src = "./oldPages/" + page.url;
+    }
     this.setState({
       breadcrumb: [parent,page.c_name]
     })

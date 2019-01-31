@@ -5510,6 +5510,8 @@ html .ui-popup .ui-field-contain>label+.ui-flipswitch {
 }
 
 body,
-.ui-overlay-a {
+.ui-overlay-a,
+.ui-page-theme-a,
+.ui-page-theme-a .ui-panel-wrapp .ui-overlay-a {
     background: none
 }

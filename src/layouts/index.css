@@ -24,7 +24,7 @@
 }
 
 .iframeCon {
-    padding: 24px;
+    padding: 0;
     background: #fff;
     height: calc(100vh - 68px);
 }
