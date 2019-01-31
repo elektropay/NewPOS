@@ -1,0 +1,63 @@
+#totals-report-print-preview-modal-content {
+    width: 700px;
+}
+
+.total-report-wrap {
+    width: 300px;
+    height: 600px;
+    padding: 2px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#totals-report-print-preview-frame {
+    width: 100%;
+    height: 100%;
+    padding-right: 10px;
+    transform: scale(1.25);
+
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+.report-wrap {
+    width: 370px;
+    height: 550px;
+    padding: 2px;
+    overflow: hidden;
+}
+
+#report-frame {
+    width: 370px;
+    height: 400px;
+    padding-right: 105px;
+    transform: scale(1.35);
+
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+
+    backface-visibility: hidden;
+}
+
+.totals-report-print-preview-buttonDivs {
+    margin-bottom: 5px;
+}
+
+.table-align-left, .table-align-left.ng-table th{
+    text-align: left;
+}
+
+.report-header{
+    font-size: 25px;
+}
+body.modal-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+}

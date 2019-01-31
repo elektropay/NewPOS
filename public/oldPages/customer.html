@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/jquery.fileDownload.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/giftCard.js"></script>
+</head>
+<body>
+<div id="customer-page" data-role="page" data-theme="a">
+    <div id="divCustomer" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+       <div class="ui-grid-c">
+            <div id="search-customer-input" class="ui-block-a" >
+                <div data-role="fieldcontain">
+                    <input id="searchCustomerInput" type="text" name="searchCustomerInput" value=""/>
+                </div>
+            </div>
+           <div id="search-customer-birthday-from" class="ui-block-b" >
+               <div data-role="fieldcontain">
+                   <label id="label-birthdayFromInput" for="birthdayFromInput" class="detail-input-birthdayFrom">From(mm-dd)</label>
+                   <input id="birthdayFromInput" type="text" name="birthdayFromInput" value=""/>
+               </div>
+           </div>
+           <div id="search-customer-birthday-to" class="ui-block-c" >
+               <div data-role="fieldcontain">
+                   <label id="label-birthdayToInput" for="birthdayToInput" class="detail-input-birthdayTo">To(mm-dd)</label>
+                   <input id="birthdayToInput" type="text" name="birthdayToInput" value=""/>
+               </div>
+           </div>
+            <div id="search-customer-btn" class="ui-block-d" >
+                <button type="submit" class="btn-search-result" onclick="customerObj.fetchEntry();" data-theme="b">Search</button>
+            </div>
+        </div>
+        <div class="myPlusIconDiv">
+            <div class="ui-grid-a">
+                <div class="ui-block-a">
+                    <div class="ui-grid-a">
+                        <div id="export-customer-data-div" class="ui-block-a">
+                            <div ><button type="submit" id="btn-export-customer-data" class="btn-export-result" onclick="customerObj.prepareExportData();" data-theme="a">Export Customer Data</button></div>
+                        </div>
+                        <div id="sync-customer-data-div" class="ui-block-b">
+                            <div><button type="submit" id="btn-sync-customer-data" onclick="customerObj.syncCustomerData();" data-theme="a">Sync Customer Data</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <input type="image" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="customerObj.newEntry();" title="Add"/>
+                </div>
+            </div>
+        </div>
+        <div>
+                <table id="customerTable" class="detailTable">
+                    <thead>
+                    <tr>
+                        <th class="detail-input-firstName td-firstName">First Name</th>
+                        <th class="detail-input-lastName td-lastName">Last Name</th>
+                        <th class="detail-input-phone td-phone">Phone</th>
+                        <th class="detail-input-address td-address">Address</th>
+                        <th class="detail-input-email td-email">Email</th>
+                        <th class="delete-icon-td"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+        </div>
+        <div data-role="popup" id="editCustomerDetailPopup" data-overlay-theme="a" data-theme="a" data-dismissible="true" data-transition="flow" class="ui-corner-all editDetailPopup">
+            <div data-role="header" data-theme="a" class="ui-corner-top">
+                <h1 id="editCustomerDetailPopup-header">Customer Detail</h1>
+            </div>
+            <p id="error-message" style="color:red;text-align:center;" hidden>Invalid Input! Please input first name or last name or phone number or email address.</p>
+            <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                <div class="ui-grid-b">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-firstNameInput" for="firstNameInput" class="detail-input-firstName">First Name</label>
+                            <input id="firstNameInput" type="text" name="firstNameInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-lastNameInput" for="lastNameInput" class="detail-input-lastName">Last Name</label>
+                            <input id="lastNameInput" type="text" name="lastNameInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-c" >
+                        <div data-role="fieldcontain">
+                            <label id="label-prefixInput" for="prefixInput" class="detail-input-prefix">Prefix</label>
+                            <input id="prefixInput" type="text" name="prefixInput" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-address1Input" for="address1Input" class="detail-input-address1">Address 1</label>
+                            <input id="address1Input" type="text" name="address1Input" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-address2Input" for="address2Input" class="detail-input-address2">Address 2</label>
+                            <input id="address2Input" type="text" name="address2Input" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid-b">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-cityInput" for="cityInput" class="detail-input-city">City</label>
+                            <input id="cityInput" type="text" name="cityInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-stateInput" for="stateInput" class="detail-input-state">State</label>
+                            <input id="stateInput" type="text" name="emailInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-c" >
+                        <div data-role="fieldcontain">
+                            <label id="label-zipcodeInput" for="zipcodeInput" class="detail-input-zipcode">ZIP code</label>
+                            <input id="zipcodeInput" type="text" name="zipcodeInput" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid-b">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-phoneInput" for="phoneInput" class="detail-input-phone">Phone</label>
+                            <input id="phoneInput" type="text" name="phoneInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-emailInput" for="emailInput" class="detail-input-email">Email</label>
+                            <input id="emailInput" type="text" name="emailInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-c" >
+                        <div data-role="fieldcontain">
+                            <label id="label-birthdayInput" for="birthdayInput" class="detail-input-birthday">Birthday</label>
+                            <input id="birthdayInput" type="date" name="birthdayInput" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid-b">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-facebookInput" for="facebookInput" class="detail-input-facebook">Facebook</label>
+                            <input id="facebookInput" type="text" name="facebookInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-wechatInput" for="wechatInput" class="detail-input-wechat">Wechat</label>
+                            <input id="wechatInput" type="text" name="wechatInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-c" >
+                        <div data-role="fieldcontain">
+                            <label id="label-twitterInput" for="twitterInput" class="detail-input-twitter">Twitter</label>
+                            <input id="twitterInput" type="text" name="twitterInput" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div data-role="fieldcontain">
+                    <label id="label-descriptionInput" for="descriptionInput" class="detail-input-description">Description</label>
+                    <textarea id="descriptionInput" name="descriptionInput" value=""></textarea>
+                </div>
+
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <div class="my-button-div"><button type="submit" class="btn-save" onclick="customerObj.save();" data-theme="b">Save</button></div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div class="my-button-div"><button type="submit" class="btn-cancel" onclick="customerObj.refreshWithoutChanges();" data-theme="a">Cancel</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="popup" id="exportConfirmationPopup" data-overlay-theme="a" data-theme="a" data-dismissible="false" class="ui-corner-all editDetailPopup">
+            <div data-role="header" data-theme="a" class="ui-corner-top">
+                <h1 id="exportConfirmationPopup-header">Export Options</h1>
+            </div>
+            <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                <form id="exportCustomerData" method="post" action="/kpos/webapp/data/export/customer" data-ajax="false">
+                    <input type="hidden" id="query" name="query"/>
+                    <input type="hidden" id="birthdayFromDate" name="birthdayFromDate"/>
+                    <input type="hidden" id="birthdayToDate" name="birthdayToDate"/>
+                    <input type="hidden" id="emailAddressOnly" name="emailAddressOnly"/>
+                    <div class="ui-field-contain">
+                        <label id="label-emailAddressOnly" for="emailAddressOnlyCheckBox">Export Email Only</label>
+                        <input type="checkbox" id="emailAddressOnlyCheckBox" name="emailAddressOnlyCheckBox"/>
+                    </div>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div class="my-button-div"><button type="submit" class="btn-confirm" data-theme="b">Confirm</button></div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="my-button-div"><button type="button" class="btn-cancel" onclick="customerObj.cancelExportData();" data-theme="a">Cancel</button></div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div data-role="popup" id="exportCustomerDataPopup" data-overlay-theme="a" data-theme="a" data-dismissible="false" class="ui-corner-all">
+            <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+                <h1 id="exportCustomerDataPopupContent" class="ui-title">Exporting customer data, please wait...</h1>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

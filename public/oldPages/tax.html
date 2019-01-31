@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/tax.js"></script>
+</head>
+<body>
+<div id="taxPage" data-role="page" data-theme="a">
+
+    <div id="taxPageMainDiv" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="taxSelectLayoutDiv">
+                <div id="taxSelectContentDiv" class="my-select-menu">
+                    <table class="tableone">
+                        <caption id="table-caption-tax">Taxes</caption>
+                        <thead>
+                        <tr>
+                            <th class="th1" scope="col"></th>
+                            <th class="th2" scope="col"><br>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:tax.newEntry();">New</button></div>
+                            </td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="innerb">
+                                    <table id="tax" class="tabletwo">
+                                    </table>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-block-b my-div-width">
+                <div id="taxDetailContentDiv" class="my-detail-panel">
+                    <input id="curTaxId" type="hidden">
+                    <div data-role="fieldcontain">
+                        <label id="label-taxName" for="taxName" class="detail-input-name">Name</label>
+                        <input id="taxName" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-taxRate" for="taxRate">Rate</label>
+                        <input id="taxRate" readonly="readonly" value="" type="text"/>
+                    </div>
+
+                    <div data-role="fieldcontain" id="taxIncreseDropdownDiv">
+                        <label id="label-taxIncrese" for="taxIncreases">Tax Increse</label>
+                        <select name="taxIncrease" id="taxIncreases" class="styled-select" onchange="tax.changeTaxIncrease();">
+                            <option id="select-taxIncrese-option-default" value="DEFAULT">Default</option>
+                            <option id="select-taxIncrese-option-on-price-limit" value="ON_PRICE_LIMIT">On price limit</option>
+                        </select>
+                    </div>
+
+                    <div data-role="fieldcontain"  id="chargePriceLimitTDiv" class="hidden" >
+                        <label id="label-priceLimit" for="priceLimit" class="detail-input-priceLimit">Price Limit</label>
+                        <input id="priceLimit"  readonly="readonly" value=""  type="text"/>
+                    </div>
+
+                    <div data-role="fieldcontain"  id="chargeTaxIncreaseNameDiv" class="hidden">
+                        <label id="label-taxIncreaseName" for="taxIncreaseName" class="detail-input-taxIncreaseName">Tax Increase Name</label>
+                        <input id="taxIncreaseName"  readonly="readonly" value=""  type="text" />
+                    </div>
+
+                    <div data-role="fieldcontain" id="chargeTaxIncreaseRateDiv" class="hidden">
+                        <label id="label-TaxIncreaseRate" for="taxIncreaseRate" class="detail-input-TaxIncreaseRate">Tax Increase Rate</label>
+                        <input id="taxIncreaseRate"  readonly="readonly" value=""  type="text"/>
+                    </div>
+
+                    <div data-role="fieldcontain">
+                        <label id="label-taxFileNumber" for="taxFileNumber">Tax File Number</label>
+                        <input id="taxFileNumber" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-taxDescription" for="taxDescription" class="detail-input-description">Description</label>
+                        <textarea id="taxDescription" rows="3" cols="45" readonly="readonly" value="" style="height:51px;"></textarea>
+                    </div>
+                    <div class="my-top-margin-button-div">
+                        <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:tax.saveElement();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

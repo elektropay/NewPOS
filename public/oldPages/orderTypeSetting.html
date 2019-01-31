@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/orderTypeSetting.js"></script>
+</head>
+<body>
+<div id="orderTypeSettingPage" data-role="page" data-theme="a">
+
+    <div id="orderTypeSettingPageMainDiv" data-theme="a" data-role="content" role="main">
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="orderTypeSettingSelectLayoutDiv">
+                <div id="orderTypeSettingSelectContentDiv" class="my-select-menu">
+                    <table class="tableone">
+                        <caption id="table-caption-orderTypeSetting">Order Type</caption>
+                        <thead>
+                        <tr>
+                            <th class="th1" scope="col"></th>
+                            <th class="th2" scope="col"><br>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="innerb">
+                                    <table id="orderTypeSetting" class="tabletwo">
+                                    </table>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-block-b my-div-width">
+                <div id="orderTypeSettingDetailContentDiv" class="my-detail-panel">
+                    <input id="curOrderTypeSettingId" type="hidden">
+                    <input id="curOrderTypeSettingType" type="hidden">
+                    <div data-role="fieldcontain">
+                        <label id="label-displayName" for="displayName" class="detail-input-name">Display Name</label>
+                        <input id="displayName" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-shortName" for="shortName" class="detail-input-short-name">Short Name</label>
+                        <input id="shortName" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-orderType" for="orderType" class="detail-input-type">Type</label>
+                        <select id="orderType">
+                            <option value=""></option>
+                            <option value="DINE_IN">Dine In</option>
+                            <option value="TOGO">To Go</option>
+                            <option value="DELIVERY">Delivery</option>
+                            <option value="PICKUP">Pickup</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain" id="defaultArea-div" style="display:none;">
+                        <label id="label-defaultArea" for="defaultArea">Default Area</label>
+                        <select id="defaultArea">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="my-top-margin-button-div">
+                        <button id="btnSave" class="btn-save" type="button" onclick="orderTypeSetting.saveElement();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

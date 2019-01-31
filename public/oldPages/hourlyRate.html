@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery-ui-1.10.3.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/hourlyRate.js"></script>
+</head>
+<body>
+<div id="hourlyRatePage" data-role="page" data-theme="a">
+
+    <div id="hourlyRatePageMainDiv" data-theme="a" data-role="content" role="main">
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="hourlyRateSelectLayoutDiv">
+                <div id="hourlyRateSelectContentDiv" class="my-select-menu">
+                    <table class="tableone">
+                        <caption id="table-caption-hourlyRate">Choose Item</caption>
+                        <thead>
+                        <tr>
+                            <th class="th1" scope="col"></th>
+                            <th class="th2" scope="col"><br></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="innerb">
+                                    <table id="hourlyRateTable" class="tabletwo">
+                                    </table>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-block-b my-div-width">
+                <div data-role="navbar" class="text-center">
+                    <h2><div id="hourlyRateDetailContentDiv-add-header">Fare Information Details</div></h2>
+                </div>
+                <div id="hourlyRateDetailContentDiv" class="my-detail-panel">
+                    <div id="hourly-rate-rule-detail" class="ui-grid-d">
+                        <input id="curHourlyRateEntryId" type="hidden">
+                        <input id="curSaleItemId" type="hidden">
+                        <div class="ui-block-a" id="hourly-rate-rule-detail-show-panel" style="width: 45%;overflow-y: auto;max-height: 600px;"></div>
+                        <div class="ui-block-b border-left" id="hourly-rate-rule-detail-edit-panel" style="width: 55%;">
+                            <div>
+                                <label id="label-from" for="from">During This Time Period:</label>
+                                <div class="ui-block-a" data-mini="true">
+                                    <input id="from" readonly="readonly" value="" type="number" step="1" min="0"/>
+                                </div>
+                                <div class="ui-block-b">
+                                    <p>&nbsp;<span class="minute">min</span>&nbsp;&nbsp;~&nbsp;&nbsp;</p>
+                                </div>
+                                <div class="ui-block-c" data-mini="true">
+                                    <input id="to" readonly="readonly" value="" type="number" step="1" min="0"/>
+                                </div>
+                                <div class="ui-block-d">
+                                    <p>&nbsp;<span class="minute">min</span></p>
+                                </div>
+                            </div>
+
+                            <div class="margin-top-13" style="clear:both;">
+                                <label id="label-fixPrice" for="fixPrice">Apply Fixed Price:</label>
+                                <div class="ui-block-a">
+                                    <p>$&nbsp;&nbsp;</p>
+                                </div>
+                                <div class="ui-block-b">
+                                    <input id="fixPrice" readonly="readonly" value="" type="number" step="1" min="0"/>
+                                </div>
+                            </div>
+
+                            <div class="ui-grid-a" style="clear:both;">
+                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="pricingRule-or">Or</span></b></p>
+                            </div>
+                            <div style="clear:both;">
+                                <label id="label-price" for="price">Apply Time Charge:</label>
+                                <div class="ui-block-a">
+                                    <p>$&nbsp;&nbsp;</p>
+                                </div>
+                                <div class="ui-block-b" data-mini="true">
+                                    <input id="price" readonly="readonly" value="" type="number" step="1" min="0"/>
+                                </div>
+                                <div class="ui-block-c">
+                                    <p>&nbsp;&nbsp;<span class="per">Per</span>&nbsp;&nbsp;</p>
+                                </div>
+                                <div class="ui-block-d" data-mini="true">
+                                    <input id="step" readonly="readonly" value="" type="number" step="1" min="0"/>
+                                </div>
+                                <div class="ui-block-e">
+                                    <p>&nbsp;<span class="minute">min</span></p>
+                                </div>
+                            </div>
+
+                            <div class="ui-grid-a" style="clear:both;margin-top:15%;">
+                                <button data-theme="a" id="btnSaveHourlyRate" class="btn-save" type="button" onclick="javascript:hourlyRate.saveElement();">Save</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

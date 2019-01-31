@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Menusifu POS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+
+</head>
+<body>
+<div id="partnerIntegrationPage" class="container-fluid">
+    <div class="row" style="margin:50px 50px 50px 50px">
+        <div class="col-xs-4 col-sm-4 col-md-4">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading"><strong id="partner-integration-panel-header">Partner Integrations</strong></div>
+
+                <div class="list-group" id="partner-integration-list">
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8">
+            <div id="partner-integration-detail" hidden>
+                <div class="panel panel-primary">
+                    <div class="panel-body"><font size="4"><strong id="partner-integration-enable">Enable Service</strong></font>
+                        <label class="switch" >
+                            <input type="checkbox" class="primary" id="enable-service" onclick="partnerIntegrationObj.enableService()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="partner-key-password" hidden>
+                    <div class="form-group row">
+                        <label for="api-key-input" class="col-xs-3 col-sm-3 col-md-3"><h4 id="partner-api-key-label">API Key</h4></label>
+                        <div class="col-xs-9 col-sm-9 col-md-9">
+                            <input class="form-control input-lg" type="text" id="api-key-input">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="login-form" hidden>
+                    <fieldset>
+                        <h3 id="partner-login-header">Please Sign In</h3>
+                        <hr class="colorgraph">
+                        <div class="form-group">
+                            <input name="userName" id="userName" class="form-control input-lg" placeholder="User Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+                        </div>
+                        <hr class="colorgraph">
+
+                        <button id="partner-login-btn" type="button" class="btn btn-lg btn-primary btn-block" onclick="partnerIntegrationObj.authentication()">Sign In</button>
+                    </fieldset>
+                </div>
+
+                <div id="partner-detail" hidden>
+                    <div class="form-group row">
+                        <label for="location-list" class="control-label col-xs-3 col-sm-3 col-md-3"><h4 id="partner-location-label">Location</h4></label>
+                        <div class="col-xs-9 col-sm-9 col-md-9">
+                            <select class="form-control input-lg" id="location-list">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="partner-save-btn" type="button" class="btn btn-lg btn-primary btn-block btn-save" onclick="partnerIntegrationObj.update()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="error-msg-modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="partner-warning-alert" class="modal-title">Warning!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="error-msg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/biscuitf.min.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/partnerIntegration.js"></script>
+    <script src="js/systemLanguage.js"></script>
+
+</div>
+</body>
+</html>

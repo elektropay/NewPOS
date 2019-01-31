@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/charge.js"></script>
+</head>
+<body>
+<div id="chargePage" data-role="page" data-theme="a">
+
+    <div id="chargePageMainDiv" data-theme="a" data-role="content" role="main">
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="chargeSelectLayoutDiv">
+                <div id="chargeSelectContentDiv" class="my-select-menu">
+                    <table class="tableone">
+                        <caption id="table-caption-charge">Charges</caption>
+                        <thead>
+                        <tr>
+                            <th class="th1" scope="col"></th>
+                            <th class="th2" scope="col"><br></th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:charge.newEntry();">New</button></div>
+                            </td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="innerb">
+                                    <table id="chargesTable" class="tabletwo">
+                                    </table>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-block-b my-div-width">
+                <div id="chargeDetailContentDiv" class="my-detail-panel">
+                    <input id="curChargeId" type="hidden">
+                    <div data-role="fieldcontain">
+                        <label id="label-chargeName" for="chargeName" class="detail-input-name">Name</label>
+                        <input id="chargeName" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-chargeRate" for="chargeRate">Rate</label>
+                        <input id="chargeRate" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-chargeRateType" for="chargeRateType">Rate Type</label>
+                        <select name="chargeRateType" id="chargeRateType">
+                            <option value="1" class="detail-rate-type-option-amount">$ Dollar Amount</option>
+                            <option value="2" class="detail-rate-type-option-percentage">% Percentage</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain" id="chargeTypeDropdownDiv">
+                        <label id="label-chargeTypes" for="chargeTypes" class="detail-input-type">Type</label>
+                        <select name="chargeType" id="chargeTypes" class="styled-select" onchange="charge.changeChargeType();">
+                            <option id="select-chargeTypes-option-default" value="DEFAULT">Default</option>
+                            <option id="select-chargeTypes-option-service" value="SERVICE">Service</option>
+                            <option id="select-chargeTypes-option-delivery" value="DELIVERY">Delivery</option>
+                            <!--<option id="select-chargeTypes-option-online" value="ONLINE">Online</option> comment out for now till knowing how to use charge for online  -->
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain" id="chargeMinGuestDiv" class="hidden">
+                        <label id="label-chargeMinGuest" for="chargeMinGuest">Minimum Guest</label>
+                        <input id="chargeMinGuest" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain" id="chargeMinMileageDiv" class="hidden">
+                        <label id="label-chargeMinMileage" for="chargeMinMileage">Minimum Mileage</label>
+                        <input id="chargeMinMileage" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-chargeDescription" for="chargeDescription" class="detail-input-description">Description</label>
+                        <textarea id="chargeDescription" readonly="readonly" value="" style="height:51px;"></textarea>
+                    </div>
+                    <div class="my-top-margin-button-div">
+                        <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:charge.saveElement();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+	<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script src = "lib/jquery-1.8.0.min.js"></script>
+	<script src="js/mobiscroll-2.13.2.full.min.js"></script>
+	<link href="css/mobiscroll-2.13.2.full.min.css" rel="stylesheet" type="text/css">
+	<!--<script src = "http://192.168.1.62:22080/kpos/call/js/prefixfree.min.js"></script>-->
+	<script type="text/javascript" src="js/ObjTree.js"></script>
+	<link href="css/roboto.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/waitinglist.css">
+	<script type="text/javascript" src="js/waitinglist.js"></script>
+</head>
+<body id = 'body'>
+<div id = 'background_body'></div>
+<div id = 'content'>
+	<div id = 'c_waitingList_left'>
+		<div id = 'box'>
+			<span><img id = 'id_logo' alt=""/></span>
+		</div>
+		<div id = 'id_menusifu'>
+			<div id = 'id_logo_note'><B>Powered by Menusifu</B></div>
+			<div id = 'logo_box'><img id = 'id_menusifu_logo' src = 'img/menusifu-logo.png'></div>
+		</div>
+	</div>
+
+	<div id = 'c_waitingList_right'>
+		<div id = 'id_right_background'></div>
+		<div id = 'right_content'>
+			<div id = 'input_box'>
+				<div class = 'row'>
+					<button id = 'fullscreenBtn' class = 'btn'>Full Screen/全屏</button>
+				</div>
+				<div class = 'row'>
+					<label id = 'adultLabel'>
+						<input type='text' class = 'input_Unit' id = "c_waitingList_adultPartySize">
+						<span class = 'span_Before'>Adult Party Size/人数</span>
+						<span id = 'invalid_note1'> Please select your adult party size/请选择人数</span>
+					</label>
+					<label id = 'childLabel'>
+						<input type='text' class = 'input_Unit' id = "c_waitingList_childrentPartySize">
+						<span class = 'span_Before'>Children/小孩</span>
+					</label>
+				</div>
+				<div class = 'row' id ='asd'>
+					<label id = 'phoneLabel'>
+						<input type='tel'  class = 'input_Unit' id = "c_waitingList_phoneNumber">
+						<span class = 'span_Before'>Phone Number/电话号码</span>
+						<div id = 'nation_field'>
+							<img src = 'img/america.png' id = 'placeholder_nation' />
+							<img src = 'img/downarrow.png' id = 'listButton' />
+							<span id = 'areaCode'>+1 </span>
+						</div>
+						<span class = 'btn_clear'>&#x2715;</span>
+						<span id = 'invalid_note3'> Please enter a valid phone number/电话号码格式不合理 </span>
+					</label></div>
+				<div class = 'row'>
+					<label id ='nameLabel'>
+						<input type='text' class = 'input_Unit' padding-right = '30px' id = "c_waitingList_name">
+						<span class = 'span_Before'>Your Name/名字</span>
+						<span class = 'btn_clear'>&#x2715;</span>
+						<span id = 'invalid_note2'> Your name must have a letter/名字必须要有字母</span>
+					</label></div>
+				<div class = 'row'><label>
+					<input type='text' class = 'input_Unit' id = "c_waitingList_note">
+					<span class = 'span_Before'>Note/备注 <font size = '3px'>(allery, birthday, highchair etc./过敏食物,生日,高脚椅等)</font></span>
+					<span class = 'btn_clear'>&#x2715;</span>
+				</label></div>
+			</div>
+			<div id = 'status_sign'>
+				<center>
+					<button class = 'btn' id = 'btn_c_waitingList_submit'>GET IN LINE/排队</button>
+				</center>
+			</div>
+		</div>
+		<div id = 'succeedBoard' class = 'board'>
+			<div class = 'resultTop'>
+				<div id = 'showSuccess'>
+					<img class = 'resultImg' src = 'img/succeed.png'><br><br>
+					<span class = 'resultMsg'>SUCCESS!</span>
+					<div class="resultMsg">成功！</div>
+				</div>
+				<div id = 'showTablesAhead'>
+					<div id = 'tablesAhead'></div>
+					<span class = 'resultMsg'>parties before you now</span>
+					<div class="resultMsg">组等位排在您的前面</div>
+				</div>
+			</div>
+			<div class = 'BoardMiddle'>
+				<p>Hi <b id = 'registeredCustomer'></b> you are in line now!</p>
+				<p>We will message you when your table is ready.</p>
+				<p>Thank you for your patience!</p>
+				<p><b id = 'registeredCustomerChn'></b>您好，当您的餐桌准备妥当时，您将会收到我们的短息提示。</p>
+				<p>感谢您的耐心等待。</p>
+			</div>
+			<div id = 'waitBoardBottom' class = 'BoardBottom'>
+				<button class = 'btn' id = 'btn_finish'>FINISH<br/>完成</button>
+			</div>
+		</div>
+		<div id = 'failBoard' class = 'board'>
+			<div class = 'resultTop'>
+				<img class = 'resultImg' src = 'img/close.png'><br><br>
+				<span class = 'resultMsg'>Oops!</span>
+				<div class="resultMsg">失败！</div>
+			</div>
+			<div class = 'BoardMiddle'>
+				<p>Sorry,<b id = 'unregisteredCustomer'></b> it looks like you cannot get in line</p>
+				<p>Please try again or ask for help!</p>
+				<p>对不起，由于系统原因您现在不能排上队，请重试或者寻求工作人员的帮助。</p>
+			</div>
+			<div id = 'failBoardBottom' class = 'BoardBottom'>
+				<button class = 'btn' id = 'btn_tryAgain'>TRY AGAIN<br/>重试</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div id = 'choose_background'></div>
+<div id = 'nation'>
+	<div id = 'option_america' class = 'nation_flag'>
+		<img src = 'img/america.png'>
+		<span>United State</span>
+		<span id = 'america_chosen' class = 'check'>&#x2713;</span>
+	</div>
+	<div id = 'option_china' class = 'nation_flag'>
+		<img src = 'img/china.jpg'>
+		<span>China</span>
+		<span id = 'china_chosen' class = 'check'>&#x2713;</span>
+	</div>
+</div>
+</body>
+</html>

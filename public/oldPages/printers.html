@@ -1,0 +1,704 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/device.js"></script>
+</head>
+<body>
+<div id="printers-page" data-role="page" data-theme="a">
+    <div id="deviceMainDiv" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="deviceTabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-mainPrinterTab" href="#mainPrinterTab">Printers & Displays</a></li>
+                    <li><a id="navbar-cashDrawerTab" href="#cashDrawerTab">Cash Drawers</a></li>
+                    <li><a id="navbar-appDeviceConfigTab" href="#appDeviceConfigTab">App Device Configuration</a></li>
+                    <li><a id="navbar-defaultDeviceTab" href="#defaultDeviceTab">Default Device</a></li>
+                    <li><a id="navbar-otherDeviceTab" href="#otherDeviceTab">Other</a></li>
+                </ul>
+            </div>
+
+            <div id="mainPrinterTab">
+
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="printerSelectLayoutDiv">
+                        <div id="printerSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-printer">Printers & Display</caption>
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="detail-input-name">Name</th>
+                                    <th scope="col" class="detail-input-printer">Printer & Display</th>
+                                    <!--<th scope="col"><br></th>-->
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:printerObj.newPrinter();">New Printer</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="innerb">
+                                            <table id ="printers"  class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="printerDetailContentDiv" class="my-detail-panel">
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-printer_name" for="printer_name" class="detail-input-name">Name</label>
+                                        <input type="text" name="printer_name" id="printer_name" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-printer_list" class="select detail-input-printer" for="printer_list">Printer & Display</label>
+                                        <select name="printer_list" id="printer_list">
+                                            <option value='' class="select-list-option-value-select-one" class="select-list-option-value-select-one">Please select one</option>
+                                            <option value='Display' class="select-list-option-value-display">Display</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-lang-setting-list" class="select" for="lang-setting-list">Language Setting</label>
+                                        <select name="lang-setting-list" id="lang-setting-list">
+                                            <option value="0" id="printer-lang-setting-list-option-value-main">Main Language</option>
+                                            <option value="1" id="printer-lang-setting-list-option-value-second">Second Language</option>
+                                            <option value="2" id="printer-lang-setting-list-option-value-third">Third Language</option>
+                                            <option value="3" id="printer-lang-setting-list-option-value-main-second">Main and Second</option>
+                                            <option value="4" id="printer-lang-setting-list-option-value-main-third">Main and Third</option>
+                                            <option value="5" id="printer-lang-setting-list-option-value-second-main">Second and Main</option>
+                                            <option value="6" id="printer-lang-setting-list-option-value-all">All Three</option>
+                                            <option value="7" id="printer-lang-setting-list-option-value-short-name">Short Name</option>
+                                            <option value="8" id="printer-lang-setting-list-option-value-main-second-by-block">Main and Second by Block</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-second-lang-name" for="second-lang-name">Printer Name (Second Language)</label>
+                                        <input type="text" name="second-lang-name" id="second-lang-name" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-second-lang-list" class="select" for="second-lang-list">Second Language</label>
+                                        <select name="second-lang-list" id="second-lang-list">
+                                            <option value='-1' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-third-lang-list" class="select" for="third-lang-list">Third Language</label>
+                                        <select name="third-lang-list" id="third-lang-list">
+                                            <option value='-1' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-printer_type" class="select" for="printer_type">Printer Type</label>
+                                        <select name="printer_type" id="printer_type">
+                                            <option value="PRINTER" id="printer_type-option-value-default">Default</option>
+                                            <option value="RECEIPT" id="printer_type-option-value-receipt">Receipt</option>
+                                            <option value="KITCHEN" id="printer_type-option-value-kitchen">Kitchen</option>
+                                            <option value="HIBACHI_KITCHEN" id="printer_type-option-value-hibachi">Hibachi</option>
+                                            <option value="REPORT" id="printer_type-option-value-report">Report</option>
+                                            <option value="RUNNER" id="printer_type-option-value-runner">Runner</option>
+                                            <option value="PACKAGE" id="printer_type-option-value-packer">Packer</option>
+                                            <option value="LABEL" id="printer_type-option-value-label">Label</option>
+                                            <option value="DISPLAY" id="printer_type-option-value-display">Display</option>
+                                            <option value="WAITLIST" id="printer_type-option-value-waitlist">Waitlist</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-print-item-one-by-one" for="print-item-one-by-one">Print one item per ticket</label>
+                                        <input type="checkbox" name="print-item-one-by-one" id="print-item-one-by-one" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-ipAddress" for="ipAddress">IP Address</label>
+                                        <input type="text" name="ipAddress" id="ipAddress" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-backup-printer-list" class="select" for="backup-printer-list">Backup Printer</label>
+                                        <select name="backup-printer-list" id="backup-printer-list">
+                                            <option value='-1' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-a double-column-detail-div">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-printer_kitchenName" for="printer_kitchenName" class="detail-input-kitchenName">Kitchen</label>
+                                        <input type="text" name="printer_kitchenName" id="printer_kitchenName" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button id="btnSavePrinterInfo" type="button" class="btn-save" onclick="javascript:printerObj.savePrinterInfo();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cashDrawerTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="cashDrawerSelectLayoutDiv">
+                        <div id="cashDrawerSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-cash-drawer">Cash Drawers</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:cashDrawerObj.newCashDrawer();">New Cash Drawer</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id ="cashDrawers" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="cashDrawerDetailContentDiv" class="my-detail-panel">
+                            <input type="hidden" id="cashDrawerId" name="cashDrawerId"/>
+                            <div data-role="fieldcontain">
+                                <label id="label-cashDrawerName" for="cashDrawerName" class="detail-input-name">Name</label>
+                                <input type="text" id="cashDrawerName" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-realName" for="realName" class="detail-input-device-name">Device Name</label>
+                                <input type="text" id="realName" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-cashDrawer-type-select-choice" class="select" for="cashDrawer-type-select-choice">Device type</label>
+                                <select name="select-choice-1" id="cashDrawer-type-select-choice">
+                                    <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                    <option value="EPSON">Epson</option>
+                                    <option value="STAR">Star</option>
+                                    <option value="SNBC">SNBC</option>
+                                </select>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-connectedPrinter-select-choice" class="select" for="connectedPrinter-select-choice">Connected Printer</label>
+                                <select name="select-choice-3" id="connectedPrinter-select-choice">
+                                    <option value="-1" class="select-list-option-value-select-one">Please select one</option>
+                                </select>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-staff-select-choice" class="select" for="staff-select-choice">Assign permission to</label>
+                                <select name="select-choice-4" id="staff-select-choice" multiple="multiple" data-native-menu="false">
+                                    <option data-placeholder="true" value="-1" class="select-list-option-value-select-one">Please select one</option>
+                                </select>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button type="button" class="btn-save" onclick="javascript:cashDrawerObj.saveCashDrawer();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="appDeviceConfigTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="appDeviceConfigSelectLayoutDiv">
+                        <div id="appDeviceConfigSelectContentDiv" class="my-select-menu">
+                            <table class="app-instance">
+                                <caption id="table-caption-app-instances">App Instances</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id ="appInstances" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="appDeviceConfigDetailContentDiv" class="my-detail-panel">
+                            <input type="hidden" id="appInstanceId" name="appInstanceId"/>
+                            <div data-role="fieldcontain">
+                                <label id="label-appInstanceName" for="appInstanceName" class="detail-input-name">Name</label>
+                                <input type="text" id="appInstanceName" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-receiptPrinter-select-choice" class="select" for="receiptPrinter-select-choice">Receipt Printer</label>
+                                <select name="select-choice-1" id="receiptPrinter-select-choice">
+                                    <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                </select>
+                            </div>
+                            <div id="pos-license-config">
+                                <div data-role="fieldcontain">
+                                    <label id="label-cashDrawer-select-choice" class="select" for="cashDrawer-select-choice">Cash Drawer</label>
+                                    <select name="select-choice-2" id="cashDrawer-select-choice">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-callerIdEnabled-select-choice" class="select" for="callerIdEnabled-select-choice">Enable Caller ID</label>
+                                    <select name="select-choice-3" id="callerIdEnabled-select-choice">
+                                        <option value="" id="callerIdEnabled-option-value-global-setting">Use Global Setting</option>
+                                        <option value="false" id="callerIdEnabled-option-value-disabled">Disabled</option>
+                                        <option value="true" id="callerIdEnabled-option-value-enabled">Enabled</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-weight-scale-enabled" for="weight-scale-enabled">Weight Scale Enabled</label>
+                                    <input type="checkbox" name="weight-scale-enabled" id="weight-scale-enabled" readonly="readonly"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-customer-display-enabled" for="customer-display-enabled">Customer Display Enabled</label>
+                                    <input type="checkbox" name="customer-display-enabled" id="customer-display-enabled" readonly="readonly"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-customer-display-model" class="select" for="customer-display-model">Customer Display Model</label>
+                                    <select id="customer-display-model">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                        <option value="bw1" id="customer-display-model-option-value-bw">Black White</option>
+                                        <option value="c1" id="customer-display-model-option-value-c">Color</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-device-manager-port" for="device-manager-port">Device Manager Port</label>
+                                    <input type="text" id="device-manager-port" value=""/>
+                                </div>
+                                <div id="appPaymentTerminalDiv" data-role="fieldcontain">
+                                    <label id="label-paymentTerminal-select-choice" class="select" for="paymentTerminal-select-choice">Payment Terminal</label>
+                                    <select name="select-choice-3" id="paymentTerminal-select-choice">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                    </select>
+                                </div>
+                                <div id="appAreaDiv" data-role="fieldcontain">
+                                    <label id="label-seatingArea-select-choice" class="select" for="seatingArea-select-choice">Seating Area</label>
+                                    <select name="select-choice-3" id="seatingArea-select-choice">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-waitlistPrinter-select-choice" class="select" for="waitlistPrinter-select-choice">Waitlist Printer</label>
+                                    <select name="select-choice-1" id="waitlistPrinter-select-choice">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div id="kitchen-display-config" hidden>
+                                <div data-role="fieldcontain">
+                                    <label id="label-wait-status-enabled" for="wait-status-enabled">Show Wait Status Button</label>
+                                    <input type="checkbox" name="wait-status-enabled" id="wait-status-enabled" readonly="readonly"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-modify-wait-enabled" for="modify-wait-enabled">Operate Wait Status Button</label>
+                                    <input type="checkbox" name="modify-wait-enabled" id="modify-wait-enabled" readonly="readonly"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-serve-status-enabled" for="serve-status-enabled">Show and Operate Serve Status Button</label>
+                                    <input type="checkbox" name="serve-status-enabled" id="serve-status-enabled" readonly="readonly"/>
+                                </div>
+                                <!--<div data-role="fieldcontain">
+                                    <label id="label-modify-done-enabled" for="modify-done-enabled">Operating Done Enabled</label>
+                                    <input type="checkbox" name="modify-done-enabled" id="modify-done-enabled" readonly="readonly"/>
+                                </div>-->
+                                <div data-role="fieldcontain">
+                                    <label id="label-displays-select-choice" class="select" for="displays-select-choice">Accept Item from</label>
+                                    <select name="select-choice-1" id="displays-select-choice" data-native-menu="false" multiple>
+                                        <option value="" class="select-list-option-value-select-one">Please select one or more</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-forewarn" for="display-forewarn">Warning Time</label>
+                                    <input name="display-forewarn" id="display-forewarn" type="text" value="">
+                                </div>
+                            </div>
+                            <div id="saveAppInstanceConfigBtnDiv" class="my-top-margin-button-div">
+                                <button type="button" class="btn-save" onclick="javascript:appInstanceObj.saveAppDeviceConfig();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="defaultDeviceTab">
+                <div class="single-column-detail-div">
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultReceiptPrinter-select-choice" class="select" for="defaultReceiptPrinter-select-choice">Global Receipt Printer</label>
+                        <select name="select-choice-1" id="defaultReceiptPrinter-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultPackagePrinter-select-choice" class="select" for="defaultPackagePrinter-select-choice">Global Packer Printer</label>
+                        <select name="select-choice-2" id="defaultPackagePrinter-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultPackagePrinter2-select-choice" class="select" for="defaultPackagePrinter2-select-choice">Global Packer Printer 2</label>
+                        <select name="select-choice-5" id="defaultPackagePrinter2-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultRunnerPrinter-select-choice" class="select" for="defaultRunnerPrinter-select-choice">Global Runner Printer</label>
+                        <select name="select-choice-2" id="defaultRunnerPrinter-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultCashDrawer-select-choice" class="select" for="defaultCashDrawer-select-choice">Global Cash Drawer</label>
+                        <select name="select-choice-3" id="defaultCashDrawer-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-defaultReportPrinter-select-choice" class="select" for="defaultReportPrinter-select-choice">Global Report Printer</label>
+                        <select name="select-choice-4" id="defaultReportPrinter-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div id="defaultPaymentTerminalDiv" data-role="fieldcontain">
+                        <label id="label-defaultPaymentTerminal-select-choice" class="select" for="defaultPaymentTerminal-select-choice">Global Payment Terminal</label>
+                        <select name="select-choice-4" id="defaultPaymentTerminal-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div id="defaultWaitlistPrintDiv" data-role="fieldcontain">
+                        <label id="label-defaultWaitlistPrint-select-choice" class="select" for="defaultWaitlistPrint-select-choice">Global Waitlist Printer</label>
+                        <select name="select-choice-4" id="defaultWaitlistPrint-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div id="defaultOpenFoodPrintDiv" data-role="fieldcontain">
+                        <label id="label-defaultOpenFoodPrint-select-choice" class="select" for="defaultOpenFoodPrint-select-choice">Global Open Food Printer</label>
+                        <select name="select-choice-4" id="defaultOpenFoodPrint-select-choice">
+                            <option value="" class="select-list-option-value-select-one">Please select one</option>
+                        </select>
+                    </div>
+                    <div id="saveDefaultDeviceBtnDiv" class="my-top-margin-button-div">
+                        <button type="button" class="btn-save" onclick="javascript:globalDeviceConfig.saveDefaultDeviceConfig();">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="otherDeviceTab">
+                <div data-role="fieldcontain" id="otherDeviceTypeRadioButtonDiv">
+                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+                        <legend><div id="otherDeviceDeviceTypeRadioBtnHeader">Device Type</div></legend>
+                        <input type="radio" name="otherDeviceType" id="other-device-type-paymentTerminal-choice" value="PAYMENT_TERMINAL"  checked="checked"/>
+                        <label id="label-other-device-type-paymentTerminal-choice" for="other-device-type-paymentTerminal-choice">Payment Terminal</label>
+                        <input type="radio" name="otherDeviceType" id="other-device-type-srm-choice" value="SRM"/>
+                        <label id="label-other-device-type-srm-choice" for="other-device-type-srm-choice">SRM</label>
+                    </fieldset>
+                </div>
+                <div id="srmTab" class="hidden">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width" id="srmSelectLayoutDiv">
+                            <div id="srmSelectContentDiv" class="my-select-menu">
+                                <table class="tableone">
+                                    <caption id="table-caption-srms">SRMs</caption>
+                                    <thead>
+                                    <tr>
+                                        <th class="th1" scope="col"></th>
+                                        <th class="th2" scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:srm.newSalesRecordingMachine();">New SRM</button></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="innerb">
+                                                <table id ="salesRecordingMachines" class="tabletwo">
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="ui-block-b my-div-width">
+                            <div id="srmDetailContentDiv" class="my-detail-panel">
+                                <input type="hidden" name="salesRecordingMachineId" id="salesRecordingMachineId"/>
+
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-salesRecordingMachineName" for="salesRecordingMachineName" class="detail-input-name">Name</label>
+                                            <input type="text" id="salesRecordingMachineName" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srmPort" for="srmPort">Port</label>
+                                            <input type="text" id="srmPort" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srmDeviceName" for="srmDeviceName" class="detail-input-device-name">Device Name</label>
+                                            <input type="text" id="srmDeviceName" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-enabled" for="srm-enabled">Enabled</label>
+                                            <input type="checkbox" name="srm-enabled" id="srm-enabled" readonly="readonly"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-connection-type-select-choice" class="select" for="srm-connection-type-select-choice">Connection Type</label>
+                                            <select name="select-choice-1" id="srm-connection-type-select-choice">
+                                                <option value="SERIAL">Serial</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-connected-printer-select-choice" class="select" for="srm-connected-printer-select-choice">Connected Printer</label>
+                                            <select name="select-choice-3" id="srm-connected-printer-select-choice">
+                                                <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-tps-select-choice" class="select" for="srm-tps-select-choice">TPS</label>
+                                            <select name="select-choice-3" id="srm-tps-select-choice">
+                                                <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-tvq-select-choice" class="select" for="srm-tvq-select-choice">TVQ</label>
+                                            <select name="select-choice-3" id="srm-tvq-select-choice">
+                                                <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-counter-service-mode" for="srm-counter-service-mode">Counter Service Mode</label>
+                                            <input type="checkbox" name="srm-counter-service-mode" id="srm-counter-service-mode" readonly="readonly"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-print-closing-receipt" for="srm-print-closing-receipt">Print receipt when closing order</label>
+                                            <input type="checkbox" name="srm-print-closing-receipt" id="srm-print-closing-receipt" readonly="readonly"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a double-column-detail-div">
+                                        <div data-role="fieldcontain">
+                                            <label id="label-srm-operating-mode-select-choice" class="select" for="srm-operating-mode-select-choice">Operating Mode</label>
+                                            <select name="select-choice-1" id="srm-operating-mode-select-choice">
+                                                <option value="OPERATIONAL" id="srm-operating-mode-option-value-operational">Operational</option>
+                                                <option value="TRAINING" id="srm-operating-mode-option-value-training">Training</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b double-column-detail-div">
+                                    </div>
+                                </div>
+
+                                <div class="my-top-margin-button-div">
+                                    <button type="button" class="btn-save" onclick="javascript:srm.saveSalesRecordingMachine();">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="paymentTerminalTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width" id="paymentTerminalSelectLayoutDiv">
+                            <div id="paymentTerminalSelectContentDiv" class="my-select-menu">
+                                <table class="tableone">
+                                    <caption id="table-caption-paymentTerminals">Payment Terminals</caption>
+                                    <thead>
+                                    <tr>
+                                        <th class="th1" scope="col"></th>
+                                        <th class="th2" scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:paymentTerminalObj.newEntry();">New Payment Terminal CED</button></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="innerb">
+                                                <table id ="paymentTerminals" class="tabletwo">
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="ui-block-b my-div-width">
+                            <div id="paymentTerminalDetailContentDiv" class="my-detail-panel">
+                                <input type="hidden" name="paymentTerminalId" id="paymentTerminalId"/>
+                                <div data-role="fieldcontain">
+                                    <label id="label-paymentTerminalName" for="paymentTerminalName" class="detail-input-name">Name</label>
+                                    <input type="text" id="paymentTerminalName" value=""/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-paymentTerminalManufacturer" class="select" for="paymentTerminalManufacturer-select-choice">Terminal Manufacturer</label>
+                                    <select name="select-choice-1" id="paymentTerminalManufacturer-select-choice" onchange="paymentTerminalObj.showFieldsBasedOnManufacturer(this.value)">
+                                        <option value="" class="select-list-option-value-select-one">Please select one</option>
+                                        <option value="PAX">Pax</option>
+                                        <option value="DEJAVOO">Dejavoo</option>
+                                        <option value="MONERIS_INGENICO">Ingenico(Moneris)</option>
+                                        <option value="MONERIS_CLOUD">Moneris Cloud</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-paymentTerminalModel" for="paymentTerminalModel">Terminal Model</label>
+                                    <input type="text" id="paymentTerminalModel" value=""/>
+                                </div>
+                                <div data-role="fieldcontain" id="ipAddressDiv">
+                                    <label id="label-paymentTerminalIpAddress" for="paymentTerminalIpAddress">IP Address</label>
+                                    <input type="text" id="paymentTerminalIpAddress" value=""/>
+                                </div>
+                                <div data-role="fieldcontain" id="portNumberDiv">
+                                    <label id="label-paymentTerminalPort" for="paymentTerminalPort">Port Number</label>
+                                    <input type="text" id="paymentTerminalPort" value=""/>
+                                </div>
+                                <div data-role="fieldcontain" id="terminalIdDiv" class="hidden">
+                                    <label id="label-paymentTerminalPinPadId" for="paymentTerminalPinPadId">Terminal ID</label>
+                                    <input type="text" id="paymentTerminalPinPadId" value=""/>
+                                </div>
+                                <div data-role="fieldcontain" id="pairingTokenDiv" class="hidden">
+                                    <label id="label-paymentTerminalPinPadToken" for="paymentTerminalPinPadToken">Pairing Token</label>
+                                    <input type="text" id="paymentTerminalPinPadToken" value=""/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-paymentTerminalCommType" class="select" for="paymentTerminalCommType-select-choice">Communication Type</label>
+                                    <select name="select-choice-1" id="paymentTerminalCommType-select-choice">
+                                        <option value="TCPIP" id="commType-option-tcpip" selected>Ethernet</option>
+                                    </select>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-paymentTerminalAdditionalSetting" for="paymentTerminalAdditionalSetting">Additional Setting</label>
+                                    <input type="text" id="paymentTerminalAdditionalSetting"/>
+                                </div>
+                                <div data-role="fieldcontain" id="enablePinPadDiv" class="hidden">
+                                    <label id="label-paymentTerminalPinPadTip" for="paymentTerminalPinPadTip">Pin Pad Tip Adjustment</label>
+                                    <input type="checkbox" id="paymentTerminalPinPadTip" value="false"/>
+                                    <label id="label-paymentTerminalPinPadSignature" for="paymentTerminalPinPadSignature">Pin Pad Signature Capture</label>
+                                    <input type="checkbox" id="paymentTerminalPinPadSignature" value="false"/>
+                                </div>
+                                <div id="initDeviceDiv" class="my-top-margin-button-div hidden">
+                                    <button id="initTerminalBtn" class="btn-save" type="button" onclick="paymentTerminalObj.initTerminal('INIT');">Initiate Device</button>
+                                </div>
+                                <div data-role="fieldcontain" id="pairPinPadDiv" class="hidden">
+                                    <button id="pairPinPadBtn" class="btn-save2" type="button" onclick="paymentTerminalObj.initTerminal('PAIR');">Pair</button>
+                                </div>
+                                <div id="initUnpairPinPadDiv" class="hidden">
+                                    <button id="initPinPadBtn" class="btn-save3" type="button" onclick="paymentTerminalObj.initTerminal('INITIALIZATION');">Initialization</button>
+                                    <button id="unpairPinPadBtn" class="btn-save4" type="button" onclick="paymentTerminalObj.initTerminal('UNPAIR');">Unpair</button>
+                                </div>
+                                <div class="my-top-margin-button-div">
+                                    <button id="paymentTerminalSaveBtn" class="btn-save" type="button" onclick="paymentTerminalObj.saveElement();">Save</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

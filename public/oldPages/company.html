@@ -1,0 +1,377 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery.fileDownload.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/company.js"></script>
+</head>
+
+<body>
+<div id="companyPage" data-role="page" data-theme="a">
+
+    <div id="companyMainDiv" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-mainTab" href="#mainTab">Company</a></li>
+                    <li><a id="navbar-restaurantHoursTab" href="#restaurantHoursTab">Restaurant Hours</a></li>
+                    <li><a id="navbar-otherInfoTab" href="#otherInfoTab">Other</a></li>
+                    <li id="dataManagementTabListItem"><a id="navbar-dataManagementTab" href="#dataManagementTab">Data Management</a></li>
+                </ul>
+            </div>
+            <div id="mainTab">
+                <div id="companyTabMainDiv">
+                    <input type="hidden" id="companyId"/>
+                    <input type="hidden" id="userId"/>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain">
+                                <label id="label-restaurantName" for="restaurantName">Restaurant Name</label>
+                                <input type="text" id="restaurantName" value=""/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain">
+                                <label id="label-merchantId" for="merchantId" class="detail-input-merchantId">Merchant ID</label>
+                                <input type="text" id="merchantId" name="merchantId" size="60" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain">
+                                <label id="label-telephone1" for="telephone1">Phone 1</label>
+                                <input type="text" id="telephone1" name="telephone1" size="12" maxLength="12"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain">
+                                <label id="label-telephone2" for="telephone2">Phone 2</label>
+                                <input type="text" id="telephone2" name="telephone2" size="12" maxLength="12"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-c">
+                            <div data-role="fieldcontain">
+                                <label id="label-fax" for="fax">Fax</label>
+                                <input type="text" id="fax" name="fax" size="12" maxLength="12"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain">
+                                <label id="label-website" for="website">Website</label>
+                                <input type="text" id="website" name="website" size="60"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain">
+                                <label id="label-email" for="email" class="detail-input-email">Email</label>
+                                <input type="text" id="email" name="email" size="60"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain">
+                                <label id="label-merchantGroupId" for="merchantGroupId">Merchant Group ID</label>
+                                <input type="text" id="merchantGroupId" name="merchantGroupId" size="60"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain">
+                                <label id="label-storeId" for="storeId">Store ID</label>
+                                <input type="text" id="storeId" name="storeId" size="60"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain">
+                                <label id="label-merchantCode" for="merchantCode">Merchant Code</label>
+                                <input type="text" id="merchantCode" name="merchantCode" size="60"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-field-contain">
+                        <label id="label-address1" for="address1" class="detail-input-address1">Address 1</label>
+                        <input type="text" id="address1" name="address1"  size="50" maxlength="50"/>
+                    </div>
+                    <div class="ui-field-contain">
+                        <label id="label-address2" for="address2" class="detail-input-address2">Address 2</label>
+                        <input type="text" id="address2" name="address2"  size="50" maxlength="50"/>
+                    </div>
+                    <div class="ui-grid-b">
+                        <div id="staff-city-div" class="ui-block-a">
+                            <div class="ui-field-contain">
+                                <label id="label-city" for="city" class="detail-input-city">City</label>
+                                <input type="text" id="city" name="city" size="10" maxlength="20"/>
+                            </div>
+                        </div>
+                        <div id="staff-state-div" class="ui-block-b">
+                            <div class="ui-field-contain">
+                                <label id="label-state" for="state" class="detail-input-state">State</label>
+                                <input type="text" id="state" name="state" value="" size="10"/>
+                            </div>
+                        </div>
+                        <div id="staff-zipcode-div" class="ui-block-c">
+                            <div class="ui-field-contain">
+                                <label id="label-zipcode" for="zipcode" class="detail-input-zipcode">ZIP Code</label>
+                                <input type="text" id="zipcode" name="zipcode" size="6" maxlength="6" data-wrapper-class="staff-zipcode-input-div"/>
+                            </div>
+                        </div>
+                        <div class="ui-field-contain">
+                            <label id="label-restaurant-hours-select-choice" for="restaurant-hours-select-choice">Hours</label>
+                            <select name="select-choice-1" id="restaurant-hours-select-choice" data-native-menu="false" multiple>
+                            </select>
+                        </div>
+                        <div class="ui-field-contain">
+                            <label id="label-licenseInfo" for="licenseInfo" >License Info</label>
+                            <input type="text" id="licenseInfo" name="licenseInfo" readonly="readonly"/>
+                        </div>
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div data-role="fieldcontain">
+                                    <label id="label-reseller" for="reseller">Reseller</label>
+                                    <input type="text" id="reseller" name="reseller" size="50"/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label id="label-region" for="region">Region</label>
+                                    <input type="text" id="region" name="region" size="30"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div class="my-button-div" id="save-company-btn-div"><button id="btnSave" class="btn-save" type="button" onclick="javascript:company.saveProfile();">Save</button></div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div id="licenseBtnDiv" class="my-button-div">
+                                    <button id="btnRegisterProduct" type="button" onclick="javascript:company.openRegisterProductDialog();">Request License Activation</button>
+                                    <button id="btnConnectToCloudServer" type="button" onclick="javascript:company.connectToCloudService();" class="hidden">Connect to Cloud Service</button>
+                                    <button id="btnDisconnectFromCloudServer" type="button" onclick="javascript:company.disconnectFromCloudService();" class="hidden">Disconnect from Cloud Service</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="restaurantHoursTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="hoursSelectLayoutDiv">
+                        <div id="hoursSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-restaurant-hours">Restaurant Hours</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:restaurantHoursObj.newRestaurantHours();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id ="restaurantHours" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width" id="hoursDetailLayoutDiv">
+                        <div id="hoursDetailContentDiv" class="my-detail-panel">
+                            <input type="hidden" id="restaurantHoursId" name="restaurantHoursId"/>
+                            <div data-role="fieldcontain">
+                                <label id="label-restaurantHoursName" for="restaurantHoursName" class="detail-input-name">Name</label>
+                                <input type="text" id="restaurantHoursName" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-from" for="from">From(hh:mm)</label>
+                                <input type="text" id="from" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-to" for="to">To(hh:mm)</label>
+                                <input type="text" id="to" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-fromDayOfWeek-select-choice" for="fromDayOfWeek">From Day of Week</label>
+                                <select name="select-choice-1" id="fromDayOfWeek">
+                                    <option value="" class="dayOfWeek-all">All Week</option>
+                                    <option value="MON" class="dayOfWeek-mon">Mon</option>
+                                    <option value="TUE" class="dayOfWeek-tue">Tue</option>
+                                    <option value="WED" class="dayOfWeek-wed">Wed</option>
+                                    <option value="THU" class="dayOfWeek-thu">Thu</option>
+                                    <option value="FRI" class="dayOfWeek-fri">Fri</option>
+                                    <option value="SAT" class="dayOfWeek-sat">Sat</option>
+                                    <option value="SUN" class="dayOfWeek-sun">Sun</option>
+                                </select>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-toDayOfWeek-select-choice" for="toDayOfWeek">To Day of Week</label>
+                                <select name="select-choice-1" id="toDayOfWeek">
+                                    <option value="" class="dayOfWeek-all">All Week</option>
+                                    <option value="MON" class="dayOfWeek-mon">Mon</option>
+                                    <option value="TUE" class="dayOfWeek-tue">Tue</option>
+                                    <option value="WED" class="dayOfWeek-wed">Wed</option>
+                                    <option value="THU" class="dayOfWeek-thu">Thu</option>
+                                    <option value="FRI" class="dayOfWeek-fri">Fri</option>
+                                    <option value="SAT" class="dayOfWeek-sat">Sat</option>
+                                    <option value="SUN" class="dayOfWeek-sun">Sun</option>
+                                </select>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-hoursDescription" for="hoursDescription" class="detail-input-description">Description</label>
+                                <textarea id="hoursDescription" value=""></textarea>
+                            </div>
+
+                            <div class="my-top-margin-button-div">
+                                <button class="btn-save" type="button" onclick="javascript:restaurantHoursObj.saveRestaurantHours();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="otherInfoTab">
+                <div class="single-column-detail-div">
+                    <div>
+                        <p id="uploadingAddressDataText" hidden="true"><b>Uploading data.. Please wait...</b></p>
+                        <form id="uploadAddressDataForm" method="post" enctype="multipart/form-data" encoding='multipart/form-data' data-ajax="false">
+                            <div data-role="fieldcontain">
+                                <label id="label-uploadFile" for="uploadFile" class="label-choose-file">File</label>
+                                <input id="uploadFile" type="file" name="file" value=""/>
+                            </div>
+                            <div class="my-button-div">
+                                <button id="btn-update-address-data" type="submit" data-theme="b">Upload Address Data</button>
+                            </div>
+                            <div class="my-button-div">
+                                <button id="btn-erase-address-data" type="button" data-theme="b" onclick="javascript:uploadAddressDataObj.eraseAddressInfo();">Erase Address Data</button>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div id="deleteSaleItemReviewsDiv">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div data-role="fieldcontain">
+                                    <label for="fromDate2" class="detail-input-from">From</label>
+                                    <input id="fromDate2" type="datetime-local" name="fromDate" value=""/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label for="toDate2" class="detail-input-to">To</label>
+                                    <input id="toDate2" type="datetime-local" name="toDate" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnDeleteSaleItemReviews" type="button" onclick="javascript:dataManagerObj.openDeleteSaleItemReviewsDialog();">Delete Sale Items Reviews</button>
+                    </div>
+                </div>
+                <div data-role="popup" id="uploadAddressDataPopup" data-overlay-theme="a" data-theme="b" data-dismissible="false" class="ui-corner-all">
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+                        <h1 id="uploadAddressDataPopupContent" class="ui-title">Uploading address data, please wait...</h1>
+                    </div>
+                </div>
+                <div data-role="popup" id="eraseAddressDataPopup" data-overlay-theme="a" data-theme="b" data-dismissible="false" class="ui-corner-all">
+                    <div data-role="content" data-theme="c" class="ui-corner-bottom ui-content">
+                        <h1 id="eraseAddressDataPopupContent" class="ui-title">Erasing address data, please wait...</h1>
+                    </div>
+                </div>
+            </div>
+            <div id="dataManagementTab">
+                <div class="single-column-detail-div">
+                    <div id="cleanAllOrderDiv">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div data-role="fieldcontain">
+                                    <label for="fromDate1" class="detail-input-from">From</label>
+                                    <input id="fromDate1" type="date" name="fromDate" value=""/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label for="toDate1" class="detail-input-to">To</label>
+                                    <input id="toDate1" type="date" name="toDate" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnClearOrders" type="button" onclick="javascript:dataManagerObj.openClearAllOrdersDialog();">Clear all orders</button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div>
+                        <form id="exportReportForm" name="exportReportForm" method="post" action="" data-ajax="false">
+                            <input id="excludeOnlineOrders" type="hidden" name="excludeOnlineOrders" value="false"/>
+                            <div data-role="fieldcontain">
+                                <label for="fromDate" class="detail-input-from">From</label>
+                                <input id="fromDate" type="date" name="fromDate" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label for="toDate" class="detail-input-to">To</label>
+                                <input id="toDate" type="date" name="toDate" value=""/>
+                            </div>
+                            <div>
+                                <button id="btn-export-data" type="submit" onclick="dataManagerObj.submitForm();" data-theme="b">Backup</button>
+                            </div>
+                        </form>
+                        <div>
+                            <p id="printingReceiptsText" hidden="true"><b id="printingReceiptsInfoText">Sending request to print receipts. Please wait...</b></p>
+                            <button id="btn-print-receipts" type="submit" onclick="dataManagerObj.openPrintAllReceiptsDialog();" data-theme="b">Print receipts for all orders in selected date range</button>
+                        </div>
+                    </div>
+                    <div id="importingOrderDiv">
+                        <p id="importingText" hidden="true"><b>Importing data.. Please wait...</b></p>
+                        <form id="importOrdersForm" method="post" enctype="multipart/form-data" encoding='multipart/form-data' data-ajax="false">
+                            <div data-role="fieldcontain">
+                                <label id="label-importFile" for="importFile" class="label-choose-file">File</label>
+                                <input id="importFile" type="file" name="file" value=""/>
+                            </div>
+                            <div>
+                                <button id="btn-import-data" type="submit" data-theme="b">Recover</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div data-role="popup" id="recoverOrdersPopup" data-overlay-theme="a" data-theme="b" data-dismissible="false" class="ui-corner-all">
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+                        <h1 id="recoverOrdersPopupContent" class="ui-title">Recovering order data, please wait...</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

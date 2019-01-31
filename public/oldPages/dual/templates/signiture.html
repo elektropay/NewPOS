@@ -1,0 +1,26 @@
+
+ <div style="background: #ccc;">
+  <div class="Pwap" id="signature-pad">
+     <div class="hearder">Add Signiture
+      <div class="container">Bill Amount {{pay.total | currency }}</div>
+     </div>
+   
+     <div class="main customer" style="flex-flow:row wrap;margin-top:8%;">
+                
+                <canvas  id="canvas" style="background:white;width:100%;height:45%;">
+                   
+                </canvas>
+                <div style="background:white;border-top:solid #dcc 2px;height:20%;width:100%;font-size:3vh;line-height:2;">
+                		Sign Here
+                		<div style="font-size:16px;">I agree to pay the total amount according to the card issuer / merchant agreement.</div>
+                </div>
+                <div style="flex:0 1 100%;display:flex; justify-content:space-around;height:30%;margin-top:8vh;"> 
+                    <div class="signButton"  ng-click="cancel()">Cancel</div>
+                    <div class="signButton"  ng-click="clear()">Clear</div>
+                	<div class="signButton"  ng-click="done()">Done</div>
+                </div> 
+                
+     </div>
+    
+</div>
+</div>

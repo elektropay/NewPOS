@@ -1,0 +1,128 @@
+<div id="sale-report-page">
+    <div class="form-group col-sm-2">
+        <input type="date" class="form-control" id="reportFilter-fromDate" ng-model="saleReportFilter.fromDate">
+    </div>
+    <div class="form-group col-sm-2">
+        <input type="date" class="form-control" id="reportFilter-toDate" ng-model="saleReportFilter.toDate">
+    </div>
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="saleReport-menu-group-operation" ng-model="saleReportFilter.menuGroup" ng-options="menuGroup.id as menuGroup.name for menuGroup in menuGroupList" ng-change="generateCategoryList(saleReportFilter.menuGroup)">
+            <option id="saleReport-menu-group-type-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="saleReport-category-operation" ng-model="saleReportFilter.categories" ng-options="categories.id as categories.name for categories in categoryList" ng-change="generateSaleItemList(saleReportFilter.categories)">
+            <option id="saleReport-category-type-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="saleReport-item-operation" ng-model="saleReportFilter.saleItems" ng-options="saleItems.id as saleItems.name for saleItems in saleItemList">
+            <option id="saleReport-item-type-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-1">
+        <button type="button" class="btn btn-primary btn-search" ng-click="listGroupCategoryItems()">Search</button>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="well">
+                    <div id="sale-report-chart" style="height: 350px"></div>
+                </div>
+                <div class="well text-center">
+                    <div ng-init="chartType='pie'">
+                        <div class="radio-inline">
+                            <input type="radio" id="pie-radio" ng-model="chartType" value="pie"><label>Pie Graph</label>
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" id="bar-radio" ng-model="chartType" value="bar"><label>Bar Graph</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success fade in">
+                    <div>
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <a ng-click="sortTable1('name')">
+                                        <label id="label-employee" class="detail-input-employee">Employee</label>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a ng-click="sortTable1('count')">
+                                        <label id="label-items" class="detail-input-items"># of Items</label>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a ng-click="sortTable1('totalAmount')">
+                                        <label id="label-total-amount" class="detail-input-total-amount">Total Amount</label>
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="staffData in tempChartData | orderBy:sortType1:sortReverseTable1" ng-show="tempChartData.length > 0">
+                            <tr>
+                                <td>{{ staffData.name }}</td>
+                                <td>{{ staffData.count }}</td>
+                                <td>{{ staffData.totalAmount | currency }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info fade in">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <a ng-click="sortTable2('categoryName')">
+                                            <label id="label-category-name" class="detail-input-category-name">Category</label>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a ng-click="sortTable2('categoryCount')">
+                                            <label id="label-category-count" class="detail-input-category-count"># of Items</label>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a ng-click="sortTable2('categoryTotal')">
+                                            <label id="label-category-total" class="detail-input-category-total">Total</label>
+                                        </a>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody ng-repeat="category in tempTableData | orderBy:sortType2:sortReverseTable2" ng-show="tempTableData.length > 0">
+                                <tr>
+                                    <td>{{ category.categoryName }}</td>
+                                    <td>{{ category.categoryCount }}</td>
+                                    <td>{{ category.categoryTotal | currency }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="well text-center">
+                            <label class="radio-inline" ng-repeat="staff in staffList track by $index">
+                                <input type="radio" name="staffMember.name" ng-model="$parent.staffMember" ng-value="staff" ng-change="organizeStaffCategoryData(staff)"><label>{{ staff }}</label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="form-group col-sm-5"></div>
+        <div class="form-group col-sm-1">
+            <button type="button" class="btn btn-primary btn-amount" ng-click="organizeChartData(null, 'price')">By Price</button>
+        </div>
+        <div class="form-group col-sm-1">
+            <button type="button" class="btn btn-primary btn-quantity" ng-click="organizeChartData(null, 'quantity')">By Quantity</button>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,21 @@
+<ion-content style="background:#ccc;">
+   <div class="Pwap">
+     <div class="hearder f5w" style="margin-top:30px">ADD A TIP
+      <div class="container f3w">Bill Amount: {{pay.total | currency}}</div>
+     </div>
+   <div  class="wrapCustomer">
+                <div class="notipTitle" ng-click="noTip()">
+                      No Tips
+                </div>
+                <div  class="notipContent">
+                  <span style="border-right:solid #fff 1px;">{{pay.tip}}</span>
+                </div>
+                <div  class="notipNo" ng-click="insertTip()">
+                         <div ng-repeat="item in keyBoard" ng-class="{'keyBoarddefalt':$index<10,'keyBoard':$index>=10}"  >{{item}}</div>
+
+                </div>
+
+                
+     </div>
+  </div>
+ </ion-content>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="reportApp">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1"><!-- for mobile device-->
+        <title>Report</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-select.min.css" rel="stylesheet">
+        <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+        <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+        <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/timetablejs.css" rel="stylesheet">
+        <link href="css/ng-table.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/report.css" rel="stylesheet">
+    </head>
+    <body ng-controller="IndexPageController">
+        <div id="alert-page" class="text-center" hidden>
+            <div class="alert alert-info" role="alert"><i class="fa fa-exclamation-triangle"></i><b> Please <b>CASH OUT</b> before check the report!!! </b><i class="fa fa-exclamation-triangle"></i></div>
+        </div>
+        <div id="page-wrapper">
+            <div class="sidebar">
+                <div>
+                    <h2>{{currentMerchantName}}</h2>
+                </div>
+                <a href="" id="sidebar-toggle"><h2 id="report-header-tag"> REPORT</h2></a>
+                <ul>
+                    <li id="overview-tab" ng-show="reportPermissions.overview.enabled">
+                        <a href="#/overView" id="overview-page-tag"> Overview</a><span class="hover"></span>
+                    </li>
+                    <li id="operation-tab" ng-show="reportPermissions.operation.enabled">
+                        <a id="operation-page-tag"> Operation</a><span class="hover"></span>
+                        <ul class="sub-menu">
+                            <li id="daily-sub-tab" ng-show="reportPermissions.operation.daily.enabled">
+                                <a href="#/daily" id="daily-page">Daily</a><span class="hover"></span>
+                            </li>
+                            <li id="hourly-sub-tab" ng-show="reportPermissions.operation.hourly.enabled || liteModeReport.operation.hourly.enabled">
+                                <a href="#/hourlySales" id="hourly-page">Hourly Sales</a><span class="hover"></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="staff-tab" ng-show="reportPermissions.staff.enabled">
+                        <a id="staff-page-tag"> Staff</a><span class="hover"></span>
+                        <ul class="sub-menu">
+                            <li id="staff-sub-tab" ng-show="reportPermissions.staff.staff.enabled">
+                                <a href="#/staff" id="staff-page">Staff</a><span class="hover"></span>
+                            </li>
+                            <li id="delivery-sub-tab" ng-show="reportPermissions.staff.delivery.enabled">
+                                <a href="#/delivery" id="delivery-page">Delivery</a><span class="hover"></span>
+                            </li>
+                            <li id="tipOut-sub-tab" ng-show="reportPermissions.staff.tipOut.enabled">
+                                <a href="#/tipOut" id="tipOut-page">Tip Out</a><span class="hover"></span>
+                            </li>
+                            <li id="attendanceEditRecord-sub-tab" ng-show="reportPermissions.staff.attendanceEditRecord.enabled">
+                                <a href="#/attendanceEditRecord" id="attendanceEditRecord-page">Attendance Edit Record</a><span class="hover"></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="payment-tab" ng-show="reportPermissions.payment.enabled">
+                        <a id="payment-page-tag"> Payment</a><span class="hover"></span>
+                        <ul class="sub-menu">
+                            <li id="all-sub-tab" ng-show="reportPermissions.payment.all.enabled">
+                                <a href="#/all" id="all-page">All</a><span class="hover"></span>
+                            </li>
+                            <li id="cash-sub-tab" ng-show="reportPermissions.payment.cash.enabled">
+                                <a href="#/cash" id="cash-page">Cash</a><span class="hover"></span>
+                            </li>
+                            <li id="credit-sub-tab" ng-show="reportPermissions.payment.credit.enabled">
+                                <a href="#/credit" id="credit-page">Credit</a><span class="hover"></span>
+                            </li>
+                            <li id="gift-card-sub-tab" ng-show="reportPermissions.payment.giftCard.enabled">
+                                <a href="#/giftCard" id="gift-card-page">Gift Card</a><span class="hover"></span>
+                            </li>
+                            <li id="loyalty-card-sub-tab" ng-show="reportPermissions.payment.loyaltyCard.enabled">
+                                <a href="#/loyaltyCard" id="loyalty-card-page">Loyalty Card</a><span class="hover"></span>
+                            </li>
+                            <li id="ali-pay-sub-tab" ng-show="reportPermissions.payment.ali.enabled">
+                                <a href="#/ali" id="ali-pay-page">Ali Pay</a><span class="hover"></span>
+                            </li>
+                            <li id="wechat-pay-sub-tab" ng-show="reportPermissions.payment.weChat.enabled">
+                                <a href="#/weChat" id="wechat-pay-page">WeChat Pay</a><span class="hover"></span>
+                            </li>
+                            <li id="levelup-sub-tab" ng-show="reportPermissions.payment.levelUp.enabled">
+                                <a href="#/levelUp" id="levelup-pay-page">LevelUp Pay</a><span class="hover"></span>
+                            </li>
+                            <li id="cash-tip-sub-tab" ng-show="reportPermissions.payment.cashTip.enabled">
+                                <a href="#/cashTip" id="cash-tip-page">Cash Tip</a><span class="hover"></span>
+                            </li>
+                            <li id="other-sub-tab" ng-show="reportPermissions.payment.other.enabled">
+                                <a href="#/other" id="other-page">Other</a><span class="hover"></span>
+                            </li>
+                            <li id="batch-sub-tab" ng-show="reportPermissions.payment.batch.enabled">
+                                <a href="#/batch" id="batch-page">Batch</a><span class="hover"></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="cash-flow-tab" ng-show="reportPermissions.cashFlow.enabled">
+                        <a id="cash-flow-page-tag"> Cash Flow</a><span class="hover"></span>
+                        <ul class="sub-menu">
+                            <li id="cash-io-sub-tab" ng-show="reportPermissions.cashFlow.cashInOut.enabled">
+                                <a href="#/cashIO" id="cashIO-page">Cash In/Out</a><span class="hover"></span>
+                            </li>
+                            <li id="register-activity-sub-tab" ng-show="reportPermissions.cashFlow.cashRegisterActivity.enabled">
+                                <a href="#/registerActivity" id="register-activity-page">Cash Register Activity</a><span class="hover"></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="other-tab" ng-show="reportPermissions.other.enabled">
+                        <a id="other-page-tag">  Other</a><span class="hover"></span>
+                        <ul class="sub-menu">
+                            <li id="void-order-sub-tab" ng-show="reportPermissions.other.voidOrder.enabled">
+                                <a href="#/voidOrder" id="void-order-page">Void Order</a><span class="hover"></span>
+                            </li>
+                            <li id="void-credit-sub-tab" ng-show="reportPermissions.other.voidCredit.enabled">
+                                <a href="#/voidCredit" id="void-credit-page">Void Credit</a><span class="hover"></span>
+                            </li>
+                            <li id="discount-sub-tab" ng-show="reportPermissions.other.discount.enabled">
+                                <a href="#/discount" id="discount-page">Discount</a><span class="hover"></span>
+                            </li>
+                            <li id="charge-sub-tab" ng-show="reportPermissions.other.charge.enabled">
+                                <a href="#/charge" id="charge-page">Charge</a><span class="hover"></span>
+                            </li>
+                            <li id="corder-rounding-sub-tab" ng-show="reportPermissions.other.orderAmountRounding.enabled">
+                                <a href="#/orderAmountRoundingDetail" id="order-rounding-page">Order Rounding</a><span class="hover"></span>
+                            </li>
+                            <li id="category-sub-tab" ng-show="reportPermissions.other.category.enabled">
+                                <a href="#/category" id="category-page">Category</a><span class="hover"></span>
+                            </li>
+                            <li id="menu-sub-tab" ng-show="reportPermissions.other.menu.enabled">
+                                <a href="#/menu" id="menu-page">Menu</a><span class="hover"></span>
+                            </li>
+                            <li id="purchase-order-sub-tab" ng-show="reportPermissions.other.purchaseOrder.enabled">
+                                <a href="#/purchaseOrder" id="purchase-order-page">Purchase Order Invoice</a><span class="hover"></span>
+                            </li>
+                            <li id="customer-wait-time-sub-tab" ng-show="reportPermissions.other.customerWaitTime.enabled">
+                                <a href="#/customerWaitTime" id="customer-wait-time-page">Customer Waiting Time</a><span class="hover"></span>
+                            </li>
+                            <li id="audit-sub-tab" ng-show="reportPermissions.other.audit.enabled">
+                                <a href="#/audit" id="audit-page">Audit</a><span class="hover"></span>
+                            </li>
+                            <li id="system-setting-audit-sub-tab" ng-show="reportPermissions.other.systemSettingAudit.enabled">
+                                <a href="#/systemSettingAudit" id="systemSettingAudit-page">System Setting Audit</a><span class="hover"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="page-content-wrapper">
+                <div ng-view>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/lib/jquery.min.js"></script>
+        <script src="js/lib/bootstrap.min.js"></script>
+        <script src="js/lib/bootstrap-select.min.js"></script>
+        <script src="js/lib/bootstrap-switch.min.js"></script>
+        <script src="js/lib/angular.min.js"></script>
+        <script src="js/lib/angular-route.min.js"></script>
+        <script src="js/lib/moment.min.js"></script>
+        <script src="js/lib/bootstrap-datetimepicker.min.js"></script>
+        <script src="js/lib/highcharts.js"></script>
+        <script src="js/lib/heatmap.js"></script>
+        <script src="js/lib/ui-bootstrap-tpls-2.2.0.min.js"></script>
+        <script src="js/lib/xml2json.min.js"></script>
+        <script src="js/lib/timetable.min.js"></script>
+        <script src="js/lib/ng-table.min.js"></script>
+        <script src="js/biscuit.js"></script>
+        <script src="js/biscuitf.min.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/systemLanguage.js"></script>
+        <script src="js/mainController.js"></script>
+        <script src="js/overViewController.js"></script>
+        <script src="js/operationController.js"></script>
+        <script src="js/staffController.js"></script>
+        <script src="js/paymentController.js"></script>
+        <script src="js/cashFlowController.js"></script>
+        <script src="js/otherController.js"></script>
+    </body>
+</html>

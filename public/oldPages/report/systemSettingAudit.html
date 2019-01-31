@@ -1,0 +1,44 @@
+<div id="systemSettingAuditReportPage" class="content-page">
+    <div class="page-wrapper">
+
+        <div class="row page-header">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <h1 class="report-header" id="systemSettingAudit-page-header">System Setting Audit</h1>
+            </div>
+            <div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+                <div id="report-date-div">
+                    <div class="input-group date">
+                        <input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+                        <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-minus"></i>
+	                    </span>
+                        <input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+                        <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-calendar"></i>
+	                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <span class="input-group"><a ng-click="generateSystemSettingAuditLogs()"><i class="fa fa-search fa-2x"></i></a></span>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <table ng-table="tableParams" class="table table-condensed table-bordered table-striped" id="audit-table">
+                        <tr ng-repeat="systemSettingAuditList in $data">
+                            <td id="audit-date" class="text-center" style='width: 10%;' data-title="getSystemLanguageDisplayVal('audit-table-date', 'Date')" sortable="'currentUpdate'">{{systemSettingAuditList.currentUpdate}}</td>
+                            <td class="text-center" style='font-size:15px;width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-group', 'Group')" sortable="'settingGroup'" filter="{settingGroup: 'select'}" filter-data="settingGroupFilter()">{{systemSettingAuditList.settingGroup}}</td>
+                            <td class="text-center" style='font-size:15px;width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-category', 'Category')" sortable="'category'" filter="{category: 'select'}" filter-data="categoryFilter()">{{systemSettingAuditList.category}}</td>
+                            <td class="text-center" style='font-size:15px;width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-by', 'By')" sortable="'updateBy'" filter="{updateBy: 'select'}" filter-data="byFilter()">{{systemSettingAuditList.updateBy}}</td>
+                            <td class="text-left" style='font-size:15px;width: 60%;white-space:pre-line;' data-title="getSystemLanguageDisplayVal('audit-table-detail', 'Detail')" sortable="'info'">{{systemSettingAuditList.info}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,262 @@
+<div id="inventoryPurchaseOrderPage">
+    <div class="form-group col-sm-1">
+        <select class="form-control" id="purchaseOrder-vendor" ng-model="purchaseOrderFilter.selectedInventoryVendorId" ng-options="item.id as item.name for item in inventoryVendorList" ng-change="updateTable()">
+            <option id="itemFilter-vendor-option-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-1">
+        <select class="form-control" id="orderStatus-filter-list" ng-model="purchaseOrderFilter.selectedOrderStatus" ng-options="item.name as item.displayName for item in orderStatusQueryList">
+        </select>
+    </div>
+    <div class="form-group col-sm-3">
+        <input type="date" class="form-control" id="itemFilter-fromDate" ng-model="purchaseOrderFilter.fromDate">
+    </div>
+    <div class="form-group col-sm-3">
+        <input type="date" class="form-control" id="itemFilter-toDate" ng-model="purchaseOrderFilter.toDate">
+    </div>
+    <div class="form-group col-sm-3">
+        <button type="button" class="btn btn-primary btn-search" ng-click="queryPurchaseOrders()">Search</button>
+        <button type="button" class="btn btn-success btn-new-entry" data-toggle="modal" data-target="#purchaseOrderDetailsModal" ng-click="newPurchaseOrder()">New</button>
+    </div>
+    <div class="form-group col-sm-1" ng-app align="right">
+        <button id="button-export" type="button" class="btn btn-primary" ng-click="exportDataPurchase()">Export</button>
+    </div>
+
+    <div>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        <a ng-click="sortTable('id')"><label>#</label></a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('total')">
+                            <label id="label-total" class="detail-input-total">Total</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('subtotal')">
+                            <label id="label-subtotal" class="detail-input-subtotal">Subtotal</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('tax')">
+                            <label id="label-tax" class="detail-input-tax">Tax</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a>
+                            <label id="label-notes" class="detail-input-notes">Notes</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('status')">
+                            <label id="label-status">Status</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('vendorname')">
+                            <label id="label-vendorName">Vendor Name</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('vendororderid')">
+                            <label id="label-vendorOrderId">Vendor Order #</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('shippingaddressname')">
+                            <label id="label-shippingAddressName">Shipping Address Name</label>
+                        </a>
+                    </th>
+                    <th>
+                        <a ng-click="sortTable('lastupdated')">
+                            <label id="label-lastupdated">Last Updated</label>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="div-table-content-md">
+        <table class="table table-striped table-condensed table-bordered">
+            <tbody>
+                <tr ng-repeat="purchaseOrder in purchaseOrderList | orderBy:sortType:sortReverse" data-toggle="modal" data-target="#purchaseOrderDetailsModal" ng-click="setCurrentPurchaseOrder(purchaseOrder)">
+                    <td>{{ purchaseOrder.id }}</td>
+                    <td>{{ purchaseOrder.total }}</td>
+                    <td>{{ purchaseOrder.subtotal }}</td>
+                    <td>{{ purchaseOrder.tax }}</td>
+                    <td>{{ purchaseOrder.notes }}</td>
+                    <td>{{ purchaseOrder.status }}</td>
+                    <td>{{ purchaseOrder.vendorname }}</td>
+                    <td>{{ purchaseOrder.vendororderid }}</td>
+                    <td>{{ purchaseOrder.shippingaddressname }}</td>
+                    <td>{{ purchaseOrder.lastupdated }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <div class="form-group col-sm-8 col-lg-8">
+        </div>
+        <div class="form-group col-sm-4 col-lg-4">
+            <label class="control-label"><label id="label-totalOrderValue">Total Value</label>: {{totalPurchaseOrderValue}}</label>
+        </div>
+    </div>
+
+    <div>
+        <div class="alert alert-danger" ng-show="submitResult.error">
+            <label id="alert-error" class="alert-error-message">Unable to submit your request.</label> {{submitResult.errorMessage}}
+        </div>
+        <div class="alert alert-success" ng-show="submitResult.success">
+            <label id="alert-success" class="alert-success-message">Submitted Successfully!</label>
+        </div>
+    </div>
+
+    <div class="modal fade" id="purchaseOrderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        <label id="label-detailModalLabel">Purchase Order Details</label> - #{{currentPurchaseOrder.id}} -
+                        <label>${{currentPurchaseOrder.subtotal}}</label>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="col-sm-4">
+                            <div>
+                                <div class="form-group col-sm-6">
+                                    <select class="form-control" id="item-group-select-list" ng-model="inventoryItemFilter.groupid" ng-options="item.id as item.name for item in inventoryItemGroupList">
+                                        <option id="item-group-option-all" value="" class="input-value-type-all">All</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <input type="input" class="form-control" id="search-item-input" ng-model="inventoryItemFilter.name" placeholder="Search">
+                                </div>
+                            </div>
+                            <div id="inventoryItemsTableContainerDiv">
+                                <div class="div-table-header">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-sm-10">
+                                                <a ng-click="sortTable('name')">
+                                                    <label id="label-item-name" class="detail-input-name">Name</label>
+                                                </a>
+                                            </th>
+                                            <th class="col-sm-2">
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="div-table-content-md">
+                                    <table class="table table-striped table-condensed">
+                                        <tbody>
+                                        <tr ng-repeat="inventoryItem in inventoryItemList | orderBy:sortType:sortReverse | customerInventoryItemFilter:inventoryItemFilter" ng-click="addOrderItem(inventoryItem)">
+                                            <td class="col-sm-10">{{ inventoryItem.displayInfo }}</td>
+                                            <td class="col-sm-2"><i class="fa fa-plus"></i></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div id="purchaseOrderDetailsDiv">
+                                <div class="row">
+                                    <div class="form-group col-sm-3">
+                                        <label id="label-vendor-select-list" for="vendor-select-list" class="control-label">Vendor</label>
+                                        <select class="form-control" id="vendor-select-list" ng-model="currentPurchaseOrder.vendorid" ng-options="item.id as item.name for item in inventoryVendorList">
+                                            <option id="vendor-option-none" value="-1"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label id="label-shipping-address-select-list" for="shipping-address-select-list" class="control-label">Location</label>
+                                        <select class="form-control" id="shipping-address-select-list" ng-model="currentPurchaseOrder.shippingaddressid" ng-options="item.id as item.name for item in inventoryLocationList">
+                                            <option id="location-option-none" value="-1"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label id="label-vendorOrderId-input" for="vendorOrderId-input" class="control-label">Vendor Ord #</label>
+                                        <input type="text" class="form-control" id="vendorOrderId-input" ng-model="currentPurchaseOrder.vendororderid">
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <label id="label-tax-input" for="tax-input" class="control-label">Tax</label>
+                                        <input type="number" class="form-control" id="tax-input" ng-model="currentPurchaseOrder.tax">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-12">
+                                        <label id="label-notes-input" for="notes-input" class="control-label">Notes</label>
+                                        <textarea rows="2" class="form-control" id="notes-input" ng-model="currentPurchaseOrder.notes"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="purchaseOrderItemsTableContainerDiv">
+                                <div class="div-table-header">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-sm-6">
+                                                <a ng-click="sortTable('name')">
+                                                    <label id="label-name" class="detail-input-name">Name</label>
+                                                </a>
+                                            </th>
+                                            <th class="col-sm-2">
+                                                <a ng-click="sortTable('qty')">
+                                                    <label id="label-qty">QTY</label>
+                                                </a>
+                                            </th>
+                                            <th class="col-sm-3">
+                                                <a ng-click="sortTable('priceperunit')">
+                                                    <label id="label-pricePerUnit">Unit Price</label>
+                                                </a>
+                                            </th>
+                                            <th class="col-sm-1">
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="div-table-content-small">
+                                    <table class="table table-striped table-condensed table-bordered">
+                                        <tbody>
+                                        <tr ng-repeat="orderItem in currentPurchaseOrder.orderItemList | orderBy:sortType:sortReverse">
+                                            <td class="col-sm-6">{{ orderItem.displayInfo }}</td>
+                                            <td class="col-sm-2"><input type="number" min="0" class="form-control input-sm" ng-model="orderItem.qty" ng-change="calculatePurchaseOrderSubtotal()" mnsf-select-on-focus mnsf-auto-focus="focusQtyInput{{$index}}"></td>
+                                            <td class="col-sm-3"><input type="number" class="form-control input-sm" ng-model="orderItem.priceperunit" ng-change="calculatePurchaseOrderSubtotal()" mnsf-select-on-focus></td>
+                                            <td class="col-sm-1"><div><a class="btn btn-danger" ng-click="deleteOrderItem($index)"><i class="fa fa-trash-o fa-lg"></i></a></div></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="alert alert-danger" ng-show="saveOrderSubmitResult.error">
+                            <label id="save-order-alert-error" class="alert-error-message">Unable to submit your request.</label> {{saveOrderSubmitResult.errorMessage}}
+                        </div>
+                        <div class="alert alert-success" ng-show="saveOrderSubmitResult.success">
+                            <label id="save-order-alert-success" class="alert-success-message">Submitted Successfully!</label>
+                        </div>
+                        <div class="alert alert-success" ng-show="saveOrderSubmitResult.processing">
+                            <label id="save-order-alert-processing" class="alert-processing-message">Processing, please wait...</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cancel-order" type="button" class="btn btn-danger pull-left" ng-click="cancelPurchaseOrder()">Cancel order</button>
+                    <button type="button" class="btn btn-primary btn-save pull-right" ng-click="savePurchaseOrder(false)">Save</button>
+                    <button type="button" class="btn btn-primary btn-email pull-right" ng-click="savePurchaseOrder(true)" ng-show="showEmailButton()">Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,451 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Menusifu POS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/cashRegisterActivity.js"></script>
+    <style type="text/css">
+        .open-arrow {
+            width: 0;
+            height: 0;
+            border: 5px solid transparent;
+            border-bottom-color: #000;
+            position:absolute;
+            /*float: right;*/
+            right:0;
+            cursor:pointer;
+            content: '';
+        }
+        .close-arrow {
+            width: 0;
+            height: 0;
+            border: 5px solid transparent;
+            border-top-color: #000;
+            /*position:absolute;*/
+            float: right;
+            cursor:pointer;
+            content: '';
+        }
+        .disabledClass{
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+<div id="cashRegisterActivityPage" data-role="page" data-theme="a">
+    <div id="cashRegisterActivityDiv" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-paidOutTransactionTab" href="#paidOutTransactionTab">Paid Out</a></li>
+                    <li><a id="navbar-cashRegisterActivityTab" href="#cashRegisterActivityTab">Cash In/Out</a></li>
+                    <li><a id="navbar-tipOutTransactionTab" href="#tipOutTransactionTab">Tip Out</a></li>
+                </ul>
+            </div>
+
+            <div id="paidOutTransactionTab" class="adminPageMainContentDiv">
+                <div class="search-btn-group">
+                    <div id='search-btn-group' class="ui-grid-b">
+                        <div class="ui-block-a" >
+                            <div data-role="fieldcontain">
+                                <label id="label-fromDatePicker" for="fromDatePicker0" class="detail-input-from">From</label>
+                                <input id="fromDatePicker0" type="date" name="fromDatePicker" value=""/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b" >
+                            <div data-role="fieldcontain">
+                                <label id="label-toDatePicker" for="toDatePicker0" class="detail-input-to">To</label>
+                                <input id="toDatePicker0" type="date" name="toDatePicker" value="" Title="To"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-c" >
+                            <button type="submit" onclick="customTransaction.fetchEntries();" class="btn-search" data-theme="b">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="myPlusIconDiv">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain" id="paid-to-staff-filter-div">
+                                <label id="label-staff-filter-list" class="select" for="staff-filter-list" class="select">Filter By Paid To Staff</label>
+                                <select name="select-choice-list-1" id="staff-filter-list">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain" id="void-filter-div">
+                                <label id="label-showVoidedPayments" for="showVoidedPayments">Show Voided Payments</label>
+                                <input id="showVoidedPayments" name="showVoidedPayments" type="checkbox" checked="false">
+                            </div>
+                        </div>
+                        <div class="ui-block-c">
+                            <input type="image" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="customTransaction.newEntry();" title="Add"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailTableContainerDiv">
+                    <table id="customTransactionTable" class="detailTable">
+                        <thead>
+                        <tr>
+                            <th class="detail-input-paid-to">Paid To</th>
+                            <th class="detail-input-datetime">Date</th>
+                            <th class="detail-input-amount">Amount</th>
+                            <th class="detail-input-authorized-by">Authorized By</th>
+                            <th class="detail-input-cash-drawer">Cash Drawer</th>
+                            <th class="detail-input-voided">Void</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div data-role="popup" id="editCustomTransactionDetailPopup" data-overlay-theme="a" data-theme="a" data-transition="flow" data-dismissible="false" class="ui-corner-all editDetailPopup">
+                    <div data-role="header" class="ui-corner-top">
+                        <h1 id="editCustomTransactionDetailPopup-header">Transaction</h1>
+                    </div>
+                    <div id="message" align="center" style="color:red"></div>
+                    <div data-role="content" class="ui-corner-bottom ui-content align-element">
+                        <div data-role="fieldcontain" id="paidToTypeRadioButtonDiv">
+                            <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+                                <legend id="legend-paidToType">Paid To Type: </legend>
+                                <input type="radio" name="paidToType-radio-choice" id="paidTo-type-staff-choice" value="STAFF" checked="checked" />
+                                <label id="label-paidTo-type-staff-choice" for="paidTo-type-staff-choice">Staff</label>
+                                <input type="radio" name="paidToType-radio-choice" id="paidTo-type-other-choice" value="OTHER" />
+                                <label id="label-paidTo-type-other-choice" for="paidTo-type-other-choice">Other</label>
+                            </fieldset>
+                        </div>
+                        <div id='paid-to-staff-select-div' data-role="fieldcontain">
+                            <label id="label-paid-to-select-list" class="select detail-input-paid-to" for="paid-to-select-list">Paid To Staff</label>
+                            <select name="select-choice-list-2" id="paid-to-select-list">
+                            </select>
+                        </div>
+                        <div id='paid-to-other-input-div' data-role="fieldcontain" class="hidden">
+                            <label id="label-paidTo" class="detail-input-paid-to" for="paidTo">Paid To</label>
+                            <input name="paidTo" id="paidTo"/>
+                        </div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div id="cashDrawerDiv" data-role="fieldcontain">
+                                    <label id="label-cash-drawer-select-list" class="select detail-input-cash-drawer" for="cash-drawer-select-list">Cash Drawer</label>
+                                    <select name="cash-drawer-select-list" id="cash-drawer-select-list">
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="authorizedByDiv" class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label id="label-authorized-by-select-list" class="select detail-input-authorized-by" for="authorized-by-select-list">Authorized By</label>
+                                    <select name="authorized-by-select-list" id="authorized-by-select-list">
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="ui-grid-a">
+                            <div id="transactDateDiv" class="ui-block-a">
+                                <div data-role="fieldcontain">
+                                    <label id="label-transactDatetimePicker" for="transactDatetimePicker" class="detail-input-datetime">Date</label>
+                                    <input id="transactDatetimePicker" type="datetime-local" name="transactDatetimePicker" value=""/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label id="label-amount" for="amount" class="detail-input-amount">Amount</label>
+                                    <input id="amount" type="number" name="amount" value=""/>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div data-role="fieldcontain">
+                            <label id="label-description" for="description" class="detail-input-description">Description</label>
+                            <textarea id="description" name="description" value="" style="height:51px;"></textarea>
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label id="label-voided" for="voided" class="detail-input-voided">Voided</label>
+                            <input id="voided" name="voided" value="0" type="checkbox" checked="false">
+                        </div>
+                    </div>
+                    <div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a"><div class="my-button-div"><button type="submit" class="btn-save" onclick="customTransaction.saveEntry();" data-theme="b">Save</button></div></div>
+                            <div class="ui-block-b"><div class="my-button-div"><button type="submit" class="btn-cancel" onclick="customTransaction.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cashRegisterActivityTab" class="adminPageMainContentDiv">
+                <div class="search-btn-group">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a" >
+                            <div data-role="fieldcontain">
+                                <label id="label-fromDatePicker1" for="fromDatePicker1" class="detail-input-from">From</label>
+                                <input id="fromDatePicker1" type="date" name="fromDatePicker1" value=""/>
+                            </div>
+                        </div>
+                        <div class="ui-block-b" >
+                            <div data-role="fieldcontain">
+                                <label id="label-toDatePicker1" for="toDatePicker1" class="detail-input-to">To</label>
+                                <input id="toDatePicker1" type="date" name="toDatePicker1" value="" Title="To"/>
+                            </div>
+                        </div>
+                        <div class="ui-block-c" >
+                            <button type="submit" onclick="cashRegisterActivity.fetchEntries();" class="btn-search" data-theme="b">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="myPlusIconDiv">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div data-role="fieldcontain" id="staff-filter-div">
+                                <label id="label-staff-filter-list1" class="select" for="staff-filter-list1" class="select">Filter By Staff</label>
+                                <select name="select-choice-list-1" id="staff-filter-list1">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="image" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="cashRegisterActivity.newEntry();" title="Add"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailTableContainerDiv">
+                    <table id="cashRegisterActivityTable" class="detailTable">
+                        <thead>
+                        <tr>
+                            <th class="detail-input-person-name">Cashier</th>
+                            <th class="detail-input-cash-drawer">Cash Drawer</th>
+                            <th class="detail-input-in-amount">In Amount</th>
+                            <th class="detail-input-out-amount">Out Amount</th>
+                            <th class="detail-input-from">From</th>
+                            <th class="detail-input-to">To</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div data-role="popup" id="editCashRegisterActivityDetailPopup" data-overlay-theme="a" data-theme="a" data-transition="flow" data-dismissible="false" class="ui-corner-all editDetailPopup">
+                    <div data-role="header" class="ui-corner-top">
+                        <h1 id="editCashRegisterActivityDetailPopup-header">Cashier In/Out</h1>
+                    </div>
+                    <div id="message1" align="center" style="color:red"></div>
+                    <div data-role="content" class="ui-corner-bottom ui-content align-element">
+                        <div id='staff-select-div' data-role="fieldcontain">
+                            <label id="label-staff-select-list" class="select detail-input-person-name" for="staff-select-list">Cashier</label>
+                            <select name="select-choice-list-2" id="staff-select-list">
+                            </select>
+                        </div>
+                        <div id="cashDrawerDiv1" data-role="fieldcontain">
+                            <label id="label-cash-drawer1-select-list" class="select detail-input-cash-drawer" for="cash-drawer1-select-list">Cash Drawer</label>
+                            <select name="cash-drawer1-select-list" id="cash-drawer1-select-list">
+                            </select>
+                        </div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <label id="label-inAmount" for="inAmount" class="detail-input-in-amount">In Amount</label>
+                                <input type="number" id="inAmount" name="inAmount"/>
+                            </div>
+                            <div class="ui-block-b">
+                                <label id="label-outAmount" for="outAmount" class="detail-input-out-amount">Out Amount</label>
+                                <input type="number" id="outAmount" name="outAmount"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <div data-role="fieldcontain">
+                                    <label id="label-fromDatetimePicker" for="fromDatetimePicker" class="detail-input-from">From</label>
+                                    <input id="fromDatetimePicker" type="datetime-local" name="fromDatetimePicker" value=""/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div data-role="fieldcontain">
+                                    <label id="label-toDatetimePicker" for="toDatetimePicker" class="detail-input-to">To</label>
+                                    <input id="toDatetimePicker" type="datetime-local" name="toDatetimePicker" value=""/>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div data-role="fieldcontain">
+                            <label id="label-expectedOutAmount" for="expectedOutAmount">Expected Out Amount</label>
+                            <input id="expectedOutAmount" type="number" name="expectedOutAmount" value="" disabled/>
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label id="label-discrepancyReason" for="discrepancyReason">Discrepancy Reason</label>
+                            <textarea id="discrepancyReason" name="discrepancyReason" value=""></textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a"><div class="my-button-div"><button type="submit" class="btn-save" onclick="cashRegisterActivity.saveEntry();" data-theme="b">Save</button></div></div>
+                            <div class="ui-block-b"><div class="my-button-div"><button type="submit" class="btn-cancel" onclick="cashRegisterActivity.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div id="tipOutTransactionTab" class="adminPageMainContentDiv" data-theme="a" data-role="content">
+
+                <!--列表布局开始-->
+                <div class="ui-grid-a">
+                    <div class="ui-grid-d ui-responsive">
+                        <div class="ui-block-a">
+                            <div class="ui-body ui-body-d">
+                                <select name="select-choice-list-1" id="orderTypeList" onchange="tipOutSetupObj.listEntry()">
+                                    <option value="">All Order Type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="ui-body ui-body-d">
+                                <select name="select-choice-list-1" id="areaList" onchange="tipOutSetupObj.listEntry()">
+                                    <option value="">All Areas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-c">
+                            <div class="ui-body ui-body-d">
+                                <select name="select-choice-list-1" id="rolesList" onchange="tipOutSetupObj.listEntry()">
+                                    <option value="">All Roles</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-d">
+                            <div class="ui-body ui-body-d">
+                                <select name="select-choice-list-1" id="menuList" onchange="tipOutSetupObj.listGroups(this);tipOutSetupObj.listEntry()">
+                                    <option value="">All Menus</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui-block-e">
+                            <div class="ui-body ui-body-d">
+                                <select name="select-choice-list-1" id="groupList" onchange="tipOutSetupObj.listEntry()">
+                                    <option value="">All Groups</option>
+                                </select>
+                                <button id="create-new" type="submit" class="btn-new" data-theme="b" onclick="tipOutSetupObj.newEntry();">New</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-a">
+                        <div class="detailTableContainerDiv">
+                            <table id="tipoutTable" class="detailTable">
+                                <thead>
+                                <tr>
+                                    <th class="detail-input-ruleName">Name</th>
+                                    <th class="detail-input-tipOutType">Tip out type</th>
+                                    <th class="detail-input-menuType">Menu/Order Type (Area)</th>
+                                    <th class="detail-input-roles">Role(s)</th>
+                                    <th class="detail-input-percentage">Percentage</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tipoutTableTbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--列表布局结束-->
+                <!--创建tipout弹出窗开始-->
+                <div data-role="popup" id="editTipOutPopup" data-overlay-theme="a" data-theme="a" data-transition="flow" data-dismissible="false" class="ui-corner-all editDetailPopup" style="max-width: 700px;width: 700px;">
+                    <div data-role="header" class="ui-corner-top">
+                        <h1 id="editTipOutPopup-header" class="editTipOutRulePopup-header">Tip out Rule</h1>
+                    </div>
+                    <div id="messageTipOut" align="center" style="color:red"></div>
+                    <div data-role="content" class="ui-corner-bottom ui-content align-element">
+                        <fieldset class="ui-grid-a">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div data-role="fieldcontain">
+                                            <label id="label-tipout-name" class="detail-input-ruleName1">Name</label>
+                                            <input style="min-height: 2.6em;" type="text" name="name" id="tipOutName">
+                                            <input name="currentEntryId" id="currentEntryId" type="hidden">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-role="fieldcontain">
+                                            <label id="label-tipout-orderType" class="detail-input-tipout-orderType">Type</label>
+                                            <select name="select-choice-list-1" id="orderTypeList1" onchange="tipOutSetupObj.typeOrMenuGroup(this)">
+                                                <option value="MENU_GROUP">Menu Group</option>
+                                                <option value="ORDER_TYPE">Order Type</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-role="fieldcontain" style="width: 160px;" >
+                                            <label></br></label>
+                                            <input id="menuList11" type="hidden">
+                                            <select name="select-choice-list-1" id="menuList1" onchange="tipOutSetupObj.areaOrGroupList(this)">
+                                                <!--<option value="">All Menus</option>-->
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-role="fieldcontain"  style="width: 160px;">
+                                            <label></br></label>
+                                            <input id="groupList11" type="hidden">
+                                            <select name="select-choice-list-1" id="groupList1">
+                                                <option value="">All Groups</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="position: absolute;">
+                                        <div style="margin-top: 0px;position: relative;width: 150px;">
+                                            <label id="label-tipout-Percentage"class="detail-input-tipout-Percentage">Total Percentage</label>
+                                            <input name="totalPercentage" id="totalPercentage">
+                                            <input name="calcTipOutBasingOn" id="calcTipOutBasingOn" type="hidden">
+                                        </div>
+
+                                    </td>
+                                    <td colspan="3">
+                                        <table style="width: 100%;">
+                                            <thead>
+                                            <tr>
+                                                <td class='detail-input-roles caption'>Roles</td>
+                                                <td class='detail-input-percentage-distributions caption'>Percentage Distributions (%)</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="rolesTable">
+                                            </tbody>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                    <div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-b" style="width: 30%;display: none;" id="deleteBtn"><div class="my-button-div"><button type="submit" class="btn-delete" style="color: rgb(255, 255, 255);background-color: rgb(217, 83, 79);border-color: rgb(212, 63, 58);" onclick="tipOutSetupObj.deleteEntry();" data-theme="b">Delete</button></div></div>
+                            <div class="ui-block-b" style="width: 30%;"><div class="my-button-div"><button type="submit" class="btn-save" onclick="tipOutSetupObj.save();" data-theme="b">Save</button></div></div>
+                            <div class="ui-block-b" style="width: 30%;"><div class="my-button-div"><button type="submit" class="btn-cancel" onclick="tipOutSetupObj.refreshTipOutTable();" data-theme="a">Cancel</button></div></div>
+                        </fieldset>
+                    </div>
+                </div>
+                <!--创建tipout弹出窗结束-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

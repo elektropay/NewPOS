@@ -1,0 +1,449 @@
+body{
+	margin: 0;
+	padding: 0;
+	position:absolute;
+	width: 100%;
+	height: 100%;
+	font-family: 'Roboto', sans-serif;
+}
+
+#background_body {
+	position:absolute;
+	width: 100%;
+	height:100%;
+	/*	background-image: url(bgImage.jpg);*/
+	background-size: 100% auto;
+	opacity: 0.5;
+	z-index: 1;
+	background-attachment:fixed;
+	/*	background-repeat: no-repeat;*/
+}
+
+#choose_background {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	opacity: 0.3;
+	z-index: 2;
+	display: none;
+}
+
+#content{
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+}
+#waitBoardBottom{
+	display: none;
+}
+#c_waitingList_left{
+	float:left;
+	width:34.89%;
+	height:100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#c_waitingList_right{
+	float:right;
+	width:65.11%;
+	height:100%;
+}
+
+#box{
+	width: 100%;
+	height: 90%;
+	display:table;
+	text-align:center;
+}
+
+.dw-li{
+	text-align: center !important;
+}
+.dw-v{
+	text-align: center !important;
+}
+
+#box span{
+	width: 100%;
+	height:100%;
+	display:table-cell;
+	vertical-align:middle;
+}
+
+#box img{
+	margin: auto;
+	width: 85%;
+}
+
+
+/*.asd{
+	width: 100%;
+	height: 20%;
+	background-color: yellow;
+	font-size: 2vw;
+}*/
+/*<!--[if lte IE 7]>
+<style type="text/css">
+#box{
+    position:relative;
+    overflow:hidden;
+}
+#box span{
+    position:absolute;
+    left:50%;top:50%;
+}
+#box img{
+    position:relative;
+    left:-50%;top:-50%;
+}
+</style>
+<[endif]!-->*/
+
+#id_menusifu{
+	height: 10%;
+	width: 100%;
+}
+
+#id_logo_note{
+	padding-top:0.5%;
+	vertical-align: middle;
+	text-align: right;
+	float: left;
+	width: 67%;
+	height:100%;
+	font-size: 1.2vw;
+}
+
+#logo_box{
+	float:right;
+	width:31%;
+	height: 100%;
+}
+
+#id_menusifu_logo{
+	width: 20%;
+}
+
+#id_right_background {
+	position:absolute;
+	width: 100%;
+	height:100%;
+	background-color: black;
+	opacity: 0.88;
+	z-index: 1;
+}
+
+#right_content{
+	width:79.636%;
+	height:100%;
+	position: relative;
+	z-index: 5;
+	/*	display: none;*/
+}
+
+#input_box{
+	width:100%;
+	height: 76.16%;
+	font-size: 2.5vw;
+	padding: 0 12.23% 0 13.34%;
+}
+
+#status_sign{
+	padding: 1.49% 12.23% 0 13.34%;
+	width:100%;
+	height:20%;
+	font-size: 22px;
+}
+
+/*.input_Unit{
+	margin-top: 10%;
+	background-color: red;
+	background-color: transparent;
+	border: none;
+	border-bottom: #F7BC30 2px solid;
+	opacity: 0.85
+}*/
+
+.row{
+	width:100%;
+	height: 20%;
+	margin: 0 0 0 0;
+	z-index: 5;
+}
+
+label{
+	position: relative;
+	display: block;
+	float: left;
+	width: 100%;
+}
+
+
+label input{
+	/*  width: 160px;
+      height: 30px;*/
+	width: 94%;
+	float: left;
+	line-height: 3.5vw;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid ;
+	border-radius: 0px 0px 0px 0px;
+	color: #F7BC30;
+	padding: 0px 0px;
+	padding-right:6.382%;
+	/*transition: all 0.3s ease-in-out;*/
+	font-size:2vw;
+}
+
+label input ::-webkit-input-placeholder {
+	color: transparent;
+}
+
+label input + span{
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: #F7BC30;
+	background-color: transparent;
+	display: inline-block;
+	/*  transform-origin: left center;*/
+	/*  transform: perspective(300px);*/
+	/* transition: all .3s ease-in-out;*/
+}
+
+#adultLabel{
+	width:55%;
+}
+
+#childLabel{
+	float:right;
+	width:42%;
+}
+
+#nation_field{
+	left: 0;
+	bottom: 0.5vw;
+	position: absolute;
+	float:left;
+	width:18%;
+	display: none;
+	z-index:10;
+}
+
+#placeholder_nation{
+	float:left;
+	width: 45%;
+}
+
+#listButton{
+	margin-left: 7%;
+	margin-top: 10%;
+	float: left;
+	width: 15%;
+}
+
+#areaCode{
+	color: white;
+	font-size: 2.5vw;
+	width: 20%;
+	margin-left: 7%;
+	float: left;
+
+
+}
+
+#nation{
+	height:12.5%;
+	width:52%;
+	display: none;
+	position: absolute;
+	float: left;
+	background-color: #2e2e2e;
+	opacity: 0.95;
+	top: 38%;
+	left: 41.5%;
+	z-index: 5;
+}
+
+.nation_flag{
+	width:96%;
+	margin: 2%;
+	color:white;
+	font-size: 2vw;
+}
+
+#option_america:hover{
+	background-color: #778899;
+}
+
+#option_china:hover{
+	background-color: #708090;
+}
+
+.nation_flag img{
+	margin-right:1%;
+	width:8%;
+}
+
+#option_america{
+	padding-bottom: 1vw;
+	border-bottom: 1px solid white;
+}
+
+.btn_clear{
+	position:absolute;
+	right:0;
+	padding-right: 2%;
+	display: block;
+	color:white;
+	display:none;
+	z-index: 20;
+}
+
+.check{
+	float: right;
+	padding-right: 2%;
+	display: none;
+}
+
+#america_chosen{
+	color:white;
+	font-weight: bold;
+	display:block;
+	font-size: 2vw;
+}
+
+#china_chosen{
+	color:white;
+	font-weight:bold;
+	font-size: 2vw;
+}
+
+#btn_c_waitingList_submit{
+	width: 40%;
+}
+
+#btn_c_waitingList_name {
+}
+#btn_tryAgain, #btn_finish{
+	width: 31.892%;
+}
+.btn{
+	font-size: 24.5px;
+	background-color: transparent;
+	color:#F7BC30;
+	border-radius: 3px;
+	z-index: 5;
+	border: 2px solid #F7BC30;
+	padding-top: 14px;
+	padding-bottom: 15px;
+	font-weight:bold;
+	outline-color:white;
+	outline: none;
+}
+
+.btn:active{
+	box-shadow: 0px 0px 1.67vw #F9C427;
+	font-size: 24.5px;
+	background-color: transparent;
+	color:#F7BC30;
+	border-radius: 3px;
+	z-index: 5;
+	border: 2px solid #F7BC30;
+	padding-top: 14px;
+	padding-bottom: 15px;
+	font-weight:bold;
+	outline-color:white;
+	outline: none;
+}
+
+.board{
+	width: 100%;
+	height: 100%;
+	color:white;
+	position: relative;
+	z-index: 5;
+	text-align: center;
+	font-size: 2vw;
+	display: none;
+}
+#succeedBoard{
+	color: #55BC76;
+	display: none;
+}
+
+#failBoard{
+	color:#F7BC30;
+	display: none;
+}
+
+#tablesAhead{
+	font-size: 3.5em;
+	width: 100%;
+	padding-top: 7%;
+	padding-bottom: 5%
+
+}
+
+.resultTop{
+	width: 100%;
+	height: 41%;
+}
+
+.resultImg{
+	width: 15%;
+	margin-top: 9%;
+}
+
+.resultMsg{
+	padding-left: 2px;
+	font-size: 2vw;
+	font-weight: bold;
+}
+
+.BoardMiddle{
+	color:white;
+	width:100%;
+	height:35%
+}
+
+.BoardBottom{
+	/*display: none;*/
+	padding-top: 0;
+	width: 100%;
+	height:19%;
+	margin-top:5%;
+}
+
+#showTablesAhead{
+	color:#F7BC30 !important;
+}
+#invalid_note1, #invalid_note2, #invalid_note3{
+	color:rgb(211,44,0);
+	display: none;
+	font-size: 1.67vw;
+}
+
+.undefined{
+	position:relative;
+	float:left !important;
+	font-weight:bold;
+}
+
+/*#fullscreenDIV{
+	width: 100%;
+	height: 5%;
+}*/
+
+#fullscreenBtn{
+	display:none;
+}

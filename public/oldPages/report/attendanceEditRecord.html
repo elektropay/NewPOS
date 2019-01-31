@@ -1,0 +1,118 @@
+<div id="attendanceEditRecordPage" class="content-page">
+	<div id="page-wrapper">
+
+		<div id="attendanceEditRecord-loading-page" class="text-center" hidden>
+            <div class="alert alert-info" role="alert"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><b class="loading-sign"> Please wait, Loading... </b><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+        </div>
+
+		<div id="preview-popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="print-preview" aria-hidden="true">
+		  	<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header text-center">
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        		<h4 class="modal-title" id="print-preview">Print Preview</h4>
+		      		</div>
+				    <div class="modal-body row">
+				    	<div class="report-wrap col-sm-8 col-md-8 col-lg-8">
+				        	<iframe id="report-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+				    	</div>
+				    	<div class="col-sm-4 col-md-4 col-lg-4">
+				    		<!--<div id="printer" class="dropdown open">-->
+							  	<!--<button class="btn btn-primary btn-lg btn-block btn-print-report dropdown-toggle" type="button" id="printer-list-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+							    <!--Print</button>-->
+							  	<!--<div class="dropdown-menu" aria-labelledby="printer-list-dropdown">-->
+							    	<!--<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(true, false, '')">Default</button>-->
+							    	<!--<button class="dropdown-item btn-primary btn-block" ng-repeat="printer in printerList" ng-click="submitReportPreview(true, false, printer.name)">{{printer.name}}</button>-->
+							  	<!--</div>-->
+							<!--</div>-->
+							<div class="dropdown open">
+							  	<button class="btn btn-primary btn-lg btn-block btn-export-report dropdown-toggle" type="button" id="export-type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    Export</button>
+							  	<div class="dropdown-menu" aria-labelledby="export-type-dropdown">
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'PDF')">PDF</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'XLSX')">XLSX</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'CSV')">CSV</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'HTML')">HTML</button>
+							  	</div>
+							</div>
+				    	</div>
+				    </div>
+			    </div>
+		  	</div>
+		</div>
+
+		<div class="row page-header">
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <h1 class="report-header" id="attendanceEditRecord-page-header">Attendance Edit Record</h1>
+            </div>
+            <div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+            	<div id="report-date-div">
+		        	<div class="input-group date">
+	                    <input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-minus"></i>
+	                    </span>
+	                    <input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-calendar"></i>
+	                    </span>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            	<span class="input-group"><a ng-click="fetchAttendanceEditRecord()"><i class="fa fa-search fa-2x"></i></a></span>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+				<form id="attendanceeditrecordform" name="attendanceeditrecordform" method="post" action="" target="report-frame">
+					
+					<input id="previewFrom" type="hidden" name="fromDate" value=""/>
+                    <input id="previewTo" type="hidden" name="toDate" value=""/>
+                    <input id="printReport" type="hidden" name="printReport" value=""/>
+                    <input id="exportReport" type="hidden" name="exportReport" value=""/>
+					<!--<input id="personalReport" type="hidden" name="personalReport" value="false"/>-->
+					<!--&lt;!&ndash;<input id="printerName" type="hidden" name="printerName" value=""/>&ndash;&gt;-->
+					<input id="exportFileName" type="hidden" name="exportFileName" value=""/>					
+					<input id="reportName" type="hidden" name="reportName" value="AttendEditRecordReport"/>
+					<input id="reportType" type="hidden" name="reportType" value="ATTENDANCE_EDIT_RECORD"/>
+					<!--&lt;!&ndash;<input id="userId" type="hidden" name="userId" value=""/>&ndash;&gt;-->
+					<!--<input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>-->
+					<!--<input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>-->
+					<input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+
+					<span class="input-group"><a data-toggle="modal" data-target="#preview-popup"><i class="fa fa-print fa-2x"></i></a></span>
+				</form>
+			</div>
+		</div>
+		<div class="page-body">
+			<div id="attendanceEditRecord-alert-sign" class="row alert alert-info text-center">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<i class="fa fa-exclamation-triangle"></i><b class="alert-sign-text-1">Please select time range and press </b><i class="fa fa-search"></i><b class="alert-sign-text-2"> button</b><i class="fa fa-exclamation-triangle"></i>
+				</div>
+			</div>
+
+			<div class="row" id="attendance-edit-record-table">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+					<h3 id="attendance-edit-record-data-table">Attendance Edit Record</h3>
+					<table ng-table="tableParams" class="table table-align-left">
+						<tr>
+							<th id="att-edit-table-login-time">Original Login Time</th>
+							<th id="att-edit-table-employee">Employee</th>
+							<th id="att-edit-table-description">Description</th>
+							<th id="att-edit-table-reason">Reason</th>
+							<th id="att-edit-table-updated-by">Updated By</th>
+							<th id="att-edit-table-edit-date">Edit Date</th>
+						</tr>
+						<tr ng-repeat="attendanceEditRecord in $data">
+							<td>{{attendanceEditRecord.originalLoginTime}}</td>
+							<td>{{attendanceEditRecord.employee}}</td>
+							<td style="white-space:pre-line;">{{attendanceEditRecord.description}}</td>
+							<td>{{attendanceEditRecord.reason}}</td>
+							<td>{{attendanceEditRecord.updatedBy}}</td>
+							<td>{{attendanceEditRecord.editDate}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,284 @@
+<div id="categoryReportPage" class="content-page">
+
+    <div class="page-wrapper">
+
+        <div id="category-loading-page" class="text-center" hidden>
+            <div class="alert alert-info" role="alert"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><b class="loading-sign"> Please wait, Loading... </b><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+        </div>
+
+        <div id="preview-popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="print-preview" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="print-preview">Print Preview</h4>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="report-wrap col-sm-8 col-md-8 col-lg-8">
+                            <iframe id="report-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div id="printer" class="dropdown open">
+                                <button class="btn btn-primary btn-lg btn-block btn-print-report dropdown-toggle" type="button" id="printer-list-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Print</button>
+                                <div class="dropdown-menu" aria-labelledby="printer-list-dropdown">
+                                    <button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(true, false, '')">Default</button>
+                                    <button class="dropdown-item btn-primary btn-block" ng-repeat="printer in printerList" ng-click="submitReportPreview(true, false, printer.name)">{{printer.name}}</button>
+                                </div>
+                            </div>
+                            <div class="dropdown open">
+                                <button class="btn btn-primary btn-lg btn-block btn-export-report dropdown-toggle" type="button" id="export-type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Export</button>
+                                <div class="dropdown-menu" aria-labelledby="export-type-dropdown">
+                                    <button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'PDF')">PDF</button>
+                                    <button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'XLSX')">XLSX</button>
+                                    <button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'CSV')">CSV</button>
+                                    <button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'HTML')">HTML</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row page-header">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <h1 class="report-header" id="category-page-header">Category</h1>
+            </div>
+
+            <div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+                <div id="report-date-div">
+                    <div class="input-group date">
+                        <input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+                        <span class="input-group-addon">
+                            <i class="fa fa-fw fa-minus"></i>
+                        </span>
+                        <input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+                        <span class="input-group-addon">
+                            <i class="fa fa-fw fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <span class="input-group"><a ng-click="categoryInfo()"><i class="fa fa-search fa-2x"></i></a></span>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <form id="categoryform" name="categoryform" method="post" action="" target="report-frame">
+
+                    <input id="previewFrom" type="hidden" name="fromDate" value=""/>
+                    <input id="previewTo" type="hidden" name="toDate" value=""/>
+                    <input id="printReport" type="hidden" name="printReport" value=""/>
+                    <input id="exportReport" type="hidden" name="exportReport" value=""/>
+                    <input id="personalReport" type="hidden" name="personalReport" value="false"/>
+                    <input id="printerName" type="hidden" name="printerName" value=""/>
+                    <input id="exportFileName" type="hidden" name="exportFileName" value="PDF"/>
+                    <input id="reportName" type="hidden" name="reportName" value="CategoryReport"/>
+                    <input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>
+                    <input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>
+                    <input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+
+                    <input id="userId" type="hidden" name="userId" value="false"/>
+                    <input id="orderTypes" type="hidden" name="orderTypes" value="false"/>
+                    <input id="combineSub" type="hidden" name="combineSub" value="false"/>
+                    <input id="combineReport" type="hidden" name="combineReport" value="false"/>
+
+                    <span class="input-group"><a data-toggle="modal" data-target="#preview-popup" ng-click="openReportPreview()"><i class="fa fa-print fa-2x"></i></a></span>
+                </form>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="form-group row">
+                <div class="col-sm-2 selectContainer">
+                    <select name="menuType" id="menuType" data-size="10" title="Menu" ng-model="categoryReport.menu" ng-change="populateGroupBasedOnMenu()">
+                        <option value="" selected>All</option>
+                        <option ng-repeat="menu in menuList" value="{{menu.id}}" repeat-finish="renderFinish('menuGroupType')">{{menu.name}}</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-2 selectContainer">
+                    <select name="menuGroupType" id="menuGroupType" data-size="10" title="Menu Group" ng-model="categoryReport.menuGroup"  ng-change="populateCategoryBasedOnGroup()">
+                        <option value="" selected>All</option>
+                        <option ng-repeat="menuGroup in menuGroupList" value="{{menuGroup.id}}" repeat-finish="renderFinish('menuGroupType')">{{menuGroup.name}}</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-2 selectContainer">
+                    <select name="menuCategoryType" id="menuCategoryType" data-size="10" title="Category" ng-model="categoryReport.category" ng-change="manipulateData()">
+                        <option value="" selected>All</option>
+                        <option ng-repeat="menuCategory in menuCategoryList" value="{{menuCategory.id}}" repeat-finish="renderFinish('menuCategoryType')">{{menuCategory.name}}</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-3 selectContainer">
+                    <select name="orderType" id="orderType" data-size="10" title="OrderType" ng-model="categoryReport.orderType" multiple  ng-change="categoryInfo()">
+                        <option value="" selected>All</option>
+                        <option ng-repeat="orderType in orderTypeList" value="{{orderType.name}}">{{orderType.displayName}}</option>
+                        <option role="separator" class="divider disabled initialism" disabled></option>
+                        <option value="ONLINE">All Online Order</option>
+                        <option value="ONLINE_PICKUP"  class="col-md-offset-2"> Online Order Pickup</option>
+                        <option value="ONLINE_DELIVERY"  class="col-md-offset-2"> Online Order Delivery</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-3 selectContainer">
+                    <select name="staffType" id="staffType" data-size="10" title="StaffType" ng-model="categoryReport.staffType" ng-change="categoryInfo()">
+                        <option value="" selected>All</option>
+                        <option ng-repeat="staff in staffList" value="{{staff.userId}}">{{staff.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!--<div class="form-group row">
+                <div class="col-sm-6 selectContainer">
+                    <select name="analysis" id="analysis" data-size="10" title="Analysis">
+                        <option value="PRICE" selected>Based On Price</option>
+                        <option value="QUANTITY">Based On Quantity</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6 selectContainer">
+                    <select name="chartType" id="chartType" data-size="10" title="Chart Type">
+                        <option value="PIE" selected>Pie Chart</option>
+                        <option value="Bar">Histogram</option>
+                    </select>
+                </div>
+
+            </div>-->
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label id="label-combineLinkedItem">Combine linked item</label>
+                    <input type="checkbox" id="combineReportItem" name="combineReportItem" unchecked>
+                </div>
+                <div class="col-md-6 text-right">
+                    <label id="label-combineSubItem">Combine sub item</label>
+                    <input type="checkbox" id="combineSubItem" name="combineSubItem" unchecked>
+                </div>
+            </div>
+
+            <div id="category-alert-sign" class="row alert alert-info text-center">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <i class="fa fa-exclamation-triangle"></i><b class="alert-sign-text-1">Please select time range and press </b><i class="fa fa-search"></i><b class="alert-sign-text-2"> button</b><i class="fa fa-exclamation-triangle"></i>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 text-center">
+                    <div id="category-general-chart"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="btn-group col-sm-6" data-toggle="buttons">
+                    <label id="label-chartType-pie" class="btn btn-primary" ng-model="chartTypeOption" uib-btn-radio="'PIE'" ng-click="chartTypeClick('PIE')">Pie Chart</label>
+                    <label id="label-chartType-bar" class="btn btn-primary" ng-model="chartTypeOption" uib-btn-radio="'Bar'" ng-click="chartTypeClick('Bar')">Histogram</label>
+                </div>
+
+                <div class="col-sm-6" data-toggle="buttons">
+                    <div class="btn-group pull-right">
+                        <label id="label-analysis-quantity" class="btn btn-primary" ng-model="analysisOption" uib-btn-radio="'QUANTITY'" ng-click="analysisClick('QUANTITY')">Quantity</label>
+                        <label id="label-analysis-price" class="btn btn-primary" ng-model="analysisOption" uib-btn-radio="'PRICE'" ng-click="analysisClick('PRICE')">Price</label>
+                    </div>
+                </div>
+
+
+                <!--<div class="btn-group" data-toggle="buttons" id="chartType">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="chartType" id="pieRadio" value="PIE"> Pie Chart
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="chartType" id="barRadio" value="Bar"> Histogram
+                    </label>
+                </div>-->
+
+                <!--<div class="btn-group pull-right" data-toggle="buttons" id="analysis">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="analysis" id="priceRadio" value="PRICE"> Price
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="analysis" id="quantityRadio" value="QUANTITY"> Quantity
+                    </label>
+                </div>-->
+            </div>
+
+            <div class="row">
+                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 text-center">
+                    <h3 class="text-center" id="category-top-ten-sales">Top 10 Selling Items</h3>
+                    <div id="category-top-ten-chart"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h3 class="text-center" id="category-data-table">Net Sales Drilldown</h3>
+                    <table class="table table-condensed table-bordered table-striped" id="category-table">
+                        <tr style="background-color:#F2F2F2">
+                            <th id="category-table-name" class="text-center">Name</th>
+                            <th id="category-table-quantity" class="text-center">Quantity</th>
+                            <th id="category-table-quantity-percentage" class="text-center">% of Quantity Sold</th>
+                            <th id="category-table-netsale" class="text-center">Net Sales</th>
+                            <th id="category-table-netsale-percentage" class="text-center">% of Net Sales</th>
+                        </tr>
+
+                        <tr style="background-color:#9EC4ED">
+                            <th>Total</th>
+                            <th ng-model="quantityTotal">{{quantityTotal}}</th>
+                            <th>100%</th>
+                            <th ng-model="netSaleTotal">{{netSaleTotal | currency}}</th>
+                            <th>100%</th>
+                        </tr>
+
+                        <tr style="background-color:#BDD8F2" ng-repeat-start="(menuKey, menuValue) in tableParams">
+                            <th>{{menuValue.menuName}}
+                                <a ng-click="menuValue.$hideRows = !menuValue.$hideRows"><span><i ng-class="{'fa fa-sort-desc' : !menuValue.$hideRows, 'fa fa-sort-up' : menuValue.$hideRows}"></i></span></a>
+                            </th>
+                            <th>{{menuValue.count}}</th>
+                            <th ng-model="quantityTotal">{{menuValue.count / quantityTotal * 100 | number : 2}}%</th>
+                            <th>{{menuValue.amount | currency}}</th>
+                            <th ng-model="netSaleTotal">{{menuValue.amount / netSaleTotal * 100 | number : 2}}%</th>
+                        </tr>
+                        <tr style="background-color:#D5E6F7" ng-hide="!menuValue.$hideRows" ng-repeat-start="(groupKey, groupValue) in menuValue.menuGroupSummaryMap">
+                            <th style="padding-left:15px">{{groupValue.groupName}}
+                                <a ng-click="groupValue.$hideRows = !groupValue.$hideRows"><span><i ng-class="{'fa fa-sort-desc' : !groupValue.$hideRows, 'fa fa-sort-up' : groupValue.$hideRows}"></i></span></a>
+                            </th>
+                            <td style="padding-left:15px">{{groupValue.count}}</td>
+                            <td ng-model="quantityTotal" style="padding-left:15px">{{groupValue.count/quantityTotal * 100 | number : 2}}%</td>
+                            <td style="padding-left:15px">{{groupValue.amount | currency}}</td>
+                            <td ng-model="netSaleTotal" style="padding-left:15px">{{groupValue.amount/netSaleTotal * 100 | number : 2}}%</td>
+                        </tr>
+                        <tr style="background-color:#D5E6F7" ng-hide="!menuValue.$hideRows || !groupValue.$hideRows" ng-repeat-start="(categoryKey, categoryValue) in groupValue.menuCategorySummaryMap">
+                            <th style="padding-left:30px">{{categoryValue.categoryName}}
+                                <a ng-click="categoryValue.$hideRows = !categoryValue.$hideRows"><span><i ng-class="{'fa fa-sort-desc' : !categoryValue.$hideRows, 'fa fa-sort-up' : categoryValue.$hideRows}"></i></span></a>
+                            </th>
+                            <td style="padding-left:30px">{{categoryValue.count}}</td>
+                            <td ng-model="quantityTotal" style="padding-left:30px">{{categoryValue.count/quantityTotal * 100 | number : 2}}%</td>
+                            <td style="padding-left:30px">{{categoryValue.amount | currency}}</td>
+                            <td ng-model="netSaleTotal" style="padding-left:30px">{{categoryValue.amount/netSaleTotal * 100 | number : 2}}%</td>
+                        </tr>
+                        <tr style="background-color:#EDF3FC" ng-hide="!menuValue.$hideRows || !groupValue.$hideRows || !categoryValue.$hideRows" ng-repeat-start="(itemKey, itemValue) in categoryValue.menuItemSummaryMap">
+                            <td style="padding-left:45px">{{itemValue.itemName}}
+                                <a ng-hide="isEmpty(itemValue.menuSubItemSummaryMap)" ng-click="itemValue.$hideRows = !itemValue.$hideRows"><span><i ng-class="{'fa fa-sort-desc' : !itemValue.$hideRows, 'fa fa-sort-up' : itemValue.$hideRows}"></i></span></a>
+                            </td>
+                            <td style="padding-left:45px">{{itemValue.count}}</td>
+                            <td ng-model="quantityTotal" style="padding-left:45px">{{itemValue.count/quantityTotal * 100 | number : 2}}%</td>
+                            <td style="padding-left:45px">{{itemValue.amount | currency}}</td>
+                            <td ng-model="netSaleTotal" style="padding-left:45px">{{itemValue.amount/netSaleTotal * 100 | number : 2}}%</td>
+                        </tr>
+                        <tr style="background-color:#FAFCFE" ng-hide="!menuValue.$hideRows || !groupValue.$hideRows || !categoryValue.$hideRows || !itemValue.$hideRows" ng-repeat="(subItemKey, subItemValue) in itemValue.menuSubItemSummaryMap" ng-repeat-end>
+                            <td style="padding-left:60px">{{subItemValue.subItemName}}</td>
+                            <td style="padding-left:60px">{{subItemValue.count}}</td>
+                        </tr>
+                        <tr ng-repeat-end ng-hide="true"></tr>
+                        <tr ng-repeat-end ng-hide="true"></tr>
+                        <tr ng-repeat-end ng-hide="true"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

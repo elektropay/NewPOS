@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+  <Appenders>
+    <RollingFile name="RollingFile" fileName="${sys:catalina.home}/logs/appserver.log"
+                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/appserver-%d{MM-dd-yyyy}-%i.log">
+      <PatternLayout>
+        <Pattern>%d [%t] %-5p [%c] %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="10 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="50">
+        <Delete basePath="${sys:catalina.home}/logs" maxDepth="2">
+          <IfFileName glob="*/appserver-*.log" />
+          <IfLastModified age="60d" />
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d [%t] %-5p [%c] %m%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="org.apache" level="warn"/>
+    <Logger name="org.apache.commons" level="warn"/>
+    <logger name="org.apache.cxf.interceptor" level="info"/>
+    <logger name="org.apache.cxf.services" level="info"/>
+
+    <!-- generic top level hibernate logging -->
+    <Logger name="org.hibernate" level="info"/>
+    <!-- Log all SQL DML statements as they are executed -->
+    <Logger name="org.hibernate.SQL" level="info"/>
+    <!-- Log all JDBC parameters -->
+    <Logger name="org.hibernate.type" level="info"/>
+    <!-- Log the state of all entities (max 20 entities) associated with the session at flush time -->
+    <Logger name="org.hibernate.pretty" level="info"/>
+    <!-- Log all second-level cache activity -->
+    <Logger name="org.hibernate.cache" level="warn"/>
+    <!-- Log transaction related activity -->
+    <Logger name="org.hibernate.transaction" level="info"/>
+    <!-- Log all JDBC resource acquisition -->
+    <Logger name="org.hibernate.jdbc" level="info"/>
+    <!-- Log HQL and SQL ASTs during query parsing -->
+    <Logger name="org.hibernate.hql.ast.AST" level="warn"/>
+    <Logger name="org.hibernate.secure" level="warn"/>
+    <!-- Hibernate Configuration -->
+    <Logger name="org.hibernate.cfg" level="info"/>
+    <!-- Schema Export (DDL statements) -->
+    <Logger name="org.hibernate.tool.hbm2ddl.SchemaExport" level="info"/>
+
+    <!-- Disable Show Warnings -->
+    <logger name="org.hibernate.engine.jdbc.spi" level="error" /> 
+    <logger name="org.hibernate.engine.internal" level="error" />
+
+    <Logger name="log4j.Logger.org.apache.cxf" level="warn"/>
+
+    <Logger name="org.springframework" level="info"/>
+    <Logger name="org.springframework.web" level="info"/>
+    <Logger name="org.springframework.security" level="warn"/>
+    <Logger name="org.springframework.jdbc.datasource" level="info"/>
+
+    <!-- application specific categories -->
+    <Logger name="com.wisdomount" level="info"/>
+
+    <!-- ======================= -->
+    <!-- Setup the Root Logger -->
+    <!-- ======================= -->
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+</Configuration>

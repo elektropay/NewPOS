@@ -1,0 +1,151 @@
+<div id="menuRecipesPage">
+    <div class="container-fluid">
+        <div class="row bottom-buffer">
+            <div class="btn-group col-sm-12" role="group" aria-label="...">
+                <button id="btn-item-type-sale-item" type="button" class="btn btn-primary" ng-click="setItemType('SALE_ITEM')">Sale Items</button>
+                <button id="btn-item-type-global-option" type="button" class="btn btn-primary" ng-click="setItemType('GLOBAL_OPTION')">Global Options</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div>
+                    <div class="form-group col-sm-6">
+                        <select class="form-control" ng-model="menuItemFilter.menuId" ng-change="refreshCategoriesBySelectedMenu()" ng-options="menu.id as menu.name for menu in menuList">
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <select class="form-control" ng-model="menuItemFilter.categoryId" ng-options="item.id as item.name for item in menuCategoryFilterList">
+                            <option value="" class="input-value-type-all">All</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <input type="input" class="form-control" ng-model="menuItemFilter.name" placeholder="Search">
+                    </div>
+                </div>
+                <div id="menuItemsTableContainerDiv">
+                    <div class="div-table-header">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-12">
+                                    <a ng-click="sortTable('name')">
+                                        <label id="label-menu-item-name" class="detail-input-name">Name</label>
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="div-table-content-md-small">
+                        <table class="table table-condensed table-hover">
+                            <tbody>
+                            <tr ng-repeat="menuItem in menuItemSelectList | orderBy:sortType:sortReverse | customerMenuItemFilter:menuItemFilter" ng-click="loadMenuRecipe(menuItem)" ng-class="{info: menuItem.id === currentMenuItemRecipe.itemid}">
+                                <td class="col-sm-12">{{ menuItem.name }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div id="purchaseOrderItemsTableContainerDiv">
+                    <div class="div-table-header">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-8">
+                                    <a ng-click="sortTable('name')">
+                                        <label id="label-name" class="detail-input-name">Name</label>
+                                    </a>
+                                </th>
+                                <th class="col-sm-2">
+                                    <a><label id="label-units-used">Units Used</label></a>
+                                </th>
+                                <th class="col-sm-2">
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="div-table-content-small">
+                        <table class="table table-condensed table-bordered">
+                            <tbody>
+                            <tr ng-repeat="item in currentMenuItemRecipe.inventoryItemList | orderBy:sortType:sortReverse">
+                                <td class="col-sm-8">{{ item.displayInfo }}</td>
+                                <td class="col-sm-2"><input type="number" min="0" class="form-control input-sm" ng-model="item.units" ng-change="calculateMenuItemEstimatedCost()" mnsf-select-on-focus mnsf-auto-focus="focusQtyInput{{$index}}"></td>
+                                <td class="col-sm-2"><div><a class="btn btn-danger" ng-click="removeInventoryItem($index)"><i class="fa fa-trash-o fa-lg"></i></a></div></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div>
+                    <div class="form-group col-sm-6">
+                        <select class="form-control" id="item-group-select-list" ng-model="inventoryItemFilter.groupid" ng-options="item.id as item.name for item in inventoryItemGroupList">
+                            <option id="item-group-option-all" value="" class="input-value-type-all">All</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <input type="input" class="form-control" id="search-item-input" ng-model="inventoryItemFilter.name" placeholder="Search">
+                    </div>
+                </div>
+                <div id="inventoryItemsTableContainerDiv">
+                    <div class="div-table-header">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-11">
+                                    <a ng-click="sortTable('name')">
+                                        <label id="label-item-name" class="detail-input-name">Name</label>
+                                    </a>
+                                </th>
+                                <th class="col-sm-1">
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="div-table-content-md">
+                        <table class="table table-striped table-condensed">
+                            <tbody>
+                            <tr ng-repeat="inventoryItem in inventoryItemList | orderBy:sortType:sortReverse | customerInventoryItemFilter:inventoryItemFilter">
+                                <td class="col-sm-11">{{ inventoryItem.displayInfo }}</td>
+                                <td class="col-sm-1" ng-click="addInventoryItem(inventoryItem)"><i class="fa fa-plus"></i></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-2"></div>
+            <div class="form-group col-sm-2" style="margin-top:5px;">
+                <label id="label-menuItem-estimatedCost">Estimated value</label>:  {{currentMenuItemRecipe.estimatedCost}}
+            </div>
+            <div class="form-group col-sm-2" style="margin-top:5px;">
+                <label id="label-menuItem-totalCost">Total value</label>:  {{currentMenuItemRecipe.totalCost}}
+            </div>
+            <div class="form-group col-sm-4">
+                <label id="label-menuItem-actualTotalCost">Actual total value</label>:
+                <input id="menuItem-actualTotalCost" type="number" class="input-sm" ng-model="currentMenuItemRecipe.actualTotalCost" style="width:50%;">
+            </div>
+            <div class="form-group col-sm-1">
+                <button type="button" class="btn btn-primary btn-submit-result pull-left" ng-click="saveMenuRecipe()">Submit</button>
+            </div>
+        </div>
+
+        <div>
+            <div class="alert alert-danger" ng-show="submitResult.error">
+                <label id="alert-error" class="alert-error-message">Unable to submit your request.</label> {{submitResult.errorMessage}}
+            </div>
+            <div class="alert alert-success" ng-show="submitResult.success">
+                <label id="alert-success" class="alert-success-message">Submitted Successfully!</label>
+            </div>
+        </div>
+    </div>
+
+</div>

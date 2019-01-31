@@ -1,0 +1,28 @@
+
+
+ <div class="mask-tip">
+    <div style="background:#fff;color:#000;border-radius:5px;display:flex;flex-flow:row wrap;" ng-class="{'px450':!pay.merchantId,'px650':!!pay.merchantId}" >
+            <div ng-class="{'content450':true}">
+                    <div style="flex:0 1 65%;height:80px;line-height:80px;text-align:right;font-size:35px;">Total Amount:&nbsp;&nbsp;</div>
+                    <div style="flex:0 1 35%;line-height:80px;text-align:left;font-size:35px;">&nbsp;{{pay.allTotal | currency}}</div>
+
+                    <div style="flex:0 1 65%;height:50px;line-height:50px;text-align:right;color:#666;font-size:30px">Bill Amount:&nbsp;&nbsp;</div>
+                    <div style="flex: 0 1 35%;color:#666;line-height:50px;text-align:left;font-size:30px">&nbsp;&nbsp;{{pay.total | currency}}</div>
+                    <div style="flex:0 1 65%;height:50px;line-height:1;text-align:right;color:#666;font-size:30px">Tip Amount:&nbsp;&nbsp;</div>
+                    <div style="flex: 0 1 35%;color:#666;line-height:1;text-align:left;font-size:30px">&nbsp;&nbsp;{{pay.tip | currency}}</div>
+             </div>
+             <div style="height:200px;width:160px;float:right;padding-top:20px;position:relative;" ng-if="!!pay.merchantId">
+                <qrcode version="5" error-correction-level="M" size="140" data="{{pay.qrcode}}"></qrcode>
+               <b style="font-size:12px;overflow:hidden;">Support WeChat/Alipay</b>
+             </div>  
+            
+            <div class="modalAlert">
+           
+                   <!-- ng-if="!config.enable" <div  class="bntEnable"  ng-if="!!config.enable" ng-click="closeAddTip()">Cancel</div>
+                   <div   class="bntEnable"  ng-if="!!config.enable" ng-click="config.enable=false;confirm()">Confirm</div> -->
+                   <div class="showOk"> <i class = "icon ion-checkmark-circled balanced"></i>&nbsp;&nbsp;Thank you for the support !</div>
+           </div>
+         
+ </div>
+     
+ </div>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title></title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/report.js"></script>
+
+</head>
+<body>
+<div id="giftCardTransactionReportPage" data-role="page" data-theme="a">
+    <div role="main" class="ui-content">
+        <div>
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a">
+                    <div id="report-query-div" class="my-select-menu">
+                        <form id="giftCardTransactionReport" name="giftCardTransactionReport" method="post" action="" target="reportResultFrame">
+                            <input id="isPrintReport" type="hidden" name="printReport" value=""/>
+                            <div data-role="fieldcontain">
+                                <label id="label-fromDate" for="fromDate" class="detail-input-from">From:</label>
+                                <input id="fromDate" type="date" name="fromDate" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-toDate" for="toDate" class="detail-input-to">To:</label>
+                                <input id="toDate" type="date" name="toDate" value=""/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-accountNumber" for="accountNumber">Account #</label>
+                                <input id="accountNumber" name="accountNumber" value="" type="text">
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-printerName" for="printerName" class="select">Report Printer: </label>
+                                <select name="printerName" id="printerName">
+                                    <option value="">Default Report printer</option>
+                                </select>
+                            </div>
+                            <div>
+                                <fieldset class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        <div class="my-button-div"><button type="submit" class="btn-run-report" onclick="giftCardTransactionReportObj.submitForm(false);">Run</button></div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="my-button-div"><button type="submit" class="btn-print-report" onclick="giftCardTransactionReportObj.submitForm(true);">Print</button></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <div id="report-result-div" class="my-detail-panel">
+                        <iframe id="reportResultFrame" name="reportResultFrame" src=""></iframe>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+</body>
+</html>

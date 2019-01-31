@@ -1,0 +1,110 @@
+<ion-view view-title="MENUSIFU Restaurant">
+ <div class="dual">
+ <div  ng-if="showMode=='IMAGE_AND_ORDER_NUMBER'" class="dualImg">
+ <video id="video" class="sliderMenusifu" style="width:100%;display:none">
+      <source id="mp4"  type="video/mp4">
+       <p>Your user agent does not support the HTML5 Video element.</p>
+ </video>
+
+	<div class="sliderMenusifu" style="overflow:hidden" ng-if="transitionEffect =='FADE'">
+		<div style="position:absolute;left:0;width:100%;height:100%;background:url('{{photoUrl}}/{{item.thumbPath}}');background-size:cover;"
+		 class="efg anim_fade_image{{$index}}" ng-repeat="item in gallery.photoList track by $index"></div>
+	</div>
+<div class="sliderMenusifu" style="height:100vh">
+	  <input name="control" id="page1" type="radio" checked/>
+	  <input name="control" id="page2" type="radio"/>
+	  <input name="control" id="page3" type="radio"/>
+	  <input name="control" id="page4" type="radio"/>
+	  <div class="sliderMenusifu--el sliderMenusifu--el-1 anim-4parts">
+	    <div class="sliderMenusifu--el-bg">
+	      <div class="part top left"></div>
+	      <div class="part top right"></div>
+	      <div class="part bot left"></div>
+	      <div class="part bot right"></div>
+	    </div>
+	    <div class="sliderMenusifu--el-content">
+	  
+	    </div>
+	  </div>
+	  <div class="sliderMenusifu--el sliderMenusifu--el-2 anim-9parts">
+	    <div class="sliderMenusifu--el-bg">
+	      <div class="part left-top"></div>
+	      <div class="part mid-top"></div>
+	      <div class="part right-top"></div>
+	      <div class="part left-mid"></div>
+	      <div class="part mid-mid"></div>
+	      <div class="part right-mid"></div>
+	      <div class="part left-bot"></div>
+	      <div class="part mid-bot"></div>
+	      <div class="part right-bot"></div>
+	    </div>
+	    <div class="sliderMenusifu--el-content">
+	      </div>
+	  </div>
+	  <div class="sliderMenusifu--el sliderMenusifu--el-3 anim-5parts">
+	    <div class="sliderMenusifu--el-bg">
+	      <div class="part part-1"></div>
+	      <div class="part part-2"></div>
+	      <div class="part part-3"></div>
+	      <div class="part part-4"></div>
+	      <div class="part part-5"></div>
+	    </div>
+	    <div class="sliderMenusifu--el-content">
+	     </div>
+	  </div>
+	  <div class="sliderMenusifu--el sliderMenusifu--el-4 anim-3parts">
+	    <div class="sliderMenusifu--el-bg">
+	      <div class="part left"></div>
+	      <div class="part mid"></div>
+	      <div class="part right"></div>
+	    </div>
+	    <div class="sliderMenusifu--el-content">
+	     
+	    </div>
+	  </div>
+	  <div class="sliderMenusifu--control left">
+	    <label class="page1-left" for="page1"></label>
+	    <label class="page2-left" for="page2"></label>
+	    <label class="page3-left" for="page3"></label>
+	    <label class="page4-left" for="page4"></label>
+	  </div>
+	  <div class="sliderMenusifu--control right">
+	    <label class="page1-right" for="page1"></label>
+	    <label class="page2-right" for="page2"></label>
+	    <label class="page3-right" for="page3"></label>
+	    <label class="page4-right" for="page4"></label>
+	  </div>	</div>
+
+
+</div>
+
+<div ng-class="{'dualContent':true,'flex':showMode !='IMAGE_AND_ORDER_NUMBER'}" >
+	  <div style="min-width:30vw;height:10vh;width:100%;text-align:center;background:#eee;padding:0 20px;line-height:1; text-shadow:4px 4px 2px rgba(150, 150, 150, 0.8);">
+	  {{showName[0]}}
+	  </div>
+	  <div style="display:flex;flex-flow:column wrap;line-height:18vh;font-size:12vh;height:90vh;text-align:center;letter-spacing:-0.5vw;overflow:hidden">
+	  		<div   ng-repeat="item in orderItems['A'] track by $index" 
+	  		ng-class="{'A-item':true}" ng-style="{ color:$index == 0? (((item.status=='READY' && item.numOfTimesCalled==1) || item.numOfTimesCalled==0 )?'red':'blue'): '#000' }">
+	  		  	{{item.name}}
+	  			<span ng-if="$index/5>=lastStrA['key']" style="visibility:hidden; margin:{{styleMarginA}}" >{{lastStrA['value']}}</span>
+	  		</div>
+	  	 </div>	 
+</div>
+
+<div ng-class="{'dualContent':true}" style="flex:1;border-left:solid #ccc 1px;" 
+ ng-if="showMode=='MULTI_KITCHEN' ||  showMode=='SHOW_KITCHEN_STATUS'" >
+	  <div style="min-width:30vw;height:10vh;width:100%;text-align:center;background:#eee;padding:0 20px;line-height:1; text-shadow:4px 4px 2px rgba(150, 150, 150, 0.8);">{{showName[1]}}</div>
+	  
+	  <div style="display:flex;flex-flow:column wrap;line-height:18vh;font-size:12vh;height:90vh;text-align:center;letter-spacing:-0.5vw;background:#B2EBF2;overflow:hidden">
+	  		<div   ng-repeat="item in orderItems['B'] track by $index" class="B-item" 
+	  		ng-style="{ color:$index == 0? (item.numOfTimesCalled<=1?'red':'blue'): '#000' }">
+	  		  	{{item.name}}
+	  			<span ng-if="$index/5>=lastStrB['key']" style="visibility:hidden;margin:{{styleMarginB}}">{{lastStrB['value']}}</span>
+	  		</div>
+	  </div>	 
+</div>
+
+        <h1 class="alertInfo" ng-if="showMode=='MULTI_KITCHEN'">Please pick up when your number is displayed from the respective kitchen</h1>
+    </div> 
+    <div class="close" onclick="window.parent.postMessage('exit', '*')">x</div>
+</ion-view>

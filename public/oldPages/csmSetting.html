@@ -1,0 +1,542 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Menusifu POS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/biscuitf.min.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/csmSetting.js"></script>
+</head>
+<body>
+<div id="cmsSettingPage" data-role="page" data-theme="a">
+    <div id="divStaff" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-staffTab" href="#staffTab" onclick="staffObj.listAllRoles();">Staff</a></li>
+                    <li><a id="navbar-staffRoleTab" href="#staffRoleTab">Role</a></li>
+                    <li><a id="navbar-companyTab" href="#companyTab">Company</a></li>
+                    <li><a id="navbar-locationTab" href="#locationTab">Location</a></li>
+                    <li><a id="navbar-syncTab" href="#syncTab">7shifts Config</a></li>
+                </ul>
+            </div>
+            <input type="hidden" id="pubCompanyId" name="pubCompanyId" maxlength="50"/>
+
+            <div id="staffTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width">
+                        <div class="my-select-menu">
+                            <table class="tableone" style="table-layout:fixed;">
+                                <caption id="table-caption-staff">Staff</caption>
+                                <thead>
+                                <tr>
+                                    <th id="staffTabList" data-role="navbar" style="width:100%;">
+                                        <ul>
+                                            <li><a id="navbar-currentTab" onclick="staffObj.listAllStaff(false)">Current</a></li>
+                                            <li><a id="navbar-pastTab" onclick="staffObj.listAllStaff(true)">Past</a></li>
+                                        </ul>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="add-new-button-centered-div" id="newStaffButton"><button class="btn-new-entry" onclick="javascript:staffObj.newStaffEntry();">New Staff</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="innerb">
+                                            <table id ="staffList" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                           <button   onclick="javascript:syncSetting.matchUser();">7shifts user match POS user</button>
+
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="staffDetailMainDiv" class="my-detail-panel">
+                            <input type="hidden" id="staffId"/>
+                            <input type="hidden" id="userId"/>
+                            <div class="ui-grid-a">
+                                <div id="staff-name-div" class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-staffName" for="staffName" class="detail-input-person-name">Name/First Name</label>
+                                        <input type="text" id="staffName" name="staffName" value="" size="15" maxlength="25"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div class="ui-field-contain">
+                                        <label id="label-lastName" for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" maxlength="50"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div id="staff-passcode-div" class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-passcode" for="passcode" class="detail-input-passcode">Passcode</label>
+                                        <input type="password" name="passcode" id="passcode"  maxlength="300" onclick="staffObj.inputPasscode(this)"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div class="ui-field-contain">
+                                        <label id="label-swipeData" for="swipeData">Swipe Data</label>
+                                        <input type="password" id="swipeData" name="swipeData" maxlength="300"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-cellPhone" for="cellPhone" class="detail-input-phone">Phone</label>
+                                        <input type="text" id="cellPhone" name="cellPhone" size="12" maxlength="12"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div class="ui-field-contain">
+                                        <label id="label-earliestClockInTime" for="earliestClockInTime" class="detail-input-earliestClockInTime">Earliest Clock In Time</label>
+                                        <input type="text" id="earliestClockInTime" name="earliestClockInTime" size="12" maxlength="12"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-requireClockInOut" for="requireClockInOut">Require clock in/out</label>
+                                        <input type="checkbox" id="requireClockInOut" name="requireClockInOut"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-role="collapsible">
+                                <h3><div id="staff-more-info-div-header">More Info</div></h3>
+                                <div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <div class="ui-field-contain">
+                                                <label id="label-requireCashInOut" for="requireCashInOut">Require cash in/Out</label>
+                                                <input type="checkbox" id="requireCashInOut" name="requireCashInOut"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <div class="ui-field-contain">
+                                                <label id="label-requireReportCashTips" for="requireReportCashTips">Require reporting cash tips</label>
+                                                <input type="checkbox" id="requireReportCashTips" name="requireReportCashTips"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <div class="ui-field-contain">
+                                                <label id="label-staffWage" for="staffWage">Wage</label>
+                                                <input type="number" id="staffWage" name="staffWage" step="0.01" min="0" max="99999" value="" size="3"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <div class="ui-field-contain">
+                                                <label id="label-staffWageType" for="staffWageType">Wage Type</label>
+                                                <select id="staffWageType" name="staffWageType">
+                                                    <option id="staffWageType-option-hourly" value="1">Hourly</option>
+                                                    <option id="staffWageType-option-weekly" value="2">Weekly</option>
+                                                    <option id="staffWageType-option-biweekly" value="3">Biweekly</option>
+                                                    <option id="staffWageType-option-monthly" value="4">Monthly</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <div class="ui-field-contain">
+                                                <label id="label-homePhone" for="homePhone">Phone 2</label>
+                                                <input type="text" id="homePhone" name="homePhone" size="12" maxlength="12"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <div class="ui-field-contain">
+                                                <label id="label-staffSkillLevel" for="staffSkillLevel">Skill Level</label>
+                                                <select id="staffSkillLevel" name="staffSkillLevel">
+                                                    <option id="staffSkillLevel-option-beginner" value="1">Beginner</option>
+                                                    <option id="staffSkillLevel-option-intermediate" value="2">Intermediate</option>
+                                                    <option id="staffSkillLevel-option-experienced" value="3">Experienced</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <div class="ui-field-contain">
+                                                <label id="label-joinDate" for="joinDate">Join Date</label>
+                                                <input type="text" id="joinDate" name="joinDate" size="12" maxlength="12"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <div class="ui-field-contain">
+                                                <label id="label-birthday" for="birthday">Birthday</label>
+                                                <input type="text" id="birthday" name="birthday" size="12" maxlength="12"/>
+                                            </div>
+                                        </div>
+                                    </div><div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        <div class="ui-field-contain">
+                                            <label id="label-thirdPartyPunchCode" for="thirdPartyPunchCode">Third Party Punch Code</label>
+                                            <input type="text" id="thirdPartyPunchCode" name="thirdPartyPunchCode" size="12" maxlength="12"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="ui-field-contain">
+                                            <label id="label-mappingId" for="mappingId">Mapping Id</label>
+                                            <input type="text" id="mappingId" name="mappingId" size="12" maxlength="12"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-a">
+                                        <div class="ui-field-contain">
+                                            <label id="label-maxWeeklyHours" for="maxWeeklyHours">Max Weekly Hours</label>
+                                            <input type="text" id="maxWeeklyHours" name="maxWeeklyHours" size="12" maxlength="12"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="ui-field-contain">
+                                            <label id="label-email" for="email">Email</label>
+                                            <input type="text" id="email" name="email" size="12" maxlength="50"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="ui-field-contain">
+                                        <label id="label-staffNotes" for="staffNotes" class="detail-input-description">Notes</label>
+                                        <textarea id="staffNotes" value="" maxlength="100" style="height:51px;"></textarea>
+                                    </div>
+                                    <h4 style="font-family:Source Sans Pro,Helvetica,Arial,sans-serif;" class="detail-header-address-info">Address</h4>
+                                    <div class="ui-field-contain">
+                                        <label id="label-street" for="street" class="detail-input-street">Street</label>
+                                        <input type="text" id="street" name="street"  size="50" maxlength="50"/>
+                                    </div>
+                                    <div class="ui-grid-b">
+                                        <div id="staff-city-div" class="ui-block-a">
+                                            <div class="ui-field-contain">
+                                                <label id="label-city" for="city" class="detail-input-city">City</label>
+                                                <input type="text" id="city" name="city" size="10" maxlength="20"/>
+                                            </div>
+                                        </div>
+                                        <div id="staff-state-div" class="ui-block-b">
+                                            <div class="ui-field-contain">
+                                                <label id="label-state" for="state" class="detail-input-state">State</label>
+                                                <input type="text" id="state" name="state" value="" size="10"/>
+                                            </div>
+                                        </div>
+                                        <div id="staff-zipcode-div" class="ui-block-c">
+                                            <div class="ui-field-contain">
+                                                <label id="label-zipcode" for="zipcode" class="detail-input-zipcode">ZIP Code</label>
+                                                <input type="text" id="zipcode" name="zipcode" size="6" maxlength="6" data-wrapper-class="staff-zipcode-input-div"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="mainTab">
+                                <h4 id="staff-role-table-header">Roles</h4>
+                                <table id="roles">
+                                </table>
+                                <h4 id="staff-permission-table-header">Permissions</h4>
+                                <div id="staff-permission-tabs" data-role="tabs">
+                                    <div id="staff-permission-tabList" data-role="navbar">
+                                        <ul>
+                                            <li><a id="navbar-orderingFoodPrivilegesTableTab" href="#orderingFoodPrivilegesTableTab" class="ui-btn-active">Ordering Food</a></li>
+                                            <li><a id="navbar-editOrderPrivilegesTableTab" href="#editOrderPrivilegesTableTab">Edit Orders</a></li>
+                                            <li><a id="navbar-paymentPrivilegesTableTab" href="#paymentPrivilegesTableTab">Payments</a></li>
+                                            <li><a id="navbar-operationPrivilegesTableTab" href="#operationPrivilegesTableTab">Operation</a></li>
+                                            <li><a id="navbar-adminPrivilegesTableTab" href="#adminPrivilegesTableTab">Admin</a></li>
+                                            <li><a id="navbar-reportPrivilegesTableTab" href="#reportPrivilegesTableTab">Report</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div id="orderingFoodPrivilegesTableTab">
+                                        <table id="orderingFoodPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                    <div id="editOrderPrivilegesTableTab">
+                                        <table id="editOrderPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                    <div id="paymentPrivilegesTableTab">
+                                        <table id="paymentPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                    <div id="operationPrivilegesTableTab">
+                                        <table id="operationPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                    <div id="adminPrivilegesTableTab">
+                                        <table id="adminPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                    <div id="reportPrivilegesTableTab">
+                                        <table id="reportPrivilegesTable" class="privilegesTable"></table>
+                                    </div>
+                                </div>
+                                <h4 id="staff-store-table-header">Store Accessibility</h4>
+                                <table id="stores">
+                                </table>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <input type="submit" data-theme="b" value="Save" id="save-staff-btn" onclick="staffObj.saveStaffInfo();"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="staffRoleTab" class="adminPageMainContentDiv">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="staffRoleSelectLayoutDiv">
+                        <div id="staffRoleSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-role">Role</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:role.clearForm(false);">New Role</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id ="rolesList" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="staffRoleDetailContentDiv" class="my-detail-panel">
+                            <input type="hidden" id="roleId"/>
+                            <input type="hidden" id="roleReadOnly"/>
+                            <div data-role="fieldcontain">
+                                <label id="label-roleName" for="roleName" class="detail-input-name">Name</label>
+                                <input type="text" id="roleName" name="roleName" value=""/>
+                            </div>
+                            <h3 id="rolePrivilegeHeader"><a id="role-permission-table-header" name="tab1">Permissions</a></h3>
+                            <div id="role-staff-permission-tabs" data-role="tabs">
+                                <div id="role-staff-permission-tabList" data-role="navbar">
+                                    <ul>
+                                        <li><a id="navbar-roleOrderingFoodPrivilegesTableTab" href="#roleOrderingFoodPrivilegesTableTab" class="ui-btn-active">Ordering Food</a></li>
+                                        <li><a id="navbar-roleEditOrderPrivilegesTableTab" href="#roleEditOrderPrivilegesTableTab">Edit Orders</a></li>
+                                        <li><a id="navbar-rolePaymentPrivilegesTableTab" href="#rolePaymentPrivilegesTableTab">Payments</a></li>
+                                        <li><a id="navbar-roleOperationPrivilegesTableTab" href="#roleOperationPrivilegesTableTab">Operation</a></li>
+                                        <li><a id="navbar-roleAdminPrivilegesTableTab" href="#roleAdminPrivilegesTableTab">Admin</a></li>
+                                        <li><a id="navbar-roleReportPrivilegesTableTab" href="#roleReportPrivilegesTableTab">Report</a></li>
+                                    </ul>
+                                </div>
+
+                                <div id="roleOrderingFoodPrivilegesTableTab">
+                                    <table id="roleOrderingFoodPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                                <div id="roleEditOrderPrivilegesTableTab">
+                                    <table id="roleEditOrderPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                                <div id="rolePaymentPrivilegesTableTab">
+                                    <table id="rolePaymentPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                                <div id="roleOperationPrivilegesTableTab">
+                                    <table id="roleOperationPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                                <div id="roleAdminPrivilegesTableTab">
+                                    <table id="roleAdminPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                                <div id="roleReportPrivilegesTableTab">
+                                    <table id="roleReportPrivilegesTable" class="rolePrivilegesTable"></table>
+                                </div>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <input type="button" value="Save" class="btn-save" onclick="role.saveRole()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="companyTab" class="adminPageMainContentDiv">
+                <div class="single-column-detail-div">
+                    <div>
+                        <form id="companyForm" name="companyForm" method="post" action="" data-ajax="false">
+                            <input type = "hidden" id ="company_id" name="company_id"  value="">
+                            <input type = "hidden" id ="createdOn" name="createdOn"  value="">
+                            <input type = "hidden" id ="createdBy" name="createdBy"  value="">
+
+                            <div data-role="fieldcontain">
+                                <label id="label-companyName" for="companyName" class="detail-input-companyName">Company Name</label>
+                                <input type="text" id="companyName" name="companyName" size="60"  maxlength="20"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-merchantGroupId" for="merchantGroupId" class="detail-input-merchantGroupId">Merchant Group Id</label>
+                                <input type="text" id="merchantGroupId" name="merchantGroupId" size="60"  maxlength="10"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-apiToken" for="apiToken" class="detail-input-apiToken"> 7shifts api key</label>
+                                <input type="text" id="apiToken" name="apiToken" size="60"  maxlength="100"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-mapping-company-id" for="mappingCompanyId" class="detail-input-mapping-company-id"> 7shifts company id </label>
+                                <input type="text" id="mappingCompanyId" name="mappingCompanyId" size="60"  maxlength="10" />
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <input type="button" value="Save" class="btn-save" onclick="company.saveCompany()"/>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="locationTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width">
+                        <div class="my-select-menu">
+                            <table class="tableone" style="table-layout:fixed;">
+                                <caption id="table-caption-location">Location</caption>
+                                <thead>
+
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:locationCsm.newlocationCsm();">New Location</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="innerb">
+                                            <table id ="locationList" class="tabletwo">
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="locationDetailMainDiv" class="my-detail-panel">
+                            <form action="">
+                                <div class="ui-grid-a">
+                                    <div id="location-name-div" class="ui-block-a">
+                                        <input type = "hidden" id ="locationId" name="locationId"  value="">
+                                        <div class="ui-field-contain">
+                                            <label id="label-locationName" for="locationName" class="detail-input-person-name">location Name</label>
+                                            <input type="text" id="locationName" name="locationName" value="" size="15" maxlength="25"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="ui-field-contain">
+                                            <label id="label-merchantId" for="merchantId">Merchant Id</label>
+                                            <input type="text" id="merchantId" name="merchantId" size="6" maxlength="11"  />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div id="staff-mapping1-div" class="ui-block-a">
+                                        <div class="ui-field-contain">
+                                            <label id="label-mapping1" for="mappingId1" class="detail-input-mappingId1">7shifts location id </label>
+                                            <input type="text" name="mappingId1" id="mappingId1"  maxlength="50" />
+                                        </div>
+                                    </div>
+                                    <div id="staff-mapping2-div" class="ui-block-b">
+                                        <div class="ui-field-contain">
+                                            <label id="label-mapping2" for="mappingId2" class="detail-input-mappingId2">7shifts location hash </label>
+                                            <input type="text" name="mappingId2" id="mappingId2"  maxlength="50" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                   <!-- <div class="ui-block-a">
+                                        <div class="ui-field-contain">
+                                            <label id="label-delFlag" for="delFlag" class="detail-input-delFlag">Del Flag</label>
+                                            <input type="checkbox" id="delFlag" value = "false" name="delFlag"/>
+                                        </div>
+                                    </div>
+                                    -->
+                                     <input type="hidden" id="companyId" name="companyId" size="12" maxlength="12"/>
+
+                                </div>
+
+                                <div class="my-top-margin-button-div">
+                                    <button class="btn-save" type="button"  onclick="locationCsm.saveLocation();">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="syncTab" class="adminPageMainContentDiv">
+                <div class="single-column-detail-div">
+                    <div>
+                        <form id="configForm" name="companyForm" method="post" action="" data-ajax="false">
+                            <div data-role="fieldcontain">
+                                <label id="label-companySync" for="companySync" class="detail-input-companySync">Company manual sync completes tag
+
+                                </label>
+                                <input type="checkbox" id="companySync" value = "false" name="companySync"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-locationSync" for="locationSync" class="detail-input-locationSync">Location manual sync completes tag </label>
+                                <input type="checkbox" id="locationSync" value = "false" name="locationSync"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-userSync" for="userSync" class="detail-input-userSync">User manual sync completes tag</label>
+                                <input type="checkbox" id="userSync" value = "false" name="userSync"/>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button class="btn-save" type="button"  onclick="syncSetting.saveSync();">Save</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <datalist id="adjustmentReasonList">
+            <select>
+                <option value="Forget"></option>
+                <option value="Late For Reason"></option>
+                <option value="Incorrect Cash Tips"></option>
+            </select>
+        </datalist>
+    </div>
+</div>
+</body>
+</html>

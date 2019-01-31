@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery-ui-1.10.3.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/promotionStrategy.js"></script>
+</head>
+<body>
+
+<div id="promotionStrategy-page" data-role="page" data-theme="a">
+    <div id="divPromotionStrategyPage" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="pricingRulesPanel">
+                <h2><div id="pricingRule-set-header">Promotion Strategies</div></h2>
+                <div id="pricingRule-set">
+                </div>
+                <div data-role="controlgroup" data-type="horizontal" class="center-div" >
+                    <a href="javascript:promotionObj.switchToAddPricingRuleMode();" data-role="button" data-icon="plus" class="btn-add-entry">Add</a>
+                    <a href="javascript:promotionObj.openDeleteConfirmDialog();" data-role="button" data-icon="delete" class="btn-delete">Delete</a>
+                </div>
+            </div>
+            <div id="addNewPricingRuleDiv" class="ui-block-b my-div-width">
+                <div data-role="navbar" class="text-center">
+                    <!--<h1 id="addNewPricingRuleDiv-text">Add New Promotional Strategy</h1>-->
+                    <h2><div id="pricingRuleDetailPanel-add-header">Promotion Strategy Details - Add</div></h2>
+                    <h2><div id="pricingRuleDetailPanel-edit-header">Promotion Strategy Details - Edit</div></h2>
+                </div>
+                <div class="ui-block-a" id="pricingRule-saleitemsPanel">
+                    <h2><div class="text-center" id="saleitem-set-header">Step 1 -- Choose Items</div></h2>
+                    <div class="ui-grid-a" data-mini="true" onclick="promotionObj.onFocus2EditButt()">
+                        <div class="ui-block-a" data-mini="true">
+                            <div data-role="fieldcontain" data-mini="true">
+                                <label id="label-pricingRule-appliedOnOrder" data-mini="true" for="pricingRule-appliedOnOrder" data-mini="true">Applied on Order</label>
+                                <input data-mini="true" type="checkbox" name="appliedOnOrder" id="pricingRule-appliedOnOrder" value="" onclick="promotionObj.triggerAppliedOnOrderButton();" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-field-contain border-top">
+                        <label id="label-pricingRule-menu-name" class="select" for="pricingRule-menu">Menu</label>
+                        <select name="select-choice-Menu" id="pricingRule-menu"></select>
+                    </div>
+                    <div data-role="collapsible-set" id="saleitem-set"></div>
+                </div>
+                <div class="ui-block-b" id="pricingRuleDetailPanel">
+                    <h2><div class="text-center" id="pricingRule-detail-header">Step 2 -- Make Rules</div></h2>
+                    <div id="pricingRule-detail-form-div">
+                        <div class="ui-grid-a border-top" id="pricingRule-detail-form-section-1" data-mini="true">
+                            <div class="pricingRule-detail-form-ui-block-a" data-mini="true">
+                                <div data-role="fieldcontain" data-mini="true">
+                                    <label id="label-pricingRule-name" data-mini="true" for="pricingRule-name" class="detail-input-name">Name</label>
+                                    <input data-mini="true" type="text" name="name" id="pricingRule-name" value="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-grid-a border-top" >
+                            <div class="ui-grid-a" data-mini="true">
+                                <label data-mini="true" id="pricingRule-schedule">Schedule</label>
+                                <label class="text-center chooseDate" data-mini="true" id="pricingRule-chooseDate">Choose Date</label>
+                                <div class="ui-block-a pricingRule-detail-form-ui-block-a" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true">
+                                        <input data-mini="true" type="text" name="dateFrom" id="pricingRule-dateFrom" value="" />
+                                    </div>
+                                </div>
+                                <div class="ui-block-b pricingRule-detail-form-ui-block-b" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true" class="text-center"><p>&nbsp;~&nbsp;</p></div>
+                                </div>
+                                <div class="ui-block-c pricingRule-detail-form-ui-block-c" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true" >
+                                        <input data-mini="true" type="text" name="dateTo" id="pricingRule-dateTo" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a margin-bottom-3">
+                                <label class="text-center weekly" data-mini="true" id="pricingRule-weekly">Or Weekly</label>
+                                <div data-mini="true" id="pricingRule-weekdays-div">
+                                    <fieldset data-role="controlgroup" data-type="horizontal" style="text-align: center;">
+                                        <!--<legend id="pricingRule-weekdays">Week day range: </legend>-->
+                                        <label for="weekdays-1">Mon</label>
+                                        <input type="checkbox" name="checkbox-1" id="weekdays-1">
+                                        <label for="weekdays-2">Tue</label>
+                                        <input type="checkbox" name="checkbox-2" id="weekdays-2">
+                                        <label for="weekdays-3">Wed</label>
+                                        <input type="checkbox" name="checkbox-3" id="weekdays-3">
+                                        <label for="weekdays-4">Thu</label>
+                                        <input type="checkbox" name="checkbox-4" id="weekdays-4">
+                                        <label for="weekdays-5">Fri</label>
+                                        <input type="checkbox" name="checkbox-4" id="weekdays-5">
+                                        <label for="weekdays-6">Sat</label>
+                                        <input type="checkbox" name="checkbox-4" id="weekdays-6">
+                                        <label for="weekdays-0">Sun</label>
+                                        <input type="checkbox" name="checkbox-4" id="weekdays-0">
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a" data-mini="true">
+                                <label class="text-center" data-mini="true" id="pricingRule-chooseTime">Choose Time</label>
+                                <div class="ui-block-a pricingRule-detail-form-ui-block-a" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true">
+                                        <input data-mini="true" type="text" name="hourFrom" id="pricingRule-hourFrom" value="" />
+                                    </div>
+                                </div>
+                                <div class="ui-block-b pricingRule-detail-form-ui-block-b" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true" class="text-center"><p>&nbsp;~&nbsp;</p></div>
+                                </div>
+                                <div class="ui-block-c pricingRule-detail-form-ui-block-c" data-mini="true">
+                                    <div data-role="fieldcontain" data-mini="true" >
+                                        <input data-mini="true" type="text" name="hourTo" id="pricingRule-hourTo" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-field-contain border-top" onclick="promotionObj.onFocus2EditButt()">
+                            <label id="label-pricingRule-orderType-name" class="select" for="pricingRule-orderType">Order Type</label>
+                            <select name="select-choice-orderType" id="pricingRule-orderType">
+                                <option value="">All</option>
+                                <option value="DINE_IN">Dine In</option>
+                                <option value="TOGO">To Go</option>
+                                <option value="DELIVERY">Delivery</option>
+                                <option value="PICKUP">Pickup</option>
+                            </select>
+                        </div>
+
+                        <div class="ui-grid-a border-top" id="promotionTypeDetail">
+                            <h2 data-mini="true" id="pricingRule-choosePromotionType">Choose Promotion Type</h2>
+                            <p id="hint-ktv-promotion">**KTV only support percentage discount**</p>
+                            <div class="ui-grid-a margin-bottom-3" id="discount-div" onclick="promotionObj.onFocus2EditButt()">
+                                <div class="ui-grid-a pricingRule-detail-form-ui-block-a" data-mini="true">
+                                    <h3 data-mini="true" id="pricingRule-h3-discount">1. Discount</h3>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-discountCash" for="pricingRule-discountCash" class="discountCash" data-mini="true">Fixed Amount</label>
+                                        <select name="select-choice-discountCash" id="pricingRule-discountCash">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a margin-left-2" data-mini="true">
+                                    <label data-mini="true" class="pricingRule-or">Or</label>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-discountPercentage" for="pricingRule-discountPercentage" class="detail-input-discountPercentage" data-mini="true">Percentage</label>
+                                        <select name="select-choice-discountPercentage" id="pricingRule-discountPercentage">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a margin-left-2" data-mini="true">
+                                    <label data-mini="true" class="pricingRule-or">Or</label>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-promotionPrice" for="pricingRule-promotionPrice" class="detail-input-promotionPrice" data-mini="true">Sales Price</label>
+                                        <input data-mini="true" type="text" name="promotionPrice" id="pricingRule-promotionPrice" value="" placeholder="$"/>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="ui-grid-a margin-bottom-3">
+                                <div class="ui-grid-a" data-mini="true">
+                                    <h3 data-mini="true" id="pricingRule-h3-exceedThresholdPrice">2. Promotional Pricing When Spend More Than $***</h3>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-thresholdPrice" for="pricingRule-thresholdPrice" data-mini="true">Exceeded Amount</label>
+                                        <input data-mini="true" type="text" name="thresholdPrice" id="pricingRule-thresholdPrice" value="" placeholder="$"/>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a margin-left-2" data-mini="true">
+                                    <label data-mini="true" class="pricingRule-get">get</label>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-discountCashWhenHasThreshold" for="pricingRule-discountCashWhenHasThreshold" data-mini="true">Fixed Amount Discount</label>
+                                        <select name="select-choice-discountCashWhenHasThreshold" id="pricingRule-discountCashWhenHasThreshold">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a margin-left-2" data-mini="true">
+                                    <label data-mini="true" class="pricingRule-or">Or</label>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-discountPercentageWhenHasThreshold" for="pricingRule-discountPercentageWhenHasThreshold" data-mini="true">Percentage of Discount</label>
+                                        <select name="select-choice-discountPercentageWhenHasThreshold" id="pricingRule-discountPercentageWhenHasThreshold">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ui-grid-a margin-bottom-3">
+                                <div class="ui-grid-a" data-mini="true">
+                                    <h3 data-mini="true" id="pricingRule-h3-exceedThresholdQty">3. Buy  **  Get **  Free</h3>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-thresholdQty" for="pricingRule-thresholdQty" data-mini="true">Buy  **</label>
+                                        <input data-mini="true" type="text" name="thresholdQty" id="pricingRule-thresholdQty" value="" placeholder="Qty"/>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a margin-left-2" data-mini="true">
+                                    <label data-mini="true" class="pricingRule-get">get</label>
+                                </div>
+                                <div class="ui-grid-a" data-mini="true">
+                                    <div class="ui-field-contain clear-div-margin" data-mini="true">
+                                        <label id="label-pricingRule-promotionQty" for="pricingRule-promotionQty" data-mini="true">Get **  Free</label>
+                                        <input data-mini="true" type="text" name="promotionQty" id="pricingRule-promotionQty" value="" placeholder="Qty"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a"><div class="my-button-div"><button id="save-edit-btn" type="submit" class="btn-save" onclick="promotionObj.savePricingRule();" data-theme="b">Save</button></div></div>
+                        <div class="ui-block-b"><div class="my-button-div"><button type="submit" class="btn-cancel" onclick="promotionObj.clearPricingRuleDetails();promotionObj.undoAddMode();promotionObj.clearSaleItemCheckboxes();" data-theme="b">Cancel</button></div></div>
+                    </fieldset>
+                </div>    
+            </div>
+            
+        </div><!-- /grid-b -->
+    </div>
+</div>
+
+</body>
+</html>

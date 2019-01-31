@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>cloud_menu</title><link href=./static/css/app.ceec0208cacbfe2bfc823a5f8e8b7b1d.css rel=stylesheet></head><body><div id=app></div><script>document.addEventListener('click', function(event){
+        // 防止有时mdc组件无法正常关闭弹框，待验证
+        if (event.target.classList.contains('mdc-dialog__backdrop')) {
+          if(document.querySelector('.mdc-dialog--open')){
+            document.querySelector('.mdc-dialog--open').classList.remove('mdc-dialog--open')
+          }
+          if(document.querySelector('.mdc-dialog--animating')){
+            document.querySelector('.mdc-dialog--animating').classList.remove('mdc-dialog--animating')
+          }
+          event.target.parentNode.classList.remove('mdc-dialog--open')
+          event.target.parentNode.classList.remove('mdc-dialog--animating')
+          event.stopPropagation = true
+        }
+      }, true)</script><script type=text/javascript src=./static/js/manifest.55784de6b87c75a2e0b2.js></script><script type=text/javascript src=./static/js/vendor.383b6638004d0273d455.js></script><script type=text/javascript src=./libs/i18n.js></script><script type=text/javascript src=./libs/material.js></script><script type=text/javascript src=./libs/jquery.js></script><script type=text/javascript src=./static/js/app.03a90e3f3dea8371fb80.js></script></body></html>

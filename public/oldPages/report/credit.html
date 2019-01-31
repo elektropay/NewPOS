@@ -1,0 +1,124 @@
+<div id="creditReportPage" class="content-page">
+    
+    <div class="page-wrapper">
+
+        <div class="row page-header">
+            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                <h1 class="report-header" id="credit-page-header">Credit</h1>
+            </div>
+        </div>
+
+        <div class="row page-body">
+            <div class="col-sm-6">
+
+                <form id="creditform" name="creditform" method="post" action="" target="report-frame">
+                    <input id="fromDateToSubmit" type="hidden" name="fromDate" value=""/>
+                    <input id="toDateToSubmit" type="hidden" name="toDate" value=""/>
+                    <input id="printReport" type="hidden" name="printReport" value=""/>
+                    <input id="exportReport" type="hidden" name="exportReport" value=""/>
+                    <input id="reportType" type="hidden" name="reportType" value="CREDIT"/>
+                    <input id="reportName" type="hidden" name="reportName" value="CreditReport"/>
+                    <input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>
+                    <input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>
+                    <input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+                    <input id="operationHour" type="hidden" name="operationHour" value=""/>
+
+                    <div id="report-date-div">
+                        <div class="form-group">
+                            <label for="fromDate" class="col-sm-3 control-label detail-input-from">From</label>
+                            <div class='input-group date col-sm-9' id="fromDate-div">
+                                <input id="fromDate" type='text' class="form-control input-group-addon" />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-fw fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="toDate" class="col-sm-3 control-label detail-input-to">To</label>
+                            <div class='input-group date col-sm-9' id="toDate-div">
+                                <input id="toDate" type='text' class="form-control input-group-addon" />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-fw fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label id="label-printer" class="col-sm-3 printer-label" for="printer-select-choice">Report Printer</label>
+                        <div class="col-sm-7 col-sm-offset-2 selectContainer">
+                            <select name="printerName" id="printer-select-choice" data-size="10">
+                                <option value="">Default</option>
+                                <option ng-repeat="printer in printerList" value="{{printer.name}}">{{ printer.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label id="label-export-type" class="col-sm-3 export-type-label" for="export-select-choice">Export Type</label>
+                        <div class="col-sm-7 col-sm-offset-2 selectContainer">
+                            <select name="exportFileName" id="export-select-choice">
+                                <option value="PDF">PDF</option>
+                                <option value="XLSX">XLSX</option>
+                                <option value="CSV">CSV</option>
+                                <option value="HTML">HTML</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label id="label-orderType" for="orderType" class="col-sm-3 control-label order-type-label">Order Type</label>
+                        <div class="col-sm-8 col-sm-offset-1 selectContainer">
+                            <select name="orderType" id="orderType" multiple="multiple" data-size="10">
+                                <option value="DEFAULT" selected>Default</option>
+                                <option value="GIFT_CARD">Gift Card</option>
+                                <option value="LOYALTY_CARD">Membership Card</option>
+                                <option value="DINE_IN">Dine In</option>
+                                <option value="DELIVERY">Delivery</option>
+                                <option value="PICKUP">Pickup</option>
+                                <option value="TOGO">To Go</option>
+                                <option value="CUSTOM_ORDER_TYPE1">CUSTOM_ORDER_TYPE1</option>
+                                <option value="CUSTOM_ORDER_TYPE2">CUSTOM_ORDER_TYPE2</option>
+                                <option value="CUSTOM_ORDER_TYPE3">CUSTOM_ORDER_TYPE3</option>
+                                <option value="CUSTOM_ORDER_TYPE4">CUSTOM_ORDER_TYPE4</option>
+                                <option value="ALL">All</option>
+                                <option role="separator" class="divider disabled initialism" disabled></option>
+                                <option value="ONLINE">All Online Order</option>
+                                <option value="ONLINE_PICKUP"  class="col-md-offset-2"> Online Order Pickup</option>
+                                <option value="ONLINE_DELIVERY"  class="col-md-offset-2"> Online Order Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label id="label-paymentTerminal" for="paymentTerminal" class="col-sm-3 control-label payment-terminal-label">Payment Terminal</label>
+                        <div class="col-sm-8 col-sm-offset-1 selectContainer">
+                            <select name="paymentTerminal" id="paymentTerminal" data-size="10">
+                                <option value="-1">All</option>
+                                <option ng-repeat="terminal in terminalList" value="{{ terminal.id }}">{{ terminal.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn-run-report btn btn-block" ng-click="submitForm(false, false)">Run</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn-print-report btn btn-block" ng-click="submitForm(true, false)">Print</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn-export-report btn btn-block" ng-click="submitForm(false, true)">Export</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="report-wrap col-sm-6">
+                <iframe id="report-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+            </div>
+        </div>
+    </div> 
+</div>

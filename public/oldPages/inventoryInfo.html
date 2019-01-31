@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/inventoryInfo.js"></script>
+</head>
+<body>
+<div id="inventoryInfoPage" data-role="page" data-theme="a">
+
+    <div id="inventoryInfoPageMainDiv" data-theme="a" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-inventoryVendorTab" href="#inventoryVendorTab">Inventory Vendor</a></li>
+                    <li><a id="navbar-inventoryLocationTab" href="#inventoryLocationTab">Inventory Location</a></li>
+                </ul>
+            </div>
+            <div id="inventoryVendorTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="inventoryVendorSelectLayoutDiv">
+                        <div id="inventoryVendorSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-inventoryVendor">Inventory Vendor</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:inventoryVendor.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="inventoryVendorTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="inventoryVendorDetailContentDiv" class="my-detail-panel">
+                            <input id="curVendorEntryId" type="hidden">
+                            <div data-role="fieldcontain">
+                                <label id="label-vendorName" for="vendorName" class="detail-input-name">Name</label>
+                                <input id="vendorName" readonly="readonly" value="" type="text" maxlength="50"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-vendorPhoneNum" for="vendorPhoneNum" class="detail-input-phone">Phone</label>
+                                <input id="vendorPhoneNum" readonly="readonly" value="" type="text" maxlength="20"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-vendorDescription" for="vendorDescription" class="detail-input-description">Description</label>
+                                <textarea id="vendorDescription" rows="3" cols="45" readonly="readonly" value="" style="height:51px;"></textarea>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnVendorSave" class="btn-save" type="button" onclick="javascript:inventoryVendor.saveElement();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="inventoryLocationTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="inventoryLocationSelectLayoutDiv">
+                        <div id="inventoryLocationSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-inventoryLocation">Inventory Location</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:inventoryLocation.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="inventoryLocationTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="inventoryLocationDetailContentDiv" class="my-detail-panel">
+                            <input id="curEntryId" type="hidden">
+                            <div data-role="fieldcontain">
+                                <label id="label-name" for="name" class="detail-input-name">Name</label>
+                                <input id="name" readonly="readonly" value="" type="text" maxlength="30"/>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-contactInfo" for="name" class="detail-input-contactInfo">Contact Info</label>
+                                        <input id="contactInfo" readonly="readonly" value="" type="text"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-phoneNum" for="phoneNum" class="detail-input-phone">Phone</label>
+                                        <input id="phoneNum" readonly="readonly" value="" type="text" maxlength="20"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-field-contain">
+                                <label id="label-address1" for="address1" class="detail-input-address1">Address1</label>
+                                <input type="text" id="address1" name="address1" value=""/>
+                            </div>
+                            <div class="ui-field-contain">
+                                <label id="label-address2" for="address2" class="detail-input-address2">Address2</label>
+                                <input type="text" id="address2" name="address2" value=""/>
+                            </div>
+                            <div class="ui-grid-b">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-city" for="city" class="detail-input-city">City</label>
+                                        <input id="city" readonly="readonly" value="" type="text" maxlength="30"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-state" for="state" class="detail-input-state">State</label>
+                                        <input id="state" readonly="readonly" value="" type="text" maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-c">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-zipCode" for="zipCode" class="detail-input-zipcode">ZIP Code</label>
+                                        <input id="zipCode" readonly="readonly" value="" type="text" maxlength="10" pattern="[0-9]"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-description" for="description" class="detail-input-description">Description</label>
+                                <textarea id="description" rows="3" cols="45" readonly="readonly" value=""></textarea>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:inventoryLocation.saveElement();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

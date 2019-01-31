@@ -1,0 +1,124 @@
+<div id="inventoryReceiveItemsPage">
+    <div class="row">
+        <form class="form-horizontal" role="form">
+            <div class="form-group col-sm-8">
+                <label id="label-po-select-list" for="po-select-list" class="col-sm-6 control-label pull-left">Load items from selected purchase order</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="po-select-list" ng-model="currentPurchaseOrder" ng-options="item as item.displayInfo for item in purchaseOrderList">
+                        <option id="po-option-new-received-items" ng-value="newOrderForReceivedItems">New Received Items</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div>
+                <div class="form-group col-sm-6">
+                    <select class="form-control" id="item-group-select-list" ng-model="inventoryItemFilter.groupid" ng-options="item.id as item.name for item in inventoryItemGroupList">
+                        <option id="item-group-option-all" value="" class="input-value-type-all">All</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6">
+                    <input type="input" class="form-control" id="search-item-input" ng-model="inventoryItemFilter.name" placeholder="Search" ng-change="onSearchInventoryItem()">
+                </div>
+            </div>
+            <div id="inventoryItemsTableContainerDiv">
+                <div class="div-table-header">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="col-sm-7">
+                                <a ng-click="sortTable('name')">
+                                    <label id="label-item-name" class="detail-input-name">Name</label>
+                                </a>
+                            </th>
+                            <th class="col-sm-4">
+                                <a ng-click="sortTable('estimatedstockqty')">
+                                    <label id="label-stock-qty">Stock QTY</label>
+                                </a>
+                            </th>
+                            <th class="col-sm-1">
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="div-table-content-md">
+                    <table class="table table-striped table-condensed">
+                        <tbody>
+                        <tr ng-repeat="inventoryItem in (filteredInventoryItemList = (inventoryItemList | orderBy:sortType:sortReverse | customerInventoryItemFilter:inventoryItemFilter))">
+                            <td class="col-sm-7">{{ inventoryItem.displayInfo }}</td>
+                            <td class="col-sm-4">{{ inventoryItem.estimatedstockqty }}</td>
+                            <td class="col-sm-1" ng-click="addOrderItem(inventoryItem)"><i class="fa fa-plus"></i></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div id="purchaseOrderItemsTableContainerDiv">
+                <div class="div-table-header">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="col-sm-6">
+                                <a ng-click="sortTable('name')">
+                                    <label id="label-name" class="detail-input-name">Name</label>
+                                </a>
+                            </th>
+                            <th class="col-sm-2">
+                                <a ng-click="sortTable('qty')">
+                                    <label id="label-qty">QTY</label>
+                                </a>
+                            </th>
+                            <th class="col-sm-3">
+                                <a ng-click="sortTable('priceperunit')">
+                                    <label id="label-pricePerUnit">Unit Price</label>
+                                </a>
+                            </th>
+                            <th class="col-sm-1">
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="div-table-content-small">
+                    <table class="table table-striped table-condensed table-bordered">
+                        <tbody>
+                        <tr ng-repeat="orderItem in currentPurchaseOrder.orderItemList | orderBy:sortType:sortReverse">
+                            <td class="col-sm-6">{{ orderItem.displayInfo }}</td>
+                            <td class="col-sm-2"><input type="number" min="0" class="form-control input-sm" ng-model="orderItem.qty" ng-change="calculatePurchaseOrderSubtotal()" mnsf-select-on-focus mnsf-auto-focus="focusQtyInput{{$index}}"></td>
+                            <td class="col-sm-3"><input type="number" class="form-control input-sm" ng-model="orderItem.priceperunit" ng-change="calculatePurchaseOrderSubtotal()" mnsf-select-on-focus></td>
+                            <td class="col-sm-1"><div><a class="btn btn-danger" ng-click="deleteOrderItem($index)"><i class="fa fa-trash-o fa-lg"></i></a></div></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-group col-sm-6">
+        </div>
+        <div class="form-group col-sm-4">
+            <label id="receivedItems-subtotal">Total value</label>:   {{currentPurchaseOrder.subtotal}}
+        </div>
+        <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary btn-submit-result pull-right" ng-click="submitReceivedInventoryItems()">Submit</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="alert alert-danger" ng-show="submitResult.error">
+            <label id="alert-error" class="alert-error-message">Unable to submit your request.</label> {{submitResult.errorMessage}}
+        </div>
+        <div class="alert alert-success" ng-show="submitResult.success">
+            <label id="alert-success" class="alert-success-message">Submitted Successfully!</label>
+        </div>
+
+    </div>
+
+</div>

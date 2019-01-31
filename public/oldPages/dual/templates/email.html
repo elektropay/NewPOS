@@ -1,0 +1,22 @@
+
+ <div style="background: #ccc;">
+   <div class="Pwap" id="signature-pad">
+      <div class="hearder f5w">RECEIPT
+        <div class="container f3w">Order No. #{{pay.orderNumber}}</div>
+      </div>
+   <div class="main customer" style="flex-flow:row wrap;margin-top:8%;">
+        <div class="wrapEmail">
+              <div class="input">&nbsp;<span>{{email}}<span style="color:#ccc">|</span></span></div>
+              <div class="sendEmail"  ng-click="sendEmail()">
+                  Send <br/>Receipt
+              </div>
+        </div>
+    </div>
+
+</div>
+    <div class="keyboard" >
+          <div ng-class="{'keyboard10':$index<40 || $index>=44 ,'keyboard20':$index>=40 && $index<44}" ng-repeat="item in keyBoard" ng-click="insertEmail(item.key)">
+                      {{item.key}}
+           </div>
+    </div> 
+</div>

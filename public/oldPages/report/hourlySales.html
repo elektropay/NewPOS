@@ -1,0 +1,155 @@
+<div id="hourlySalesReportPage" class="content-page">
+	<div id="page-wrapper">
+
+		<div id="hourly-loading-page" class="text-center" hidden>
+            <div class="alert alert-info" role="alert"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><b class="loading-sign"> Please wait, Loading... </b><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+        </div>
+
+		<div id="preview-popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="print-preview" aria-hidden="true">
+		  	<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header text-center">
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        		<h4 class="modal-title" id="print-preview">Print Preview</h4>
+		      		</div>
+				    <div class="modal-body row">
+				    	<div class="report-wrap col-sm-8 col-md-8 col-lg-8">
+				        	<iframe id="report-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+				    	</div>
+				    	<div class="col-sm-4 col-md-4 col-lg-4">
+				    		<div id="printer" class="dropdown open">
+							  	<button class="btn btn-primary btn-lg btn-block btn-print-report dropdown-toggle" type="button" id="printer-list-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    Print</button>
+							  	<div class="dropdown-menu" aria-labelledby="printer-list-dropdown">
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(true, false, '')">Default</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-repeat="printer in printerList" ng-click="submitReportPreview(true, false, printer.name)">{{printer.name}}</button>
+							  	</div>
+							</div>
+							<div class="dropdown open">
+							  	<button class="btn btn-primary btn-lg btn-block btn-export-report dropdown-toggle" type="button" id="export-type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    Export</button>
+							  	<div class="dropdown-menu" aria-labelledby="export-type-dropdown">
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'PDF')">PDF</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'XLSX')">XLSX</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'CSV')">CSV</button>
+							    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'HTML')">HTML</button>
+							  	</div>
+							</div>
+				    	</div>
+				    </div>
+			    </div>
+		  	</div>
+		</div>
+
+		<div class="row page-header">
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <h1 class="report-header" id="hourly-page-header">Hourly</h1>
+            </div>
+            <div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+            	<div id="report-date-div">
+		        	<div class="input-group date">
+	                    <input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-minus"></i>
+	                    </span>
+	                    <input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-calendar"></i>
+	                    </span>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            	<span class="input-group"><a ng-click="hourlyInfo()"><i class="fa fa-search fa-2x"></i></a></span>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+				<form id="hourlyform" name="hourlyform" method="post" action="" target="report-frame">
+					
+					<input id="previewFrom" type="hidden" name="fromDate" value=""/>
+                    <input id="previewTo" type="hidden" name="toDate" value=""/>
+                    <input id="printReport" type="hidden" name="printReport" value=""/>
+                    <input id="exportReport" type="hidden" name="exportReport" value=""/>
+					<input id="personalReport" type="hidden" name="personalReport" value="false"/>
+					<input id="printerName" type="hidden" name="printerName" value=""/>
+					<input id="exportFileName" type="hidden" name="exportFileName" value=""/>					
+					<input id="reportName" type="hidden" name="reportName" value="HourlyReport"/>
+					<input id="userId" type="hidden" name="userId" value=""/>
+					<input id="reportType" type="hidden" name="reportType" value="DAILY"/>
+					<input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>
+					<input id="operationHour" type="hidden" name="operationHour" value=""/>
+					<input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>
+					<input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+
+					<span class="input-group"><a data-toggle="modal" data-target="#preview-popup" ng-click="submitReportPreview(false, false)"><i class="fa fa-print fa-2x"></i></a></span>
+				</form>
+			</div>
+		</div>
+
+		<div class="page-body">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h3 id="hourly-sale-heat-map-graph" class="text-center">Hourly Sales Heat Map</h3>
+		    		<div id="hourly-sales-heat-graph" style="height: 400px"></div>
+		    	</div>
+			</div>
+
+			<div id="hourly-alert-sign" class="row alert alert-info text-center">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<i class="fa fa-exclamation-triangle"></i><b class="alert-sign-text-1">Please select time range and press </b><i class="fa fa-search"></i><b class="alert-sign-text-2"> button</b><i class="fa fa-exclamation-triangle"></i>
+				</div>
+			</div>
+
+			<div class="row" id="hourly-sales-table">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+					<h3 id="hourly-sale-data-table">Hourly Sales</h3>
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" id="hourly-table">
+						<tr>
+							<th id="hourly-table-date">Date</th>
+							<th id="hourly-table-gross-sales">Gross Sales</th>
+							<th id="hourly-table-discount">Discount</th>
+							<th id="hourly-table-net-sales">Net Sales</th>
+							<th id="hourly-table-grand-total">Grand Total</th>
+							<th id="hourly-table-num-of-order"># of Orders</th>
+							<th id="hourly-table-avg-per-order">Avg Sales Per Order</th>
+							<th id="hourly-table-num-of-guests"># of Guests</th>
+							<th id="hourly-table-avg-per-guests">Avg Sales Per Guests</th>
+							<th id="hourly-table-percentage-of-sales">Percentage of Sales</th>
+							<th id="hourly-table-occupancy-rate">Occupancy Rate</th>
+						</tr>
+						<tr class="ng-table-group" ng-repeat-start="dailySummary in $data">
+							<th>
+								{{dailySummary.orderDate}}
+								<a ng-click="dailySummary.$hideRows = !dailySummary.$hideRows"><span><i ng-class="{'fa fa-sort-desc' : !dailySummary.$hideRows, 'fa fa-sort-up' : dailySummary.$hideRows}"></i></span></a>
+							</th>
+							<th>{{dailySummary.grossSale | currency}}</th>
+							<th>{{dailySummary.discount | currency}}</th>
+							<th>{{dailySummary.subTotal | currency}}</th>
+							<th>{{dailySummary.grandTotal | currency}}</th>
+							<th>{{dailySummary.orderCount}}</th>
+							<th>{{dailySummary.subTotal/dailySummary.orderCount | currency}}</th>
+							<th>{{dailySummary.numOfGuest}}</th>
+							<th>{{dailySummary.subTotal/dailySummary.numOfGuest | currency}}</th>
+							<th>100%</th>
+							<th ng-model="numOfSeat">{{dailySummary.numOfGuest/numOfSeat | number : 2}}</th>
+							<!--<th>{{dailySummary.grandTotal/dailySummary.orderCount | number : 2}}</th>-->
+						</tr>
+						<tr ng-hide="!dailySummary.$hideRows" ng-repeat="hourlySummary in dailySummary.hourlySaleMap" ng-repeat-end>
+							<td>{{hourlySummary.name}}:00 - {{hourlySummary.name}}:59</td>
+							<td>{{hourlySummary.grossSale | currency}}</td>
+							<td>{{hourlySummary.discount | currency}}</td>
+							<td>{{hourlySummary.netSale | currency}}</td>
+							<td>{{hourlySummary.total | currency}}</td>
+							<td>{{hourlySummary.count}}</td>
+							<td>{{hourlySummary.netSale/hourlySummary.count | currency}}</td>
+							<td>{{hourlySummary.numOfGuest}}</td>
+							<td>{{hourlySummary.netSale/hourlySummary.numOfGuest | currency}}</td>
+							<td>{{hourlySummary.netSale/dailySummary.subTotal * 100 | number : 2}}%</td>
+							<td>{{hourlySummary.numOfGuest/numOfSeat | number : 2}}</td>
+							<!--<td data-title="'Service Rate'">{{hourlySummary.total/dailySummary.grandTotal * 100 | number : 2}}%</td>-->
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

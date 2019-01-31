@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Menusifu POS</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="css/jquery-ui-1.10.3.min.css"/>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/tableManagement.js"></script>
+</head>
+<body>
+    <div id="tableManagementPage" data-role="page" data-theme="a">
+        <div id="tableManagementMainContentDiv" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+            <div id="tabs" data-role="tabs">
+                <div id="tableManagementTabList" data-role="navbar">
+                    <ul>
+                        <li><a id="navbar-mainTab" href="#mainTableManagementTab">Main</a></li>
+                        <li><a id="navbar-tableCategoryTab" href="#tableCategoryTab">Table Category</a></li>
+                    </ul>
+                </div>
+
+                <div id="mainTableManagementTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <div>
+                                <div id="tablePageContainer"></div>
+                            </div>
+                            &nbsp;
+                            <div id="saveAreaLayoutBtnDiv" class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnSaveAllTableLayoutChanges" type="button" onclick="tableManagement.saveAllTableLayoutChanges();">Save Area Layout</button>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div id="tableDetailDiv">
+                                <div>
+                                    <div><table id="areaList" style="overflow-x:auto; display:block;"></table></div>
+                                    <div class="ui-grid-b">
+                                        <div class="ui-block-a"><div><button class="btn-new-entry" onclick="tableManagement.newArea()">New</button></div></div>
+                                        <div class="ui-block-b"><div><button class="btn-edit" onclick="tableManagement.editArea()">Edit</button></div></div>
+                                        <div class="ui-block-c"><div><button class="btn-delete" onclick="tableManagement.openDeletePanel()">Delete</button></div></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 id="edit-table-detail-header" class="center-horizontal-align-element">Table Detail</h2>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <label id="label-tableName" for="tableName" class="detail-input-name">Table Name</label>
+                                            <input type="text" id="tableName" value="" maxlength="5" onkeyup="tableManagement.limitInput()"/>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <label id="label-guestCount" for="guestCount">Guest Count</label>
+                                            <input type="text" id="guestCount" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <label id="label-tableWidth" for="tableWidth">Width (%)</label>
+                                            <input type="number" id="tableWidth" value=""/>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <label id="label-tableHeight" for="tableHeight">Height (%)</label>
+                                            <input type="number" id="tableHeight" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a">
+                                        <div class="ui-block-a">
+                                            <label id="label-tableTypeList" for="tableTypeList">Table Type</label>
+                                            <select name="table-type-list" id="tableTypeList">
+                                                <option id="table-type-option-rectangle" value="RECTANGLE">Rectangle</option>
+                                                <option id="table-type-option-round" value="ROUND">Round</option>
+                                                <option id="table-type-option-hibachi" value="HIBACHI">Hibachi</option>
+                                                <option id="table-type-option-bar" value="BAR">Bar</option>
+                                                <option id="table-type-option-ktv" value="KTV">KTV</option>
+                                            </select>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <label id="label-tableCategoryList" for="tableCategoryList">Category</label>
+                                            <select name="table-category-list" id="tableCategoryList">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-a" id="defaultSaleItemList-div" hidden>
+                                        <label id="label-defaultSaleItemList" for="defaultSaleItemList">Default Sale Item</label>
+                                        <select name="default-sale-item-list" id="defaultSaleItemList">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div id="hibachi-properties-div" class="ui-grid-a" hidden>
+                                        <div class="ui-block-a">
+                                            <label id="label-hibachiTableShapeList" for="hibachiTableShapeList">Hibachi Table Type</label>
+                                            <select name="hibachiTableShapeList" id="hibachiTableShapeList">
+                                                <option id="hibachiTableShapeList-option-0" value="0">Default(3-4-3)</option>
+                                                <option id="hibachiTableShapeList-option-1" value="1">2-4-2</option>
+                                                <option id="hibachiTableShapeList-option-2" value="2">4-4-4</option>
+                                            </select>
+                                        </div>
+                                        <div class="ui-block-b">
+                                            <label id="label-seatingOrientationList" for="seatingOrientationList">Seating Layout</label>
+                                            <select name="seatingOrientationList" id="seatingOrientationList">
+                                                <option id="seatingOrientationList-option-0" value="0">Left</option>
+                                                <option id="seatingOrientationList-option-1" value="1">Right</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-b">
+                                        <div class="ui-block-a"><div><button class="btn-add-entry" onclick="tableManagement.addTable()" id="addTableButton">New</button></div></div>
+                                        <div class="ui-block-b"><div><button class="btn-save" onclick="tableManagement.saveTable()" id="saveTableButton">Save</button></div></div>
+                                        <div class="ui-block-c"><div><button class="btn-delete" onclick="tableManagement.openDeleteTablePanel()" id="deleteTableButton">Delete</button></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tableCategoryTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width" id="tableCategorieselectLayoutDiv">
+                            <div id="tableCategorieselectContentDiv" class="my-select-menu">
+                                <table class="tableone">
+                                    <caption id="table-caption-tableCategory">Table Category</caption>
+                                    <thead>
+                                    <tr>
+                                        <th class="th1" scope="col"></th>
+                                        <th class="th2" scope="col"><br></th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:tableCategory.newEntry();">New</button></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="innerb">
+                                                <table id="tableCategoryTable" class="tabletwo">
+                                                </table>
+                                            </div>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="ui-block-b my-div-width">
+                            <div id="tableCategoryDetailContentDiv" class="my-detail-panel">
+                                <input id="curEntryId" type="hidden">
+                                <div data-role="fieldcontain">
+                                    <label id="label-name" for="name" class="detail-input-name">Name</label>
+                                    <input id="name" readonly="readonly" value="" type="text" maxlength="20"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-description" for="description" class="detail-input-description">Description</label>
+                                    <input id="description" readonly="readonly" value="" type="text"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-minSeats" for="minSeats" class="detail-input-minSeats">Min Table Size</label>
+                                    <input id="minSeats" readonly="readonly" type="number" step="1" min="0" max="99999"/>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-maxSeats" for="minSeats" class="detail-input-maxSeats">Max Table Size</label>
+                                    <input id="maxSeats" readonly="readonly" type="number" step="1" min="0" max="99999"/>
+                                </div>
+                                <div class="my-top-margin-button-div">
+                                    <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:tableCategory.saveElement();">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-role="popup" id="editAreaDetailPopup" data-overlay-theme="a" data-theme="a" data-dismissible="false" class="ui-corner-all editDetailPopup">
+            <div data-role="header" data-theme="a" class="ui-corner-top">
+                <h1 id="editAreaDetailPopup-header">Area Detail</h1>
+            </div>
+            <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                <div data-role="fieldcontain">
+                    <label id="label-areaName" for="areaName" class="detail-input-name">Name</label>
+                    <input type="text" id="areaName"/>
+                </div>
+            </div>
+            <div>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a"><div class="my-button-div"><button type="submit" class="btn-save" onclick="tableManagement.saveSeatingArea();" data-theme="a">Save</button></div></div>
+                    <div class="ui-block-b"><div class="my-button-div"><button type="submit" class="btn-cancel" onclick="tableManagement.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

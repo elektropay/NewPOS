@@ -1,0 +1,505 @@
+<div id="overviewReportPage" class="content-page">
+	<div id="page-wrapper">
+		
+		<div id="preview-popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="print-preview" aria-hidden="true">
+		  	<div class="modal-dialog" role="document">
+		    	<div id="totals-report-print-preview-modal-content" class="modal-content">
+		      		<div class="modal-header text-center">
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        		<h4 class="modal-title" id="print-preview">Print Preview</h4>
+		      		</div>
+				    <div class="modal-body row">
+				    	<div class="total-report-wrap col-sm-6 col-md-6 col-lg-6">
+				        	<iframe id="totals-report-print-preview-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+				    	</div>
+				    	<div class="col-sm-6 col-md-6 col-lg-6">
+
+							<div id="fromDatePreview-container-div" class="form-group row">
+								<label for="fromDatePreview" class="col-sm-3 control-label detail-input-from">From</label>
+								<div class='input-group date col-sm-8 col-sm-offset-1' id="fromDatePreview-div">
+									<input id="fromDatePreview" type='text' class="form-control input-group-addon" ng-model="printPreview.fromDate"/>
+									<span class="input-group-addon">
+										<i class="fa fa-fw fa-calendar"></i>
+									</span>
+								</div>
+							</div>
+
+
+							<div id="toDatePreview-container-div" class="form-group row">
+								<label for="toDatePreview" class="col-sm-3 control-label detail-input-to">To</label>
+								<div class='input-group date col-sm-8 col-sm-offset-1' id="toDatePreview-div">
+									<input id="toDatePreview" type='text' class="form-control input-group-addon" ng-model="printPreview.toDate"/>
+									<span class="input-group-addon">
+										<i class="fa fa-fw fa-calendar"></i>
+									</span>
+								</div>
+							</div>
+
+				    		<div class="form-group row">
+								<label id="label-orderType" class="select col-sm-4 control-label orderType-label" for="orderType">Order Type</label>
+                                <div class="col-sm-8 selectContainer">
+                                    <select name="orderType" id="orderType" multiple="multiple" data-size="10" title="Order Type">
+                                        <option value="DEFAULT" selected>Default</option>
+                                        <option value="GIFT_CARD">Gift Card</option>
+                                        <option value="LOYALTY_CARD">Membership Card</option>
+                                        <option value="DINE_IN">Dine In</option>
+                                        <option value="DELIVERY">Delivery</option>
+                                        <option value="PICKUP">Pickup</option>
+                                        <option value="TOGO">To Go</option>
+										<option value="CUSTOM_ORDER_TYPE1">CUSTOM_ORDER_TYPE1</option>
+										<option value="CUSTOM_ORDER_TYPE2">CUSTOM_ORDER_TYPE2</option>
+										<option value="CUSTOM_ORDER_TYPE3">CUSTOM_ORDER_TYPE3</option>
+										<option value="CUSTOM_ORDER_TYPE4">CUSTOM_ORDER_TYPE4</option>
+                                        <option value="ALL">All</option>
+										<option role="separator" class="divider disabled initialism" disabled></option>
+										<option value="ONLINE">All Online Order</option>
+										<option value="ONLINE_PICKUP"  class="col-md-offset-2"> Online Order Pickup</option>
+										<option value="ONLINE_DELIVERY"  class="col-md-offset-2"> Online Order Delivery</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label id="label-hours-select-choice" class="select col-sm-4 control-label hour-label" for="hours-select-choice">Hours</label>
+                                <div class="col-sm-8 selectContainer">
+                                    <select name="hourId" id="hours-select-choice" data-size="10">
+                                        <option value="">All</option>
+                                        <option ng-repeat="hour in hoursList" value="{{ hour.id }}">{{hour.name}}: {{hour.from}}-{{hour.to}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label id="label-areaIds" class="select col-sm-4 control-label area-label" for="areas-select-choice">Area</label>
+                                <div class="col-sm-8 selectContainer">
+                                    <select name="areaId" id="areas-select-choice" data-size="10">
+                                        <option value="">All</option>
+                                        <option ng-repeat="area in areasList" value="{{ area.id }}">{{ area.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="staff-list-div">
+								<div class="btn-group col-sm-6" data-toggle="buttons">
+									<label id="label-userFilterOptions-staff" class="btn btn-primary" ng-model="userFilterOptions" uib-btn-radio="'staff'">Staff</label>
+									<label id="label-userFilterOptions-drivers" class="btn btn-primary" ng-model="userFilterOptions" uib-btn-radio="'drivers'">Driver</label>
+								</div>
+                            	<div class="col-sm-6 selectContainer" ng-show="userFilterOptions == 'staff'">
+	                                <select name="userIds" id="users-select-choice" multiple="multiple" ng-model="selectedStaff" data-size="10">
+										<option value="-1" selected>All</option>
+	                                    <option ng-repeat="staff in staffList" value="{{ staff.user.id }}">{{ staff.name }}</option>
+	                                </select>
+	                            </div>
+
+								<div class="col-sm-6 selectContainer" ng-show="userFilterOptions == 'drivers'">
+									<select name="driverIds" id="drivers-select-choice" multiple="multiple" ng-model="selectedDriver" data-size="10">
+										<option value="-1" selected>All</option>
+										<option ng-repeat="driver in driversList" value="{{ driver.id }}">{{ driver.name }}</option>
+									</select>
+								</div>
+		                    </div>
+
+                            <div class="form-group row">
+                                <label id="label-combineLinkedItem" class="col-sm-8" for="combineLinkedItem">Combine linked item</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" id="combineLinkedItem" name="combineLinkedItem">
+                                </div>
+
+                                <label id="label-showStaffAttendanceCheckbox" class="col-sm-8" for="showStaffAttendance">Attendance Record</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" name="showStaffAttendance" id="showStaffAttendance" checked="checked"/>
+                                </div>
+
+                                <label id="label-showOrderSummaryCheckbox" class="col-sm-8" for="showOrderSummary">Order Summary</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" name="showOrderSummary" id="showOrderSummary"/>
+                                </div>
+
+                                <label id="label-showPaidOutDetailsCheckbox" class="col-sm-8" for="showPaidOutDetails">Paid Out Detail</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" name="showPaidOutDetails" id="showPaidOutDetails"/>
+                                </div>
+
+                                <label id="label-useAttendanceCheckbox" class="col-sm-8" for="useAttendanceCheckbox">Last Clock In</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" name="useAttendanceCheckbox" id="useAttendanceCheckbox" ng-click="setDatetimeBasedOnAttendance()"/>
+                                </div>
+
+                                <label id="label-printSpreadsheetCheckbox" class="col-sm-8" for="printSpreadsheet">Print Empty Spreadsheet On Page Footer</label>
+                                <div class="col-sm-4">
+                                    <input type="checkbox" name="printSpreadsheet" id="printSpreadsheet" value="true"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+								<div class="col-sm-12 totals-report-print-preview-buttonDivs">
+									<div class="btn btn-primary btn-lg btn-block btn-run-report" type="button" id="preview-type-button" ng-click="submitReportPreview(false, false)">Run</div>
+								</div>
+
+					    		<div id="printer" class="dropdown open col-sm-12 totals-report-print-preview-buttonDivs">
+								  	<button class="btn btn-primary btn-lg btn-block btn-print-report dropdown-toggle" type="button" id="printer-list-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Print</button>
+								  	<div class="dropdown-menu" aria-labelledby="printer-list-dropdown">
+								    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(true, false, '')">Default</button>
+								    	<button class="dropdown-item btn-primary btn-block" ng-repeat="printer in printerList" ng-click="submitReportPreview(true, false, printer.name)">{{printer.name}}</button>
+								  	</div>
+								</div>
+
+								<div class="dropdown open col-sm-12 totals-report-print-preview-buttonDivs">
+								  	<button class="btn btn-primary btn-lg btn-block btn-export-report dropdown-toggle" type="button" id="export-type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Export</button>
+								  	<div class="dropdown-menu" aria-labelledby="export-type-dropdown">
+								    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'PDF')">PDF</button>
+								    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'XLSX')">XLSX</button>
+								    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'CSV')">CSV</button>
+								    	<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'HTML')">HTML</button>
+								  	</div>
+								</div>
+							</div>
+				    	</div>
+				    </div>
+			    </div>
+		  	</div>
+		</div>
+
+		<div class="row page-header">
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <h1 class="report-header" id="overview-page-header">Overview</h1>
+            </div>
+            <div class="col-xs-10 col-sm-7 col-md-7 col-lg-7">
+	        	<div class="input-group date">
+                    <input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+                    <span id ="fromDate-icon" class="input-group-addon">
+                        <i class="fa fa-fw fa-calendar"></i>
+                    </span>
+                    <input id="fromTime" name="fromTime" type='text' class="form-control input-group-addon"/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-fw fa-minus"></i>
+                    </span>
+                    <input id="toTime" name="toTime" type='text' class="form-control input-group-addon"/>
+	            </div>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+				<form id="overviewform" name="overviewform" method="post" action="" target="report-frame">
+					
+					<input id="previewFrom" type="hidden" name="fromDate" value=""/>
+                    <input id="previewTo" type="hidden" name="toDate" value=""/>
+                    <input id="printReport" type="hidden" name="printReport" value=""/>
+                    <input id="exportReport" type="hidden" name="exportReport" value=""/>
+					<input id="personalReport" type="hidden" name="personalReport" value="false"/>
+					<input id="printerName" type="hidden" name="printerName" value=""/>
+					<input id="exportFileName" type="hidden" name="exportFileName" value=""/>					
+					<input id="reportName" type="hidden" name="reportName" value=""/>
+					<input id="userIds" type="hidden" name="userIds" value=""/>
+					<input id="driverIds" type="hidden" name="driverIds" value=""/>
+					<input id="orderTypeData" type="hidden" name="orderType" value=""/>		
+					<input id="hourIdData" type="hidden" name="hourId" value=""/>		
+					<input id="areaIdData" type="hidden" name="areaId" value=""/>
+                    <input id="combineLinkedItemData" type="hidden" name="combineLinkedItem" value=""/>
+					<input id="showStaffAttendanceData" type="hidden" name="showStaffAttendance" value=""/>
+					<input id="showOrderSummaryData" type="hidden" name="showOrderSummary" value=""/>				
+					<input id="showPaidOutDetailsData" type="hidden" name="showPaidOutDetails" value=""/>		
+					<input id="useAttendanceCheckboxData" type="hidden" name="useAttendanceCheckbox" value=""/>
+					<input id="printSpreadSheetData" type="hidden" name="printSpreadsheet" value=""/>
+					<input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>
+					<input id="operationHour" type="hidden" name="operationHour" value=""/>
+					<input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>
+					<input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+
+					<span class="input-group"><a data-toggle="modal" data-target="#preview-popup" ng-click="openReportPreview()"><i class="fa fa-print fa-2x"></i></a></span>
+				</form>
+			</div>
+		</div>
+		<div class="page-body">
+			<div class="row" id="employee-name-tag" hidden>
+				<h4><label for="staffNameDisplay" id="staffNameDisplay"></label></h4>
+			</div>
+
+		    <div class="row">
+		        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+		            <div class="panel panel-info">
+		                <div class="panel-heading">
+		                    <div class="row">
+		                        <div class="col-xs-3">
+		                            <i class="fa fa-dollar fa-4x"></i>
+		                        </div>
+		                        <div class="col-xs-9 text-right">
+		                        	<div id="total-sales-box">Total Sales</div>
+		                            <div ng-bind ="subtotal | currency" class="huge"></div>
+		                        </div>
+		                    </div>
+		                </div>
+	                    <div class="panel-footer">
+	                        <span ng-model="totalSalesPercentage" class="pull-left">{{totalSalesPercentage}}</span>
+	                        <span class="pull-right"><i ng-class="{'fa fa-arrow-up' : totalSalesPercentage.indexOf('-') === -1, 'fa fa-arrow-down' : totalSalesPercentage.indexOf('-') > -1}"></i></span>
+	                        <div class="clearfix"></div>
+	                    </div>
+		            </div>
+		        </div>
+
+		        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+		            <div class="panel panel-success">
+		                <div class="panel-heading">
+		                    <div class="row">
+		                        <div class="col-xs-3">
+		                            <i class="fa fa-balance-scale fa-4x"></i>
+		                        </div>
+		                        <div class="col-xs-9 text-right">
+		                        	<div id="avg-sales-box">Average Sales Per Order</div>
+		                            <div ng-bind="orderAvg | currency" class="huge"></div>
+		                        </div>
+		                    </div>
+		                </div>
+	                    <div class="panel-footer">
+	                        <span ng-model="averageSalesPercentage" class="pull-left">{{averageSalesPercentage}}</span>
+	                        <span class="pull-right"><i ng-class="{'fa fa-arrow-up' : averageSalesPercentage.indexOf('-') === -1, 'fa fa-arrow-down' : averageSalesPercentage.indexOf('-') > -1}"></i></span>
+	                        <div class="clearfix"></div>
+	                    </div>
+		            </div>
+		        </div>
+
+		        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+		            <div class="panel panel-warning">
+		                <div class="panel-heading">
+		                    <div class="row">
+		                        <div class="col-xs-3">
+		                            <i class="fa fa-smile-o fa-4x"></i>
+		                        </div>
+		                        <div class="col-xs-9 text-right">
+		                        	<div id="total-tips-box">Total Tips</div>
+		                            <div ng-bind="tipTotal | currency" class="huge"></div>
+		                        </div>
+		                    </div>
+		                </div>
+	                    <div class="panel-footer">
+	                        <span ng-model="totalTipPercentage" class="pull-left">{{totalTipPercentage}}</span>
+	                        <span class="pull-right"><i ng-class="{'fa fa-arrow-up' : totalTipPercentage.indexOf('-') === -1, 'fa fa-arrow-down' : totalTipPercentage.indexOf('-') > -1}"></i></span>
+	                        <div class="clearfix"></div>
+	                    </div>
+		            </div>
+		        </div>
+
+		        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+		            <div class="panel panel-danger">
+		                <div class="panel-heading">
+		                    <div class="row">
+		                        <div class="col-xs-3">
+		                            <i class="fa fa-minus-circle fa-4x"></i>
+		                        </div>
+		                        <div class="col-xs-9 text-right">
+		                        	<div id="total-void-box">Total Void</div>
+		                            <div ng-bind="voidTotal | currency" class="huge"></div>
+		                        </div>
+		                    </div>
+		                </div>
+	                    <div class="panel-footer">
+	                        <span ng-model="voidTotalPercentage" class="pull-left">{{voidTotalPercentage}}</span>
+	                        <span class="pull-right"><i ng-class="{'fa fa-arrow-up' : voidTotalPercentage.indexOf('-') === -1, 'fa fa-arrow-down' : voidTotalPercentage.indexOf('-') > -1}"></i></span>
+	                        <div class="clearfix"></div>
+	                    </div>
+		            </div>
+		        </div>
+
+		    </div>
+
+		    <div class="row">
+		    	<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+		    		<h3 class="text-center" id="sale-by-period-label">Sales By Period</h3>
+	                <div id="hourly-sales-div" style="height: 260"></div>
+	            </div>
+
+	            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+	            	<div class="form-group row">
+		            	<h3 class="col-xs-6 col-sm-6 col-md-6 col-lg-6" for="break-down" id="sale-breakdown-label">Sales Breakdown</h3>
+		            	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-top:20px">
+		            		<select id="break-down">
+		            			<option value="PAYMENT">Payment Type</option>
+		            			<option value="ORDER">Order Type</option>
+		            			<option value="MENU">Menu Group</option>
+		            		</select>
+		            	</div>
+	            	</div>
+	            	<div id="sales-break-down" style="height: 260px"></div>
+	            </div>
+		    </div>
+
+		    <div class="row">
+		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="form-group row">
+			    		<h3 class="col-xs-7 col-sm-7 col-md-7 col-lg-7 text-right"  id="top-selling-items-labe">Top Five Selling Items</h3>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 text-right" style="margin-top:20px">
+							<label id="label-combineLinkedItem2">Combine linked item</label>
+							<input type="checkbox" id="combineReportItem" name="combineReportItem" unchecked>
+						</div>
+					</div>
+			    </div>
+
+		    	<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+		    		<div id="top-sales-bar-graph" style="height: 300px"></div>
+		    	</div>
+		    	<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+		    		<div style="height: 300px">
+		    			<table id="datatable" class="table">
+						    <thead>
+						    	<tr>
+						    		<th>Name</th>
+						    		<th class="text-center">Amount</th>
+						    		<th class="text-right">Quantity</th>
+						    	</tr>
+						    </thead>
+						    <tbody ng-repeat="item in topFiveItems">
+						        <tr>
+						            <th>{{item.name}}</th>
+						            <td class="text-center">{{item.total | currency}}</td>
+						            <td class="text-right">{{item.count}}</td>
+						        </tr>
+						    </tbody>
+						</table>
+		    		</div>
+		    	</div>
+		    </div>
+
+		    <div class="row">
+		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		    		<h3 class="text-center" id="business-data-label">Business Data</h3>
+		    		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			    		<table id="datatable" class="table">
+						    <tbody>
+						        <tr>
+						            <th id="total-sale-data">Total Sales</th>
+						            <td></td>
+						            <td ng-bind="grandTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="subtotal-sale-data">Subtotal Sales</th>
+						            <td></td>
+						            <td ng-bind="subtotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="paid-total-data">Paid Total</th>
+						            <td></td>
+						            <td ng-bind="paidTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="order-count-data">Number of Order</th>
+						            <td></td>
+						            <td ng-bind="numOfOrder" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="share-tip-data">Share Tips</th>
+						            <td></td>
+						            <td ng-bind="shareTip | currency" class="text-right">23</td>
+						        </tr>
+						        <tr>
+						            <th id="charge-total-data">Charge Total</th>
+						            <td></td>
+						            <td ng-bind="chargeTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="tip-total-data">Tips Total</th>
+						            <td>
+						            	<table class="table" ng-show="tipList.length > 1">
+							            	<tbody ng-repeat="tip in tipList">
+										        <tr>
+										            <th>{{tip.tipName}}</th>
+										            <td class="text-right">{{tip.total | currency}}</td>
+										        </tr>
+							    			</tbody>
+						            	</table>
+						            </td>
+						            <td ng-bind="tipTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr ng-show="isShowGiftAndLoyalty">
+						            <th id="gift-card-sale-total-data">Gift Card Sales Total</th>
+						            <td ng-bind="giftCardSales | currency" class="text-right"></td>
+						        </tr>
+						    </tbody>
+						</table>
+			    	</div>
+			    	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			    		<table id="datatable" class="table">
+						    <tbody>
+						        <tr>
+						            <th id="void-total-data">Void Total</th>
+						            <td></td>
+						            <td ng-bind="voidTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="paid-out-total-data">Paid Out Total</th>
+						            <td></td>
+						            <td ng-bind="paidOutTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="expected-cash-data">Expected Cash In Drawer</th>
+						            <td></td>
+						            <td ng-bind="expectedCash | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="num-of-void-data">Number of Void</th>
+						            <td></td>
+						            <td ng-bind="numOfVoid" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="transaction-fee-data">Transaction Fee</th>
+						            <td></td>
+						            <td ng-bind="transactionFee | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="discount-total-data">Discount Total</th>
+						            <td></td>
+						            <td ng-bind="discountTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr>
+						            <th id="tax-total-data">Tax Total</th>
+						            <td>
+						            	<table class="table" ng-show="taxList.length > 1">
+							            	<tbody ng-repeat="tax in taxList">
+										        <tr>
+										            <th>{{tax.name}}</th>
+										            <td class="text-right">{{tax.amount | currency}}</td>
+										        </tr>
+							    			</tbody>
+						            	</table>
+						            </td>
+						            <td ng-bind="taxTotal | currency" class="text-right"></td>
+						        </tr>
+						        <tr ng-show="isShowGiftAndLoyalty">
+						            <th id="loyalty-card-sale-total-data">Loyalty Card Sales Total</th>
+						            <td ng-bind="loyaltyCardSales | currency" class="text-right"></td>
+						        </tr>
+						    </tbody>
+						</table>
+			    	</div>
+		    	</div>
+		    </div>
+
+		    <div class="row">
+		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			    	<h3 class="text-center" id="staff-attendance-label">Staff Attendance</h3>
+			    	<div class="timetable">
+			    	</div>
+		    	</div>
+		    </div>
+
+			<div class="row" id="order-summary-table">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+					<h3 id="order-summary-label">Order Summary</h3>
+					<table ng-table="tableParams" class="table">
+						<tr ng-repeat="orderSummary in $data">
+							<td data-title="getSystemLanguageDisplayVal('overview-table-number', 'No.')" sortable="'orderNum'">{{orderSummary.orderNum}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-time', 'Time')" sortable="'createdOn'">{{orderSummary.date.substr(orderSummary.date.length - 8, 5)}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-type', 'Type')" sortable="'orderType'">{{orderSummary.orderType}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-grantotal', 'Grand Total')" sortable="'totalSale'">{{orderSummary.totalSale | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-subtotal', 'Subtotal')" sortable="'subTotal'">{{orderSummary.subTotal | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-tax', 'Tax')" sortable="'tax'">{{orderSummary.tax | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-tips', 'Tips')" sortable="'tip'">{{orderSummary.tip | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-charge', 'Charge')" sortable="'charge'">{{orderSummary.charge | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-discount', 'Discount')" sortable="'discount'">{{orderSummary.discount | currency}}</td>
+							<td data-title="getSystemLanguageDisplayVal('overview-table-status', 'Status')" sortable="'status'">{{orderSummary.status}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

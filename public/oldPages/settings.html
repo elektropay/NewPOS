@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html ng-app="settingApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+        display: none !important;
+        }
+    </style>
+</head>
+<body ng-controller="settingController" ng-cloak>
+    <div id="settings-page" data-role="page" data-theme="a">
+    
+        <div id="divSettings" data-role="content" role="main">
+            <div id="tabs" data-role="tabs">
+                <div id="tabList" data-role="navbar">
+                    <div style="float:left;margin-top:-5px" class="my-div-width-15">
+                        <input ng-change="searchConfig(searchBoxValue)" ng-model="searchBoxValue" placeholder="Search Settings" type="search" id="search-box" value="">
+                    </div>
+                    <div class="my-div-width-70" style="float:left;">
+                        <ul style="margin-left:2%;">
+                            <li><a ng-click="showConfigByConfigRange('global')" style="color:#333;text-shadow:none;border: none; background-color: #f9f9f9; border-bottom: 2px solid #459DE4;" id="navbar-globalSettingsTab">Global Settings</a></li>
+                            <li><a ng-click="showConfigByConfigRange('user')" style="color:#333;text-shadow:none;border: none; background-color: #f9f9f9; border-bottom: 2px solid #ddd;" id="navbar-userSettingsTab">User Settings</a></li>
+                            <li><a ng-click="showConfigByConfigRange('app')" style="color:#333;text-shadow:none;border: none; background-color: #f9f9f9; border-bottom: 2px solid #ddd;" id="navbar-appSettingsTab">App Settings</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+                <div ng-show="!isSearchMode && range=='global'" id="globalSettingsTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width-15">
+                            <div id="settings-category-div" class="my-select-menu" style="margin-left:0px;margin-right:0px;">
+                                <ul data-role='listview' data-inset='true' id='configs-category-list' style="border:1px solid #ddd;">
+                                    <li id="{{'category_' + cName}}" style='cursor: pointer;border:none;' ng-click="generateGlobalConfigDetail($event, cName)" ng-repeat="cName in categoryList"> 
+                                        {{ getCategorySystemLanguageDisplayVal(cName) }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="settingsDetail" style="display:none;margin-top:-15px;" class="my-div-width-75 ui-block-b">
+                            <div id="settings-detail-content" style="overflow-y:auto;max-height:660px;padding-right:5%;margin-left:3%;">
+                                <div style="margin-bottom:45px;" ng-repeat="(slc, configMap) in configListMapBySecondLevelCategory">
+                                    <!-- group -->
+                                    <div>
+                                        <h1 style="float:left;margin-bottom:0px;">{{ getSlcSystemLanguageDisplayVal(slc) }}</h1>
+                                        <div ng-if="slc=='Advance_Settings'" auto-width style="height:2px;margin-top:41px;margin-left:20px;border-top:2px solid #ddd;float:left;"></div>
+                                        <h4 ng-if="slc=='Advance_Settings'" style="margin-top:30px;float:left;">
+                                            <i class="search-result-div-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-d ui-nodisc-icon ui-btn-icon-notext ui-btn-inline" ng-click="showAdvanceSettings($event)"></i>
+                                        </h4>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                    <div ng-show="slc!='Advance_Settings'">
+                                        <div ng-repeat="(configName, config) in configMap">
+                                            <!-- multi select -->
+                                            <div ng-if="config.configtype=='MULTI_SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <fieldset data-role="controlgroup" style="margin-top:0px;">
+                                                    <div ng-repeat="res in config.restrictions" class="checkbox-horizontal">
+                                                        <label id="{{ 'multiCheckboxLabel_' + res.id }}" my-checkbox-trigger="{type:'multiCheckbox'}">
+                                                            <input my-config-value-change="{config: config, res: res, type: 'multiCheckbox', range: 'global'}" type="checkbox" id="{{ 'multiCheckbox_' + res.id }}" my-multi-checkbox-default-value-setter="{config: config, res: res, type:'multiCheckbox'}"> {{ res.name }}
+                                                        </label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+
+                                            <!-- checkbox -->
+                                            <div ng-if="config.configtype=='CHECK' || (config.configtype=='INPUT' && config.datatype=='Boolean')" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <label id="{{ 'checkboxLabel_' + config.id }}" my-checkbox-trigger="{type:'checkbox'}">
+                                                    <input my-config-value-change="{config: config, type: 'checkbox', range: 'global'}" type="checkbox" id="{{ 'checkbox_' + config.id }}" my-checkbox-default-value-setter="{config: config, type:'checkbox'}">Enable
+                                                </label>
+                                            </div>
+
+                                            <!-- select -->
+                                            <div ng-if="config.configtype=='SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <select id="{{ 'select_' + config.id }}" name="{{ 'select_' + config.id }}" my-config-value-change="{config: config, type: 'select', range: 'global'}">
+                                                    <option my-select-default-value-setter="{config: config, type:'select'}" id="{{ 'selectOption_' + res.id }}" ng-repeat="res in config.restrictions" value="{{ res.value }}"> {{ res.name }} </option>
+                                                </select>
+                                            </div>
+
+                                            <!-- input -->
+                                            <div ng-if="(config.configtype=='INPUT' && config.datatype!='Boolean') || config.configtype=='TIME'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <div>
+                                                    <label for="{{ 'input_' + config.id }}">
+                                                        <input my-config-value-change="{config: config, type: 'input', range: 'global'}" type="text" name="{{ 'input_' + config.id }}" id="{{ 'input_' + config.id }}" value="{{ config.value }}">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>   
+                            </div>
+                            <div>
+                                <fieldset class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        <div class="my-button-div"><button type="submit" class="btn-save" ng-click="saveConfigChanges()" data-theme="b">Save</button></div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="my-button-div"><button type="submit" class="btn-cancel" ng-click="cancelConfigChanges()" data-theme="a">Cancel</button></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-role="popup" id="saveSettingsPopup" data-overlay-theme="b" data-theme="a" data-transition="pop" data-dismissible="false" class="ui-corner-all">
+                        <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content" style="border-width:5px;border-color:#FFD275;background-color:#FEEFBC;">
+                            <h1 id="saveSettingsPopupContent" class="ui-title">Saving configurations, please wait...</h1>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="!isSearchMode && range=='user'" style="display:none;" id="userSettingsTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width-15">
+                            <div class="my-select-menu" style="margin-left:0px;margin-right:0px;">
+                                <ul ng-model="currentUser" data-role='listview' data-inset='true' id='staff-list' style="border:1px solid #ddd;max-height:680px;overflow-y:auto;">
+                                    <li id="{{'staff_' + staff.id}}" style='cursor: pointer;border:none;' ng-click="generateUserConfigDetail($event, staff)" ng-repeat="(name, staff) in staffMapByName">
+                                        {{ name }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="userSettingsDetail" style="display:none;margin-top:-15px;" class="my-div-width-75 ui-block-b">
+                            <div class="" style="overflow-y:auto;max-height:660px;padding-right:5%;margin-left:3%;">
+                                <div style="margin-bottom:45px;" ng-repeat="(slc, configMap) in userConfigListMapBySecondLevelCategory">
+                                    <!-- group -->
+                                    <div>
+                                        <h1 style="float:left;margin-bottom:0px;">{{ getSlcSystemLanguageDisplayVal(slc) }}</h1>
+                                        <div ng-if="slc=='Advance_Settings'" auto-width style="height:2px;margin-top:41px;margin-left:20px;border-top:2px solid #ddd;float:left;"></div>
+                                        <h4 ng-if="slc=='Advance_Settings'" style="margin-top:30px;float:left;">
+                                            <i class="search-result-div-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-d ui-nodisc-icon ui-btn-icon-notext ui-btn-inline" ng-click="showAdvanceSettings($event)"></i>
+                                        </h4>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                    <div ng-show="slc!='Advance_Settings'">
+                                        <div ng-repeat="(configName, config) in configMap track by trackByValueAndId(config)">
+                                            <!-- multi select -->
+                                            <div ng-if="config.configtype=='MULTI_SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <fieldset data-role="controlgroup" style="margin-top:0px;">
+                                                    <div ng-repeat="res in config.restrictions" class="checkbox-horizontal">
+                                                        <label id="{{ 'user-multiCheckboxLabel_' + res.id }}" my-checkbox-trigger="{type:'user-multiCheckbox'}">
+                                                            <input my-config-value-change="{config: config, res: res, type: 'user-multiCheckbox', range: 'user'}" type="checkbox" id="{{ 'user-multiCheckbox_' + res.id }}" my-multi-checkbox-default-value-setter="{config: config, res: res, type:'user-multiCheckbox'}"> {{ res.name }}
+                                                        </label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+    
+                                            <!-- checkbox -->
+                                            <div ng-if="config.configtype=='CHECK' || (config.configtype=='INPUT' && config.datatype=='Boolean')" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <label id="{{ 'user-checkboxLabel_' + config.id }}" my-checkbox-trigger="{type:'user-checkbox'}">
+                                                    <input my-config-value-change="{config: config, type: 'user-checkbox', range: 'user'}" type="checkbox" id="{{ 'user-checkbox_' + config.id }}" my-checkbox-default-value-setter="{config: config, type:'user-checkbox'}">Enable
+                                                </label>
+                                            </div>
+    
+                                            <!-- select -->
+                                            <div ng-if="config.configtype=='SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <select id="{{ 'user-select_' + config.id }}" name="{{ 'user-select_' + config.id }}" my-config-value-change="{config: config, type: 'user-select', range: 'user'}">
+                                                    <option my-select-default-value-setter="{config: config, type:'user-select'}" id="{{ 'user-selectOption_' + res.id }}" ng-repeat="res in config.restrictions" value="{{ res.value }}"> {{ res.name }} </option>
+                                                </select>
+                                            </div>
+    
+                                            <!-- input -->
+                                            <div ng-if="(config.configtype=='INPUT' && config.datatype!='Boolean') || config.configtype=='TIME'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <div>
+                                                    <label for="{{ 'user-input_' + config.id }}"></label>
+                                                    <input my-config-value-change="{config: config, type: 'user-input', range: 'user'}" type="text" name="{{ 'user-input_' + config.id }}" id="{{ 'user-input_' + config.id }}" value="{{ config.value }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <fieldset class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        <div class="my-button-div"><button type="submit" class="btn-save" ng-click="saveUserConfigChanges();" data-theme="b">Save</button></div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="my-button-div"><button type="submit" class="btn-cancel" ng-click="cancelConfigChanges();" data-theme="a">Cancel</button></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="!isSearchMode && range=='app'" style="display:none;" id="appSettingsTab">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a my-div-width-15">
+                            <div class="my-select-menu" style="margin-left:0px;margin-right:0px;">
+                                <ul ng-model="currentApp" data-role='listview' data-inset='true' id='app-list' style="border:1px solid #ddd;max-height:680px;overflow-y:auto;">
+                                    <li id="{{'app_' + app.id}}" style='cursor: pointer;border:none;' ng-click="generateAppConfigDetail($event, app)" ng-repeat="app in appInstanceList">
+                                        {{ app.displayname }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="appSettingsDetail" style="display:none;margin-top:-15px;" class="my-div-width-75 ui-block-b">
+                            <div class="" style="overflow-y:auto;max-height:660px;padding-right:5%;margin-left:3%;">
+                                <div style="margin-bottom:45px;" ng-repeat="(slc, configMap) in appConfigListMapBySecondLevelCategory">
+                                    <!-- group -->
+                                    <div>
+                                        <h1 style="float:left;margin-bottom:0px;">{{ getSlcSystemLanguageDisplayVal(slc) }}</h1>
+                                        <div ng-if="slc=='Advance_Settings'" auto-width style="height:2px;margin-top:41px;margin-left:20px;border-top:2px solid #ddd;float:left;"></div>
+                                        <h4 ng-if="slc=='Advance_Settings'" style="margin-top:30px;float:left;">
+                                            <i class="search-result-div-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-d ui-nodisc-icon ui-btn-icon-notext ui-btn-inline" ng-click="showAdvanceSettings($event)"></i>
+                                        </h4>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                    <div ng-show="slc!='Advance_Settings'">
+                                        <div ng-repeat="(configName, config) in configMap track by trackByValueAndId(config)">
+                                            <!-- multi select -->
+                                            <div ng-if="config.configtype=='MULTI_SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <fieldset data-role="controlgroup" style="margin-top:0px;">
+                                                    <div ng-repeat="res in config.restrictions" class="checkbox-horizontal">
+                                                        <label id="{{ 'app-multiCheckboxLabel_' + res.id }}" my-checkbox-trigger="{type:'app-multiCheckbox'}">
+                                                            <input my-config-value-change="{config: config, res: res, type: 'app-multiCheckbox', range: 'app'}" type="checkbox" id="{{ 'app-multiCheckbox_' + res.id }}" my-multi-checkbox-default-value-setter="{currentApp: currentApp, config: config, res: res, type:'app-multiCheckbox'}"> {{ res.name }}
+                                                        </label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+
+                                            <!-- checkbox -->
+                                            <div ng-if="config.configtype=='CHECK' || (config.configtype=='INPUT' && config.datatype=='Boolean')" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <label id="{{ 'app-checkboxLabel_' + config.id }}" my-checkbox-trigger="{type:'app-checkbox'}">
+                                                    <input my-config-value-change="{config: config, type: 'app-checkbox', range: 'app'}" type="checkbox" id="{{ 'app-checkbox_' + config.id }}" my-checkbox-default-value-setter="{config: config, type:'app-checkbox'}">Enable
+                                                </label>
+                                            </div>
+
+                                            <!-- select -->
+                                            <div ng-if="config.configtype=='SELECT'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <select id="{{ 'app-select_' + config.id }}" name="{{ 'app-select_' + config.id }}" my-config-value-change="{config: config, type: 'app-select', range: 'app'}">
+                                                    <option my-select-default-value-setter="{currentApp: currentApp, config: config, type:'app-select'}" id="{{ 'app-selectOption_' + res.id }}" ng-repeat="res in config.restrictions" value="{{ res.value }}"> {{ res.name }} </option>
+                                                </select>
+                                            </div>
+
+                                            <!-- input -->
+                                            <div ng-if="(config.configtype=='INPUT' && config.datatype!='Boolean') || config.configtype=='TIME'" style="margin-bottom:30px;">
+                                                <h3 style="font-weight:normal;margin-bottom:0px;">
+                                                    {{ config.configSystemLanguageDisplayValue }}
+                                                    <a href="#popupConfigDetail" data-rel="popup" data-transition="pop" class="fa fa-question-circle-o icon-question-mark" ng-click="showConfigDescription(config)"></a>
+                                                </h3>
+                                                <div>
+                                                    <label for="{{ 'app-input_' + config.id }}"></label>
+                                                    <input my-config-value-change="{config: config, type: 'app-input', range: 'app'}" type="text" name="{{ 'app-input_' + config.id }}" id="{{ 'app-input_' + config.id }}" value="{{ config.value }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <fieldset class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        <div class="my-button-div"><button type="submit" class="btn-save" ng-click="saveAppConfigChanges();" data-theme="b">Save</button></div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div class="my-button-div"><button type="submit" class="btn-cancel" ng-click="cancelConfigChanges();" data-theme="a">Cancel</button></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="searchResultDiv" ng-show="isSearchMode" class="ui-grid-a">
+                    <h2 class="label-search-results" style="font-weight:normal;">Search Results</h2>
+                    <div class="search-result-div" ng-repeat="config in searchResultList track by config.id">
+                        <h4 class="search-result-div-title"> {{ getCategorySystemLanguageDisplayVal(config.category) }} </h4>
+                        <div class="search-result-div-content">
+                            <h4 ng-click="showSearchDetail($event, config.id)" style='cursor: pointer;'> {{ config.configSystemLanguageDisplayValue }} </h4>
+                            <div id="{{'search-result-div-detail_' + config.id}}" style="display:none;">
+                                <div>
+                                    <!-- multi select -->
+                                    <div ng-if="config.configtype=='MULTI_SELECT'">
+                                        <fieldset data-role="controlgroup">
+                                            <div ng-repeat="res in config.restrictions" class="checkbox-horizontal">
+                                                <label id="{{ 'search-multiCheckboxLabel_' + res.id }}" my-checkbox-trigger="{type:'search-multiCheckbox'}">
+                                                    <input type="checkbox" id="{{ 'search-multiCheckbox_' + res.id }}" my-multi-checkbox-default-value-setter="{config: config, res: res, type:'search-multiCheckbox'}"> {{ res.name }}
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    
+                                    <!-- checkbox -->
+                                    <div ng-if="config.configtype=='CHECK' || (config.configtype=='INPUT' && config.datatype=='Boolean')">
+                                        <label id="{{ 'search-checkboxLabel_' + config.id }}" my-checkbox-trigger="{type:'search-checkbox'}">
+                                            <input type="checkbox" id="{{ 'search-checkbox_' + config.id }}" my-checkbox-default-value-setter="{config: config, type:'search-checkbox'}">Enable
+                                        </label>
+                                    </div>
+
+                                    <!-- select -->
+                                    <div ng-if="config.configtype=='SELECT'">
+                                        <select id="{{ 'search-select_' + config.id }}" my-config-value-change="{config: config, type: 'search-select', range: 'global'}">
+                                            <option  my-select-default-value-setter="{config: config, type:'search-select'}" id="{{ 'search-selectOption_' + res.id }}" ng-repeat="res in config.restrictions" value="{{ res.value }}"> {{ res.name }} </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- input -->
+                                    <div ng-if="(config.configtype=='INPUT' && config.datatype!='Boolean') || config.configtype=='TIME'">
+                                        <label>
+                                            <input type="text" id="{{ 'search-input_' + config.id }}" value="{{ config.value }}">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="width:45%;float:left;">
+                                        <button type="submit" class="btn-save" ng-click="saveSearchConfigChange(config)" data-theme="b">Save</button>
+                                    </div>
+                                    <div style="width:45%;float:left;margin-left:10%;">
+                                        <button type="submit" class="btn-cancel" ng-click="cancelSearchConfigChange(config)" data-theme="a">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>
+                            <i class="search-result-div-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-d ui-nodisc-icon ui-btn-icon-notext ui-btn-inline" ng-click="showSearchDetail($event, config.id)"></i>
+                        </h4>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div class="search-no-result-div" style="margin-top:10%;margin-left:auto;margin-right:auto;width:512px;" ng-show="searchResultList.length == 0">
+                        <h1 class="label-no-result-found">No result found.</h1>
+                        <br>
+                        <p class="label-no-result-found-description1" style="float:left;">We're sorry, there is no result found for your search: </p>
+                        <p><b>"{{ searchBoxValue }}"</b></p>
+                        <p class="label-no-result-found-description2">Please refine your search</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- popup div -->
+        <div data-role="popup" id="popupConfigDetail" data-arrow="true" class="ui-content" data-theme="a" style="max-width:350px;">
+            <p>No Description Available</p>
+        </div>
+    </div>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/biscuitf.min.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+</body>
+</html>

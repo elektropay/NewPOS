@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/biscuitf.min.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/printingSetup.js"></script>
+</head>
+<body>
+<div id="printingSetupPage" data-role="page" data-theme="a">
+
+    <div id="tabs" data-role="tabs">
+        <div id="printingSetupPageMainDiv" data-theme="a" data-role="content" role="main">
+            <div id="deviceTabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-printingTemplateSetupTab" href="#printingTemplateSetupTab">Main Setup</a></li>
+                    <li><a id="navbar-receiptFooterContentTab" href="#receiptFooterContentTab">Ticket Footer</a></li>
+                    <li><a id="navbar-printJobRoutingRuleTab" href="#printJobRoutingRuleTab">Print Job Routing Rule</a></li>
+                </ul>
+            </div>
+            <div id="printingTemplateSetupTab">
+                <div class="single-column-detail-div">
+                    <div data-role="fieldcontain">
+                        <label id="label-receiptTemplate-select-choice" class="select" for="receiptTemplate-select-choice">Receipt Template</label>
+                        <select name="select-choice-1" id="receiptTemplate-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-packageTemplate-select-choice" class="select" for="packageTemplate-select-choice">Package Template</label>
+                        <select name="select-choice-1" id="packageTemplate-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-kitchenTicketTemplate-select-choice" class="select" for="receiptTemplate-select-choice">Kitchen Ticket Template</label>
+                        <select name="select-choice-1" id="kitchenTicketTemplate-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-kitchenLabelTemplate-select-choice" class="select" for="kitchenLabelTemplate-select-choice">Label Template</label>
+                        <select name="select-choice-1" id="kitchenLabelTemplate-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-paymentReceiptTemplate-select-choice" class="select" for="paymentReceiptTemplate-select-choice">Payment Receipt Template</label>
+                        <select name="select-choice-1" id="paymentReceiptTemplate-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-receiptFooterContent-select-choice" class="select" for="receiptFooterContent-select-choice">Receipt Footer</label>
+                        <select name="select-choice-1" id="receiptFooterContent-select-choice">
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-receiptFooterContent2-select-choice" class="select" for="receiptFooterContent2-select-choice">Receipt Footer (Part 2)</label>
+                        <select name="select-choice-2" id="receiptFooterContent2-select-choice">
+                            <option value="-1" class="select-list-option-value-none">None</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-paymentReceiptFooterContent-select-choice" class="select" for="paymentReceiptFooterContent-select-choice">Payment Receipt Footer</label>
+                        <select name="select-choice-2" id="paymentReceiptFooterContent-select-choice">
+                            <option value="-1" class="select-list-option-value-none">None</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-waitlistTicketFooterContent-select-choice" class="select" for="waitlistTicketFooterContent-select-choice">Waitlist Ticket Footer</label>
+                        <select name="select-choice-1" id="waitlistTicketFooterContent-select-choice">
+                            <option value="-1" class="select-list-option-value-none">None</option>
+                        </select>
+                    </div>
+                    <div id="savePrintingTemplateSetupBtnDiv" class="my-top-margin-button-div">
+                        <button type="button" class="btn-save" onclick="javascript:printingSetupObj.saveConfig();">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div id="receiptFooterContentTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="receiptFooterContentSelectLayoutDiv">
+                        <div id="receiptFooterContentSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-receiptFooterContent">Footer Content</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:receiptFooterObj.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="receiptFooterContentTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="receiptFooterContentDetailContentDiv" class="my-detail-panel">
+                            <input id="curEntryId" type="hidden">
+                            <div data-role="fieldcontain">
+                                <label id="label-name" for="footerName" class="detail-input-name">Name</label>
+                                <input id="footerName" readonly="readonly" value="" type="text"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-content" for="footerContent" class="detail-input-content">Content</label>
+                                <textarea id="footerContent" readonly="readonly" rows="8" data-autogrow="false" value=""></textarea>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-qrCodeUrl" for="qrCodeUrl" class="detail-input-content">QR Code URL</label>
+                                <input id="qrCodeUrl" readonly="readonly" rows="8" value="" type="text"/>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:receiptFooterObj.saveElement();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="printJobRoutingRuleTab">
+                <div class="myPlusIconDiv">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="image" id="create-oncreate" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="printJobRoutingRuleObj.newEntry();" title="Add"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailTableContainerDiv">
+                    <table id="printJobRoutingRuleTable" class="detailTable">
+                        <thead>
+                        <tr>
+                            <th class="detail-input-sourcePrinter">Source Printer</th>
+                            <th class="detail-input-targetPrinter">Target Printer</th>
+                            <th class="detail-input-orderTypes">Order Types</th>
+                            <th class="detail-input-hours">Hours</th>
+                            <th class="detail-input-devices">Devices</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div data-role="popup" id="editPrintJobRoutingRuleDetailPopup" data-overlay-theme="a" data-theme="a" data-transition="flow" data-dismissible="true" class="ui-corner-all editDetailPopup">
+                    <div data-role="header" data-theme="a" class="ui-corner-top">
+                        <h1 id="editPrintJobRoutingRuleDetailPopup-header">Print Job Routing Rule</h1>
+                    </div>
+                    <div id="message" align="center" style="color:red"></div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                        <div data-role="fieldcontain">
+                            <label id="label-sourcePrinterList" class="select detail-input-sourcePrinter" for="sourcePrinterId">Source Printer</label>
+                            <select name="sourcePrinterId" id="sourcePrinterId">
+                                <option value='' class="select-list-option-value-one">Please select one</option>
+                            </select>
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label id="label-targetPrinterList" class="select detail-input-targetPrinter" for="targetPrinterId">Target Printer</label>
+                            <select name="targetPrinterId" id="targetPrinterId">
+                                <option value='' class="select-list-option-value-one">Please select one</option>
+                            </select>
+                        </div>
+
+                        <div class="ui-field-contain" id="orderTypeCheckboxList-div">
+                            <fieldset data-role="controlgroup" data-type="horizontal" id="orderTypeCheckboxList">
+                                <legend class="detail-input-orderTypes">Order Types:</legend>
+                                <input type="checkbox" name="checkbox-0" id="checkbox-ALL" value="" class="custom">
+                                <label for="checkbox-ALL" id="label-checkbox-ALL">All</label>
+                                <input type="checkbox" name="checkbox-6" id="checkbox-DINE_IN" value="DINE_IN" class="custom">
+                                <label for="checkbox-DINE_IN" id="label-checkbox-DINE_IN">Dine In</label>
+                                <input type="checkbox" name="checkbox-7" id="checkbox-DELIVERY" value="DELIVERY" class="custom">
+                                <label for="checkbox-DELIVERY" id="label-checkbox-DELIVERY">Delivery</label>
+                                <input type="checkbox" name="checkbox-8" id="checkbox-PICKUP" value="PICKUP" class="custom">
+                                <label for="checkbox-PICKUP" id="label-checkbox-PICKUP">Pickup</label>
+                                <input type="checkbox" name="checkbox-9" id="checkbox-TOGO" value="TOGO" class="custom">
+                                <label for="checkbox-TOGO" id="label-checkbox-TOGO">To Go</label>
+                                <input type="checkbox" name="checkbox-10" id="checkbox-ONLINE_DELIVERY" value="ONLINE_DELIVERY" class="custom">
+                                <label for="checkbox-ONLINE_DELIVERY" id="label-checkbox-ONLINE_DELIVERY">Online Delivery</label>
+                                <input type="checkbox" name="checkbox-11" id="checkbox-ONLINE_PICKUP" value="ONLINE_PICKUP" class="custom">
+                                <label for="checkbox-ONLINE_PICKUP" id="label-checkbox-ONLINE_PICKUP">Online Pickup</label>
+                                <input type="checkbox" name="checkbox-11" id="checkbox-OTHER" value="OTHER" class="custom">
+                                <label for="checkbox-OTHER" id="label-checkbox-OTHER">Other</label>
+                            </fieldset>
+                        </div>
+
+                        <div data-role="fieldcontain">
+                            <label id="label-hoursList" class="select detail-input-hours" for="hoursId">Hours</label>
+                            <select name="hoursId" id="hoursId">
+                                <option value='-1' class="select-list-option-value-all">All</option>
+                            </select>
+                        </div>
+
+                        <div data-role="fieldcontain">
+                            <label id="label-deviceList" class="select detail-input-devices" for="devicesId">Devices</label>
+                            <select name="devicesId" id="devicesId">
+                                <option value='-1' class="select-list-option-value-all">All</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a"><div class="my-button-div"><button id="create-onsave" type="submit" class="btn-save" onclick="printJobRoutingRuleObj.save();" data-theme="b">Save</button></div></div>
+                            <div class="ui-block-b"><div class="my-button-div"><button id="create-oncancel" type="submit" class="btn-cancel" onclick="printJobRoutingRuleObj.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

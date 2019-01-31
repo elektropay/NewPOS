@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body>
+<div id="galleryPage" data-role="page">
+    <div class="container-fluid">
+        <h1 id="gallery-page-header">Gallery</h1>
+        <ul class="nav nav-tabs">
+            <li id="call-tab-li" class="active"><a id="call-tab" href="#call-display-tab" data-toggle="tab" onclick="galleryObj.init()" hide>Call Display</a></li>
+            <li id="dual-tab-li"><a id="dual-tab" href="#dual-display-tab" data-toggle="tab" onclick="dualDisplayObj.init()">Dual Display</a></li>
+            <li id="company-tab-li"><a id="company-tab" href="#company-cover-tab" data-toggle="tab" onclick="companyCoverObj.init()" hide>Company Cover</a></li>
+        </ul>
+
+        <div class="tab-content clearfix">
+            <div class="tab-pane active" id="call-display-tab">
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-lg-2 list-views">
+                        <ul id="call-display-img-list" class="list-group list-unstyled">
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-7 col-lg-7">
+                        <img id="call-display-img" value="" src="" height="550">
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label id="label-call-display-time" for="call-display-time">Time image to be shown:</label>
+                            <input type="range" name="call-display-time" id="call-display-time" min="0" max="20" value="3" step="1" oninput="galleryObj.sliderUpdate(value);">
+                            <output for="call-display-time" id="call-display-sec"><b>3</b></output>
+                        </div>
+                        <div class="form-group">
+                            <label id="call-display-transition-effect" for="call-display-effect">Transition effect:</label>
+                            <select name="call-display-effect-mode" id="call-display-effect" onchange="galleryObj.transitionEffectUpdate()">
+                                <option value="WIPE">Wipe</option>
+                                <option value="FADE">Fade</option>
+                            </select>
+                        </div>
+                        <form id="call-display-img-form" method="post" enctype="multipart/form-data" encoding='multipart/form-data' data-ajax="false">
+                            <div class="form-group">
+                                <input id="call-display-upload" type="file" name="file" value=""/>
+                            </div>
+                            <button id="call-display-btn-upload" type="submit" class="btn btn-default btn-lg btn-block" onclick="galleryObj.submit();">Upload Image</button>
+                            <button id="call-display-btn-delete" type="button" class="btn btn-default btn-lg btn-block" onclick="galleryObj.deleteSelectedImage();">Delete Image</button>
+                            <div id="call-display-waiting-text" hidden="true" class="uploading-image-text">Uploading image.. Please wait...</div>
+                            <p id="call-display-response-text" hidden="true"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="dual-display-tab">
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-lg-2 list-views">
+                        <ul id="dual-display-img-list" class="list-group list-unstyled">
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-7 col-lg-7">
+                        <img id="dual-display-img" value="" src="" height="550">
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label id="label-dual-display-time" for="dual-display-time">Time image to be shown:</label>
+                            <input type="range" name="dual-display-time" id="dual-display-time" min="0" max="20" value="3" step="1" oninput="dualDisplayObj.sliderUpdate(value);">
+                            <output for="dual-display-time" id="dual-display-sec"><b>3</b></output>
+                        </div>
+                        <div class="form-group">
+                            <label id="dual-display-transition-effect" for="dual-display-effect">Transition effect:</label>
+                            <select name="dual-display-effect" id="dual-display-effect" onchange="dualDisplayObj.transitionEffectUpdate()">
+                                <option value="WIPE">Wipe</option>
+                                <option value="FADE">Fade</option>
+                            </select>
+                        </div>
+                        <form id="dual-display-img-form" method="post" enctype="multipart/form-data" encoding='multipart/form-data' data-ajax="false">
+
+                            <div class="form-group">
+                                <input id="dual-display-upload" type="file" name="file" value=""/>
+                            </div>
+                            <button id="dual-display-btn-upload" type="submit" class="btn btn-default btn-lg btn-block" onclick="dualDisplayObj.submit();">Upload Image</button>
+                            <button id="dual-display-btn-delete" type="button" class="btn btn-default btn-lg btn-block" onclick="dualDisplayObj.deleteSelectedImage();">Delete Image</button>
+                            <div id="dual-display-waiting-text" hidden="true" class="uploading-image-text">Uploading image.. Please wait...</div>
+                            <p id="dual-display-response-text" hidden="true"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="company-cover-tab">
+                <div class="row">
+                    <div class="col-sm-8 col-md-9 col-lg-9">
+                        <img id="company-cover-image" value="" src="" height="650" width="650">
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-3">
+                        <form id="upload-company-cover-form" method="post" enctype="multipart/form-data" encoding='multipart/form-data' data-ajax="false">
+                            <div class="form-group">
+                                <input id="upload-company-image" type="file" name="file" value=""/>
+                            </div>
+                            <button id="btn-upload-company-image" type="submit" class="btn btn-default btn-lg btn-block">Upload</button>
+                            <button id="btn-delete-company-image" type="button" class="btn btn-default btn-lg btn-block" onclick="companyCoverObj.deleteCover()">Delete</button>
+                            <p id="upload-company-cover-result-text" hidden="true"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/biscuitf.min.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/gallery.js"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+   <import resource="classpath:META-INF/cxf/cxf.xml"/>
+   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+   
+   <!--
+       Turn on AspectJ @Configurable support. As a result, any time you
+       instantiate an object, Spring will attempt to perform dependency
+       injection on that object.
+   -->
+   <context:spring-configured/>
+
+   <!--
+       This declaration will cause Spring to locate every @Component,
+       @Repository and @Service in your application. In practical terms this
+       allows you to write a POJO and then simply annotate the new POJO as an
+       @Service and Spring will automatically detect, instantiate and
+       dependency inject your service at startup time. Importantly, you can
+       then also have your new service injected into any other class that
+       requires it simply by declaring a field for your service inside the
+       relying class and Spring will inject it.
+
+       Furthermore, this turns on @Autowired, @PostConstruct etc support. These
+       annotations allow you to use common Spring and Java Enterprise Edition
+       annotations in your classes without needing to do any special configuration.
+       The most commonly used annotation is @Autowired, which instructs Spring to
+       dependency inject an object into your class.
+   -->
+   <context:component-scan base-package="com.wisdomount">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+   </context:component-scan>
+   
+   <context:annotation-config/>
+   
+   <bean id="propertyPlaceholderConfigurer" class="com.wisdomount.config.MyPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/cms/database.properties</value>
+				<value>classpath:properties/cms/application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="abstractDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="user" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+        <property name="idleConnectionTestPeriod" value="60"/>
+        <property name="testConnectionOnCheckin" value="true"/>
+        <property name="preferredTestQuery" value="select 1"/>
+        <property name="initialPoolSize" value="3" />
+        <property name="maxPoolSize" value="5" />
+    </bean>
+
+    <bean id="realDataSource"
+          parent="abstractDataSource"
+          p:jdbcUrl="jdbc:mysql://${database.url}/${database.name}?autoReconnect=true&amp;validationQuery=select%201&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+
+    <bean id="realDataSource1"
+          parent="abstractDataSource"
+          p:jdbcUrl="jdbc:mysql://${database.url}/${database.name1}?autoReconnect=true&amp;validationQuery=select%201&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+
+    <bean id="realDataSource2"
+          parent="abstractDataSource"
+          p:jdbcUrl="jdbc:mysql://${database.url}/${database.name2}?autoReconnect=true&amp;validationQuery=select%201&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+
+    <!-- Step 4 -->
+
+    <bean id="dataSource" class="com.wisdomount.db.ds.MultiStoreRoutingDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="M000000234" value-ref="realDataSource1"/>
+                <entry key="M000000123" value-ref="realDataSource2"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="realDataSource"/>
+    </bean>
+
+    <bean id="dbMigration" class="com.wisdomount.db.SchemaMigrationManager" init-method="migrate">
+        <property name="dataSource" ref="realDataSource"/>
+    </bean>
+   
+   <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+      <property name="dataSource" ref="dataSource"/>
+   </bean>
+
+   <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" id="hibernateDialect"/>
+
+   <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory"/>
+      <property name="jpaDialect" ref="hibernateDialect"/>
+   </bean>
+
+   <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
+   
+   <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory" 
+         p:dataSource-ref="dataSource" depends-on="dbMigration">
+      <property name="persistenceUnitName" value="kpos-appserver"/>
+   </bean>
+
+   <context:load-time-weaver aspectj-weaving="on"/>
+   
+</beans>

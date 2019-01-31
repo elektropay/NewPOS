@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="inventoryManagementApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/admin.css"/>
+
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+        display: none !important;
+        }
+    </style>
+</head>
+<body ng-controller="inventoryMainController" ng-cloak>
+    <div id="inventoryManagementPage">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#inventoryCount"><label id="page-header-inventory-count">Inventory Count</label></a></li>
+                    <li><a href="#inventoryReview"><label id="page-header-inventory-review">Inventory Level Review</label></a></li>
+                    <li ng-show="!currentMerchantIds"><a href="#inventoryPurchaseOrder"><label id="page-header-purchase-order">Purchase Orders</label></a></li>
+                    <li ng-show="!currentMerchantIds"><a href="#inventoryReceivedItems"><label id="page-header-received-items">Receive Items</label></a></li>
+                    <li ng-show="!currentMerchantIds"><a href="#menuRecipes"><label id="page-header-menu-recipes">Menu Recipes</label></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div id="inventoryManagementPageMainDiv">
+            <div ng-view class="container-fluid"></div>
+        </div>
+    </div>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/alasql.min.js"></script>
+    <script src="js/xlsx.core.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/inventoryManagement.js"></script>
+</body>
+</html>

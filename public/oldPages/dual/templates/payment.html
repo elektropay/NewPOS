@@ -1,0 +1,32 @@
+<!-- <div class="modal openmodal"> -->
+ <ion-content style="background:#ccc;">
+
+  <div class="Pwap">
+     <div class="hearder f5w">ADD A TIP
+     	<div class="container f3w">Bill Amount: {{pay.total | currency}}</div>
+     </div>
+   
+    <div class="main" ng-repeat="item in tips" ng-if="$index % 2 ==0">
+       	<div class="content" ng-click="addTip(item)">
+       		    <p>{{item.name}}<br/>
+       			<span style="font-size:3vh;"  ng-if="$index<3">{{item.val | currency}}</span>
+       			</p>
+     	 </div>
+     	 <div class="content" ng-click="addTip(tips[$index+1])">
+                <p>{{tips[$index+1].name}}<br/>
+       			<span style="font-size:3vh;" ng-if="$index<3">{{tips[$index+1].val  | currency}}</span>
+       			</p>
+     	 </div>
+     </div>
+    
+   
+    </div>
+ </ion-content>
+   
+<!-- </div> -->
+
+
+<!-- <p ng-repeat="itemSec in combo.orderOptionItems" ng-if="$index % 2 ==0"  style="text-indent:20px;font-size:18px" >  
+              <span ng-if="$index+0<combo.orderOptionItems.length">&nbsp;&nbsp;{{combo.orderOptionItems[$index+0].optionDetail |to_trusted}}   &nbsp;|</span>  
+              <span ng-if="$index+1<combo.orderOptionItems.length">&nbsp;&nbsp;{{combo.orderOptionItems[$index+1].optionDetail |to_trusted}}</span>  
+            </p> -->

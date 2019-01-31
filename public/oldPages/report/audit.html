@@ -1,0 +1,46 @@
+<div id="auditReportPage" class="content-page">
+	<div class="page-wrapper">
+
+		<div class="row page-header">
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+				<h1 class="report-header" id="audit-page-header">Audit</h1>
+			</div>
+			<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+				<div id="report-date-div">
+					<div class="input-group date">
+						<input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-minus"></i>
+	                    </span>
+						<input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+	                    <span class="input-group-addon">
+	                        <i class="fa fa-fw fa-calendar"></i>
+	                    </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+				<span class="input-group"><a ng-click="generateAuditLogs()"><i class="fa fa-search fa-2x"></i></a></span>
+			</div>
+		</div>
+
+		<div class="page-body">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<table ng-table="tableParams" class="table table-condensed table-bordered table-striped" id="audit-table">
+						<tr ng-repeat="auditList in $data">
+							<td id="audit-date" class="text-center" style='width: 10%;' data-title="getSystemLanguageDisplayVal('audit-table-date', 'Date')" sortable="'currentUpdate'">{{auditList.currentUpdate}}</td>
+							<td class="text-center" style='width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-num', 'No.')" sortable="'orderNumber'" filter="{orderNumber: 'number'}">{{auditList.orderNumber}}</td>
+							<td class="text-center" ng-style="auditList.flag == 'SUSPICIOUS' ? {'width': '10%','background-color': 'Red'} : {'width': '10%'}" data-title="getSystemLanguageDisplayVal('audit-table-action', 'Action')" sortable="'displayName'" filter="{displayName: 'select'}" filter-data="displayNameFilter()">{{auditList.displayName}}</td>
+							<td class="text-center" style='width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-result', 'Result')" sortable="'changedAmount'">{{auditList.changedAmount | currency}}</td>
+							<td class="text-center" style='width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-by', 'By')" sortable="'updateBy'" filter="{updateBy: 'select'}" filter-data="byFilter()">{{auditList.updateBy}}</td>
+							<td class="text-center" style='width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-authorized-by', 'Authorized By')" sortable="'authorizedBy'" filter="{authorizedBy: 'select'}" filter-data="authorizedByFilter()">{{auditList.authorizedBy}}</td>
+							<td class="text-center" style='width: 10%' data-title="getSystemLanguageDisplayVal('audit-table-device', 'Device')" sortable="'deviceName'" filter="{deviceName: 'select'}" filter-data="deviceFilter()">{{auditList.deviceName}}</td>
+							<td class="text-left" style='width: 30%' data-title="getSystemLanguageDisplayVal('audit-table-detail', 'Detail')" sortable="'info'">{{auditList.info}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

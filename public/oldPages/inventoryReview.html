@@ -1,0 +1,161 @@
+<div id="inventoryLevelReviewPage">
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="inventoryReport-itemGroup" ng-model="inventoryItemChangeRecordFilter.selectedInventoryItemGroupId" ng-options="item.id as item.name for item in inventoryItemGroupList">
+            <option class="input-value-type-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="inventoryReport-type" ng-model="inventoryItemChangeRecordFilter.selectedInventoryChangeType" ng-change="clearSearchResult()">
+            <option id="inventoryReport-type-item-change-record" value="" ng-show="!currentMerchantIds">Inventory Level Change Report</option>
+            <option id="inventoryReport-type-item-used" value="COST_OF_GOODS_SOLD" ng-show="!currentMerchantIds">Items Used Report</option>
+            <option id="inventoryReport-type-received-items" value="RECEIVED_ITEMS" ng-show="!currentMerchantIds">Received Items Report</option>
+            <option id="inventoryReport-type-inventory-count" value="INVENTORY_COUNT">Inventory Count Report</option>
+            <option id="inventoryReport-type-saleItem-outOfStock" value="SALE_ITEM_OUT_OF_STOCK">Sale Items Out Of Stock Report</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-3">
+        <input type="date" class="form-control" id="itemFilter-fromDate" ng-model="inventoryItemChangeRecordFilter.fromDate">
+    </div>
+    <div class="form-group col-sm-3">
+        <input type="date" class="form-control" id="itemFilter-toDate" ng-model="inventoryItemChangeRecordFilter.toDate">
+    </div>
+    <div class="form-group col-sm-1">
+        <button type="button" class="btn btn-primary btn-search" ng-click="generateInventoryItemChangeRecords()">Search</button>
+    </div>
+    <div class="form-group col-sm-1" ng-app align="right">
+        <button id="button-export" type="button" class="btn btn-primary" ng-click="exportData()">Export</button>
+    </div>
+    <div class="form-group col-sm-2">
+        <select class="form-control" id="inventoryReport-itemId" ng-model="inventoryItemChangeRecordFilter.selectedInventoryItemId" ng-options="item.id as item.name for item in inventoryItemList">
+            <option class="input-value-type-all" value="">All</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-2">
+        <div class="checkbox" ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+            <label for="itemFilter-groupByItem">
+                <input type="checkbox" id="itemFilter-groupByItem" ng-model="inventoryItemChangeRecordFilter.groupByItem" ng-change="generateInventoryItemChangeRecords()">
+                <label id="label-itemFilter-groupByItem">Group by Item</label>
+            </label>
+        </div>
+    </div>
+    <div class="form-group col-sm-2">
+        <div class="checkbox" ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT' && inventoryItemChangeRecordFilter.groupByItem && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+            <label for="itemFilter-showItemChangeLogDetails">
+                <input type="checkbox" id="itemFilter-showItemChangeLogDetails" ng-model="inventoryItemChangeRecordFilter.showItemChangeLogDetails">
+                <label id="label-itemFilter-showItemChangeLogDetails">Show Item Change Record Details</label>
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    <a ng-click="sortTable('itemid')"><label>#</label></a>
+                </th>
+                <th>
+                    <a ng-click="sortTable('itemname')">
+                        <label id="label-item-name" class="detail-input-name">Name</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+                    <a ng-click="sortTable('type')">
+                        <label id="label-type" class="detail-input-type">Type</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+                    <a ng-click="sortTable('originalstockqty')">
+                        <label id="label-originalStockQty">Orig Stock QTY</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+                    <a ng-click="sortTable('changedstockqty')">
+                        <label id="label-changedStockQty">Changed Stock QTY</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+                    <a ng-click="sortTable('originalestimatedusedqty')">
+                        <label id="label-origEstimatedUsedQty" ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT'">Orig Estimated Used QTY</label>
+                        <label id="label-estimatedUsedQty" ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='INVENTORY_COUNT'">Estimated Used QTY</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='INVENTORY_COUNT'">
+                    <a>
+                        <label id="label-estimatedEndingStockQty">Estimated Ending Stock QTY</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='INVENTORY_COUNT'">
+                    <a>
+                        <label id="label-actualStockQty">Actual Stock QTY</label>
+                    </a>
+                </th>
+                <th ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+                    <a ng-click="sortTable('changedestimatedusedqty')">
+                        <label id="label-changedEstimatedUsedQty">Changed Estimated Used QTY</label>
+                    </a>
+                </th>
+                <th>
+                    <a>
+                        <label id="label-extraInfo">Extra Info</label>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortTable('lastupdated')">
+                        <label id="label-lastUpdated">Last Updated</label>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortTable('lastupdatedusername')">
+                        <label id="label-lastUpdatedUserName">Last Updated By</label>
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="inventoryItemChangeSummary in inventoryItemChangeSummaryList" ng-show="inventoryItemChangeSummaryList.length > 0">
+            <tr class="active">
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.itemid }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.itemname }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.saleitemid }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.saleitemname }}</td>
+                <td></td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.originalstockqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.changedstockqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.originalestimatedusedqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ inventoryItemChangeSummary.changedestimatedusedqty }}</td>
+                <td>{{ inventoryItemChangeSummary.otherInfo }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr ng-repeat="itemChangeRecord in inventoryItemChangeSummary.itemchangerecords" ng-show="inventoryItemChangeRecordFilter.showItemChangeLogDetails">
+                <td></td>
+                <td></td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ itemChangeRecord.type }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'"></td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ itemChangeRecord.changedstockqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'"></td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">{{ itemChangeRecord.changedestimatedusedqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS'"><span>{{ itemChangeRecord.otherinfo }}</span><br><span>{{ itemChangeRecord.createdon}}</span></td>
+                <td>{{ itemChangeRecord.lastupdated }}</td>
+                <td>{{ itemChangeRecord.lastupdatedusername }}</td>
+            </tr>
+            </tbody>
+            <tbody ng-show="inventoryItemChangeRecordList.length > 0 && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='SALE_ITEM_OUT_OF_STOCK'">
+            <tr ng-repeat="inventoryItemChangeRecord in inventoryItemChangeRecordList | orderBy:sortType:sortReverse">
+                <td>{{ inventoryItemChangeRecord.itemid }}</td>
+                <td>{{ inventoryItemChangeRecord.itemname }}</td>
+                <td>{{ inventoryItemChangeRecord.type }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD'">{{ inventoryItemChangeRecord.originalstockqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='COST_OF_GOODS_SOLD' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT'">{{ inventoryItemChangeRecord.changedstockqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS'">{{ inventoryItemChangeRecord.originalestimatedusedqty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='INVENTORY_COUNT'">{{ inventoryItemChangeRecord.estimatedEndingStockQty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType=='INVENTORY_COUNT'">{{ inventoryItemChangeRecord.actualEndingStockQty }}</td>
+                <td ng-show="inventoryItemChangeRecordFilter.selectedInventoryChangeType!='RECEIVED_ITEMS' && inventoryItemChangeRecordFilter.selectedInventoryChangeType!='INVENTORY_COUNT'">{{ inventoryItemChangeRecord.changedestimatedusedqty }}</td>
+                <td><span>{{ inventoryItemChangeRecord.otherinfo }}</span><br><span>{{ inventoryItemChangeRecord.createdon}}</span></td>
+                <td>{{ inventoryItemChangeRecord.lastupdated }}</td>
+                <td>{{ inventoryItemChangeRecord.lastupdatedusername }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

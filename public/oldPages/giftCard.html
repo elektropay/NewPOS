@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/giftCard.js"></script>
+</head>
+<body>
+<div id="giftCard-page" data-role="page" data-theme="a">
+    <div id="divGiftCard" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+
+        <div class="ui-grid-b">
+            <div class="ui-block-a" >
+                <div data-role="fieldcontain">
+                    <label id="label-cardNumberFilterInput" for="cardNumberFilterInput" class="detail-input-cardNumber">Card Number</label>
+                    <input id="cardNumberFilterInput" type="text" name="cardNumberFilterInput" value="" maxlength="200"/>
+                </div>
+            </div>
+            <div class="ui-block-b" >
+                <div data-role="fieldcontain">
+                    <label id="label-issuedToFilterInput" for="issuedToFilterInput" class="detail-input-issuedTo">Issued to</label>
+                    <input id="issuedToFilterInput" type="text" name="issuedToFilterInput" value=""/>
+                </div>
+            </div>
+            <div   class="ui-block-a" >
+                <div data-role="fieldcontain">
+                    <label id="label-fromDatePicker" for="fromDatePicker" class="detail-input-transactionDateFrom">Transaction Date From</label>
+                    <input id="fromDatePicker" style="padding: 0 !important;font-size: 16px !important;" type="date"  name="fromDatePicker" value=""/>
+                </div>
+            </div>
+            <div  class="ui-block-b" >
+                <div data-role="fieldcontain">
+                    <label id="label-toDatePicker" for="toDatePicker" class="detail-input-transactionDateTo">Transaction Date To</label>
+                    <input id="toDatePicker" style="padding: 0 !important;font-size: 16px !important;" type="date"  name="toDatePicker" value="" Title="To"/>
+                </div>
+            </div>
+            <div class="ui-block-c" >
+                <button type="submit" class="btn-search-result" onclick="giftCardObj.fetchEntry();" data-theme="b">Search</button>
+            </div>
+        </div>
+        <div class="myPlusIconDiv">
+            <div class="ui-grid-a">
+                <form id="giftCardform" name="giftCardform" method="post" action=""  data-ajax="false">
+                    <input id="cardNumber" type="hidden" name="cardNumber" value="" />
+                    <input id="issuedTo" type="hidden" name="issuedTo" value=""/>
+                    <input id="transactionFromDate" type="hidden"  name="transactionFromDate" value=""/>
+                    <input id="transactionToDate" type="hidden" name="transactionToDate" value="" />
+                </form>
+                <div class="ui-block-a">
+                    <div class="ui-grid-a">
+                        <div id="export-customer-data-div" class="ui-block-a">
+                            <div ><button type="submit" id="btn-export-giftcard-data" class="btn-export-result" onclick="giftCardObj.prepareExportData();" data-theme="a">Export Gift Card Data</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <input type="image" id="create-oncreate" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="giftCardObj.newEntry();" title="Add"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="detailTableContainerDiv">
+            <table id="giftCardTable" class="detailTable">
+                <thead>
+                <tr>
+                    <th class="detail-input-cardNumber">Card Number</th>
+                    <th class="detail-input-issuedTo">Issued To</th>
+                    <th class="detail-input-expireDate">Expire Date</th>
+                    <th class="detail-input-balance">Balance</th>
+                    <th class="detail-input-consumptionTimes">Consumption Times</th>
+                    <th class="detail-input-rechargeAmount">Recharge Amount</th>
+                    <th class="detail-input-amountSpent">Amount Spent</th>
+                    <th class="detail-input-endingBalance">Amount Spent</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="giftCardRemainTotal">
+            <div data-role="fieldcontain">
+                <label id="label-remainTotal" for="remainTotal">Remain Total:</label>
+                <p id="remainTotal">0</p>
+            </div>
+        </div>
+        <div data-role="popup" id="editGiftCardDetailPopup" data-overlay-theme="a" data-theme="a" data-transition="flow" data-dismissible="true" class="ui-corner-all editDetailPopup">
+            <div data-role="header" data-theme="a" class="ui-corner-top">
+                <h1 id="editGiftCardDetailPopup-header">Gift Card Detail</h1>
+            </div>
+            <div id="message" align="center" style="color:red"></div>
+            <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                <div data-role="fieldcontain">
+                    <label id="label-cardNumberInput" for="cardNumberInput" class="detail-input-cardNumber">Card Number</label>
+                    <input id="cardNumberInput" type="text" name="cardNumberInput" value="" maxlength="200"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label id="label-issuedToInput" for="issuedToInput" class="detail-input-issuedTo">Issued to</label>
+                    <input id="issuedToInput" type="text" name="issuedToInput" value=""/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label id="label-expireDatePicker" for="expireDatePicker" class="detail-input-expireDate">Expire Date</label>
+                    <input id="expireDatePicker" type="date" name="expireDatePicker" value=""/>
+                </div>
+                <div id="balanceInput-container-div">
+                    <div data-role="fieldcontain">
+                        <label id="label-balanceInput" for="balanceInput" class="detail-input-balance">Balance</label>
+                        <input id="balanceInput" type="number" pattern="^\d+(\.|\,)\d{2}$" name="balanceInput" value=""/>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a"><div class="my-button-div"><button id="create-onsave" type="submit" class="btn-save" onclick="giftCardObj.save();" data-theme="b">Save</button></div></div>
+                    <div class="ui-block-b"><div class="my-button-div"><button id="create-oncancel" type="submit" class="btn-cancel" onclick="giftCardObj.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

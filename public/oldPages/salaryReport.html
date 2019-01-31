@@ -1,0 +1,112 @@
+<div id="salary-report-page">
+    <div class="container-fluid">
+        <div class="form-group col-sm-3">
+            <input type="date" class="form-control" id="reportFilter-fromDate" ng-model="salaryReportFilter.fromDate">
+        </div>
+        <div class="form-group col-sm-3">
+            <input type="date" class="form-control" id="reportFilter-toDate" ng-model="salaryReportFilter.toDate">
+        </div>
+        <div class="form-group col-sm-2">
+            <select class="form-control" id="salaryReport-comparison-operation" ng-model="salaryReportFilter.comparisonType" ng-change="generateSelectOptionList()">
+                <option id="salaryReport-comparison-type-agt" value="">All vs Grand Total</option>
+                <option id="salaryReport-comparison-type-ert">Employee vs Role Total</option>
+                <option id="salaryReport-comparison-type-eet">Employee vs Employees Total</option>
+                <option id="salaryReport-comparison-type-rgt">Role vs Grand Total</option>
+                <option id="salaryReport-comparison-type-rrt">Role vs Roles Total</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-2">
+            <select class="form-control" id="salaryReport-all-operation" ng-model="salaryReportFilter.all">
+                <option id="salaryReport-type-all" value="">All</option>
+            </select>
+            <select class="form-control" id="salaryReport-staffList-operation" ng-model="salaryReportFilter.staff" ng-options="staff.id as staff.name for staff in staffList" ng-change="removeWarning()">
+                <option id="salaryReport-type-staffList" value="">All</option>
+            </select>
+            <select class="form-control" id="salaryReport-roleList-operation" ng-model="salaryReportFilter.role" ng-options="role.id as role.name for role in roleList">
+                <option id="salaryReport-type-role" value="">All</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-1">
+            <button type="button" class="btn btn-primary btn-search" ng-click="listSalaryDetailInfo()">Search</button>
+        </div>
+    </div>
+
+    <div class="container alert alert-danger" id="alert-empty-employee">
+        <strong>Info!</strong> Please select an Employee from the list.
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="well">
+                    <div id="salary-report-chart" style="height: 350px"></div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info fade in">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <a>
+                                            <label id="label-employee-name" class="detail-input-employee-name">Employee</label>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a>
+                                            <label id="label-employee-salary" class="detail-input-employee-salary">Salary</label>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a>
+                                            <label id="label-employee-work-hour" class="detail-input-employee-work-hour">Work Hours</label>
+                                        </a>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody ng-repeat="staffInfo in salaryDetailInfo" ng-show="salaryDetailInfo.length > 0">
+                                    <tr>
+                                        <td>{{ staffInfo.name }}</td>
+                                        <td>{{ staffInfo.salary | currency }}</td>
+                                        <td>{{ staffInfo.hours }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-success">
+        <table class="table table-condensed">
+            <th class="text-center" ng-model="paidTotal" colspan="2">Paid Total: {{ paidTotal | currency }}</th>
+            <tr>
+                <td>
+                    <table class="table table-condensed">
+                        <th class="text-center" colspan="2">Payment Type</th>
+                        <tbody ng-repeat="payment in paymentDetailInfo" ng-show="paymentDetailInfo.length > 0">
+                            <tr>
+                                <td>{{ payment.paymentType }}</td>
+                                <td>{{ payment.total | currency }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="table table-condensed">
+                        <th class="text-center" colspan="3">Card Type</th>
+                        <tbody ng-repeat="creditPayment in creditPaymentDetailInfo" ng-show="creditPaymentDetailInfo.length > 0">
+                            <tr>
+                                <td>{{ creditPayment.cardType }}</td>
+                                <td>{{ creditPayment.count }}</td>
+                                <td>{{ creditPayment.total | currency }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

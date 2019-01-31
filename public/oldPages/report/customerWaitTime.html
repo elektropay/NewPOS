@@ -1,0 +1,119 @@
+<div id="customerWaitTimeReportPage" class="content-page">
+    
+    <div class="page-wrapper">
+
+        <div class="row page-header">
+            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                <h1 class="report-header" id="customer-wait-time-page-header">Customer Wait Time</h1>
+            </div>
+        </div>
+
+		<div id="preview-popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="print-preview" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header text-center">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="print-preview">Print Preview</h4>
+					</div>
+					<div class="modal-body row">
+						<div class="report-wrap col-sm-8 col-md-8 col-lg-8">
+							<iframe id="report-frame" name="report-frame" class="embed-responsive-item" src=""></iframe>
+						</div>
+						<div class="col-sm-4 col-md-4 col-lg-4">
+							<div id="printer" class="dropdown open">
+								<button class="btn btn-primary btn-lg btn-block btn-print-report dropdown-toggle" type="button" id="printer-list-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Print</button>
+								<div class="dropdown-menu" aria-labelledby="printer-list-dropdown">
+									<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(true, false, '')">Default</button>
+									<button class="dropdown-item btn-primary btn-block" ng-repeat="printer in printerList" ng-click="submitReportPreview(true, false, printer.name)">{{printer.name}}</button>
+								</div>
+							</div>
+							<div class="dropdown open">
+								<button class="btn btn-primary btn-lg btn-block btn-export-report dropdown-toggle" type="button" id="export-type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Export</button>
+								<div class="dropdown-menu" aria-labelledby="export-type-dropdown">
+									<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'PDF')">PDF</button>
+									<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'XLSX')">XLSX</button>
+									<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'CSV')">CSV</button>
+									<button class="dropdown-item btn-primary btn-block" ng-click="submitReportPreview(false, true, null, 'HTML')">HTML</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="page-body">
+
+			<div class="row form-group">
+				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+					<div id="report-date-div">
+						<div class="input-group date">
+							<input id="inputFromDate" type="hidden" name="fromDate" value=""/>
+							<input id="inputToDate" type="hidden" name="toDate" value=""/>
+							<input id="fromDate" name="fromDate" type='text' class="form-control input-group-addon"/>
+							<span class="input-group-addon">
+								<i class="fa fa-fw fa-minus"></i>
+							</span>
+							<input id="toDate" name="toDate" type='text' class="form-control input-group-addon"/>
+							<span class="input-group-addon">
+								<i class="fa fa-fw fa-calendar"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!--div class="form-group col-sm-2">
+					<div class="col-sm-12">
+						<input  type="number" maxlength="10" class="form-control" id="customerWaitTimeThreshold" ng-model="customerWaitTimeThreshold" ng-blur="refreshChart()">
+					</div>
+				</div-->
+
+				<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+					<span class="input-group"><a ng-click="loadData()"><i class="fa fa-search fa-2x"></i></a></span>
+				</div>
+				<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+					<form id="customerwaittimeform" name="customerwaittimeform" method="post" action="" target="report-frame">
+
+						<input id="previewFrom" type="hidden" name="fromDate" value=""/>
+						<input id="previewTo" type="hidden" name="toDate" value=""/>
+						<input id="printReport" type="hidden" name="printReport" value=""/>
+						<input id="exportReport" type="hidden" name="exportReport" value=""/>
+						<input id="personalReport" type="hidden" name="personalReport" value="false"/>
+						<input id="printerName" type="hidden" name="printerName" value=""/>
+						<input id="exportFileName" type="hidden" name="exportFileName" value="PDF"/>
+						<input id="reportName" type="hidden" name="reportName" value="CustomerWaitTimeReport"/>
+						<input id="reportLanguage" type="hidden" name="reportLanguage" value=""/>
+						<input id="merchantIds" type="hidden" name="merchantIds" value="{{$parent.currentMerchantIds}}"/>
+						<input id="appInstanceName" type="hidden" name="appInstanceName" value=""/>
+						<input id="longWaitTimeThreshold" type="hidden" name="longWaitTimeThreshold" ng-value="customerWaitTimeThreshold"/>
+
+						<span class="input-group"><a data-toggle="modal" data-target="#preview-popup" ng-click="openReportPreview()"><i class="fa fa-print fa-2x"></i></a></span>
+					</form>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label id="label-customerWaitTimeThreshold" for="customerWaitTimeThreshold" class="col-sm-8 control-label pull-left">Customer wait time threshold (min)</label>
+					<div class="col-sm-4">
+						<input  type="number" maxlength="10" class="form-control" id="customerWaitTimeThreshold" ng-model="customerWaitTimeThreshold" ng-blur="refreshChart()">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h3 class="text-center"><b id="customer-wait-time-graph-label">Customer Wait Time </b>{{overviewSummary}}</h3>
+					<div id="customer-wait-time-graph" style="height: 300px"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h3 class="text-center"><b id="customer-wait-time-zoomed-in-graph-label">Zoomed In Details</b></h3>
+					<div id="customer-wait-time-zoomed-in-graph" style="height: 300px"></div>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>

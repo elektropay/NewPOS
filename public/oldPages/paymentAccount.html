@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/paymentAccount.js"></script>
+</head>
+<body>
+<div id="paymentAccountPage" data-role="page" data-theme="a">
+
+    <div id="paymentAccountPageMainDiv" data-theme="a" data-role="content" role="main">
+        <div class="ui-grid-a">
+            <div class="ui-block-a my-div-width" id="paymentAccountSelectLayoutDiv">
+                <div id="paymentAccountSelectContentDiv" class="my-select-menu">
+                    <table class="tableone">
+                        <caption id="table-caption-paymentAccount">Payment Accounts</caption>
+                        <thead>
+                        <tr>
+                            <th class="th1" scope="col"></th>
+                            <th class="th2" scope="col"><br></th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:paymentAccount.newEntry();">New</button></div>
+                            </td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="innerb">
+                                    <table id="paymentAccountTable" class="tabletwo">
+                                    </table>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-block-b my-div-width">
+                <div id="paymentAccountDetailContentDiv" class="my-detail-panel">
+                    <input id="curEntryId" type="hidden">
+                    <div data-role="fieldcontain">
+                        <label id="label-name" for="name" class="detail-input-name">Name</label>
+                        <input id="name" readonly="readonly" value="" type="text"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-description" for="description" class="detail-input-description">Description</label>
+                        <textarea id="description" readonly="readonly" value="" style="height:51px;"></textarea>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label id="label-billedToSelf" for="billedToSelf">Billed to Self</label>
+                        <input id="billedToSelf" readonly="readonly" value="" type="checkbox"/>
+                    </div>
+                    <div class="my-top-margin-button-div">
+                        <button data-theme="a" id="btnSave" class="btn-save" type="button" onclick="javascript:paymentAccount.saveElement();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+    <title>Menusifu POS</title>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css"/>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/languageManagement.js"></script>
+    <script>
+        $(document).on("mobileinit", function () {
+            $.mobile.loader.prototype.options.text = "loading";
+            $.mobile.loader.prototype.options.textVisible = false;
+            $.mobile.loader.prototype.options.theme = "a";
+            $.mobile.loader.prototype.options.html = "";
+        });
+    </script>
+    <style>
+        .table-scroll {
+            width: 100% !important;
+        }
+        .related-hd .ui-block-a,.related-hd .ui-block-b {
+            width: 48%!important;
+        }
+        #tabs .lang-table-column-header {
+            display: inline;
+        }
+        #menuLists-button {
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+        }
+        #menulist-box  .ui-select {
+            margin-top:0;
+        }
+        .language-tab tr:first-child td {
+            border:none;
+            opacity: 0;
+        }
+        .table-title {
+            display: none;
+        }
+        /*#tabs .ui-block-a .ui-first-child .ui-btn,*/
+        /*#tabs .ui-block-a .ui-first-child .ui-btn:focus,*/
+        #tabs .ui-block-a .active {
+            box-shadow: 0 0 12px #38c;
+            -webkit-box-shadow: 0 0 12px #38c;
+            z-index: 100;
+        }
+        .languageField {
+            display: block;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            background: rgba(0,0,0,.2);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+<div id="language-page" data-role="page" data-theme="a">
+    <div id="mainDivLanguagePage" data-theme="a" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li data-path="menuRelated"><a id="navbar-mainTab" href="#menuRelated" class="ui-link ui-btn ui-tabs-anchor ui-btn-active ui-btn-active">Menu Related</a></li>
+                    <li data-path="systemRelated"><a id="navbar-modifierTab" href="#systemRelated">System Related</a></li>
+                    <li data-path="other"><a id="navbar-optionsCategoryTab" href="#other">Other</a></li>
+                </ul>
+            </div>
+            <!--menu related-->
+            <div id="menuRelated" class="ui-grid-a menubox-0">
+                <div class="ui-block-a"></div>
+                <div class="ui-block-b">
+                    <!--搜索和menulist-->
+                    <div class="ui-gird-a related-hd">
+                        <div class="ui-block-a ui-content">
+                            <fieldset data-role="fieldcontain" id="menulist-box"><select name="menuLists" id="menuLists"> </select></fieldset>
+                        </div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain" id="searchInputDiv1">
+                                <label id="" for="searchInput" class="detail-input-searchInput"></label>
+                                <input class="searchInput" value="" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-block-a table-scroll">
+                        <table id="languageTable-0" class="table-stripe language-tab">
+                            <thead class="table-title">
+                            <tr>
+                                <th class="fieldName"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--system related-->
+            <div id="systemRelated" class="ui-grid-a menubox-1">
+                <div class="ui-block-a"></div>
+                <div class="ui-block-b">
+                    <!--搜索和menulist-->
+                    <div class="ui-gird-a related-hd">
+                        <div class="ui-block-a ui-content"></div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain" id="searchInputDiv1">
+                                <label id="label-searchInput-sys" for="searchInput" class="detail-input-searchInput"></label>
+                                <input class="searchInput" value="" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-block-a table-scroll">
+                        <table id="languageTable-1" class="table-stripe language-tab">
+                            <thead class="table-title">
+                            <tr>
+                                <th class="fieldName"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--other related-->
+            <div id="other" class="ui-grid-a menubox-2">
+                <div class="ui-block-a"></div>
+                <div class="ui-block-b">
+                    <!--搜索和menulist-->
+                    <div class="ui-gird-a related-hd">
+                        <div class="ui-block-a ui-content"></div>
+                        <div class="ui-block-b">
+                            <div data-role="fieldcontain" id="searchInputDiv1">
+                                <label id="label-searchInput-other" for="searchInput" class="detail-input-searchInput">Search</label>
+                                <input class="searchInput" value="" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-block-a table-scroll">
+                        <table id="languageTable-2" class="table-stripe language-tab">
+                            <thead class="table-title">
+                            <tr>
+                                <th class="fieldName"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-role="popup" id="popupAddLanguageColumn" data-theme="a" data-overlay-theme="a" class="ui-content">
+            <h3 id="popupAddLanguageColumn-header">Add Language</h3>
+            <div data-role="fieldcontain" class="padded-fields">
+                <label id="label-add-language-select" class="select" for="add-language-select" class="select">Select
+                    Language</label>
+                <select name="add-language-select" id="add-language-select">
+                </select>
+            </div>
+            <button type="submit" onclick="languageManagement.saveColumn();" class="btn-add-entry"
+                    data-theme="b">Add
+            </button>
+        </div>
+        <div class="ui-grid-c">
+            <div class="ui-block-a">
+                <div class="my-button-div">
+                    <button type="submit" id="add-lang-btn" onclick="$('#popupAddLanguageColumn').popup('open');"
+                            data-theme="b">Add Language
+                    </button>
+                </div>
+            </div>
+            <div class="ui-block-b">
+                <div class="my-button-div">
+                    <button type="submit" id="delete-lang-btn" onclick="languageManagement.openDeletePanel();"
+                            data-theme="b">Delete Language
+                    </button>
+                </div>
+            </div>
+            <div class="ui-block-c">
+                <div class="my-button-div">
+                    <button type="submit" class="btn-save" onclick="languageManagement.saveChanges();" data-theme="b">
+                        Save
+                    </button>
+                </div>
+            </div>
+            <div class="ui-block-d">
+                <div class="my-button-div">
+                    <button type="submit" class="btn-cancel" onclick="languageManagement.cancelChanges();"
+                            data-theme="b">Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div data-role="popup" id="popupLoader" data-overlay-theme="a" data-theme="a" data-corners="false">
+            <a href="#" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img
+                class="popphoto" src="css/images/ajax-loader.png" alt="Colorful city">
+        </div>
+    </div>
+</div>
+<div class="overlay"></div>
+</body>
+</html>

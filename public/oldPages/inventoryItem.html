@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/inventoryItem.js"></script>
+</head>
+<body>
+<div id="inventoryItemPage" data-role="page" data-theme="a">
+
+    <div id="inventoryItemPageMainDiv" data-theme="a" data-role="content" role="main">
+        <div id="tabs" data-role="tabs">
+            <div id="tabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-inventoryItemTab" href="#inventoryItemTab">Inventory Item</a></li>
+                    <li><a id="navbar-inventoryItemGroupTab" href="#inventoryItemGroupTab">Item Group</a></li>
+                </ul>
+            </div>
+            <div id="inventoryItemTab">
+                <div class="ui-grid-b">
+                    <div class="ui-block-a">
+                        <div id="inventoryItem-select-div" data-role="fieldcontain" class="my-ui-grid-div">
+                            <label id="label-inventoryItem-filter-list" class="select padded-fields btn-filter-result" for="inventoryItem-filter-list" class="select padded-fields">Filter</label>
+                            <select name="select-choice-1" id="inventoryItem-filter-list" onchange="inventoryItem.filterEntries(this);">
+                                <option value='' class="select-list-option-value-all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div data-role="fieldcontain">
+                            <label id="label-searchInventoryItemInput" for="searchInventoryItemInput" class="btn-search-result">Search Item</label>
+                            <input id="searchInventoryItemInput" value="" type="text">
+                        </div>
+                    </div>
+                    <div class="ui-block-c">
+                    </div>
+                </div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="inventoryItemSelectLayoutDiv">
+                        <div id="inventoryItemSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-inventoryItem">Inventory Item</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:inventoryItem.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="inventoryItemTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="inventoryItemDetailContentDiv" class="my-detail-panel">
+                            <input id="curEntryId" type="hidden">
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-name" for="name" class="detail-input-name">Name</label>
+                                        <input id="name" readonly="readonly" value="" type="text" maxlength="30"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-sku" for="sku">SKU</label>
+                                        <input id="sku" readonly="readonly" value="" type="text" maxlength="50"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-itemGroupSelectList" class="select" for="itemGroupSelectList">Item Group</label>
+                                        <select name="itemGroupSelectList" id="itemGroupSelectList">
+                                            <option value='' class="select-list-option-value-select-one">Please select one</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-baseUnit" for="baseUnit">Base Unit</label>
+                                        <input id="baseUnit" readonly="readonly" value="" list="itemUnitSelectList">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-productionUnit" for="productionUnit">Recipe Unit</label>
+                                        <input id="productionUnit" readonly="readonly" value="" list="itemUnitSelectList">
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-baseUnitToProductionUnitRatio" for="baseUnitToProductionUnitRatio">Base Unit/Recipe Unit</label>
+                                        <input id="baseUnitToProductionUnitRatio" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-purchaseUnit" for="purchaseUnit">Purchase Unit</label>
+                                        <input id="purchaseUnit" readonly="readonly" value="" list="itemUnitSelectList">
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-purchaseUnitToBaseUnitRatio" for="purchaseUnitToBaseUnitRatio">Purchase Unit/Base Unit</label>
+                                        <input id="purchaseUnitToBaseUnitRatio" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-defaultPurchasePrice" for="defaultPurchasePrice">Default Purchase Price</label>
+                                        <input id="defaultPurchasePrice" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-defaultPurchaseQty" for="defaultPurchaseQty">Default Purchase QTY</label>
+                                        <input id="defaultPurchaseQty" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-lowStockAlertThreshold" for="lowStockAlertThreshold">Low Stock Alert Threshold</label>
+                                        <input id="lowStockAlertThreshold" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-baseItemSelectList" class="select" for="baseItemSelectList">Base Item</label>
+                                        <select name="baseItemSelectList" id="baseItemSelectList">
+                                            <option value='' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-targetStockQTYCalculationList" class="select" for="targetStockQTYCalculationList">Target Stock QTY Calculation</label>
+                                        <select name="targetStockQTYCalculationList" id="targetStockQTYCalculationList">
+                                            <option value='MANUAL' class="select-list-option-value-manual">Manual</option>
+                                            <option value='AUTO' class="select-list-option-value-auto">Auto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-targetStockQty" for="targetStockQty">Target Stock QTY</label>
+                                        <input id="targetStockQty" readonly="readonly" value="" type="number"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-inventoryCountUnitSelectList" class="select" for="inventoryCountUnitSelectList">Inventory Count Unit</label>
+                                        <select name="inventoryCountUnitSelectList" id="inventoryCountUnitSelectList">
+                                            <option value='BASE_UNIT' class="select-list-option-value-baseUnit">Base Unit</option>
+                                            <option value='PURCHASE_UNIT' class="select-list-option-value-purchaseUnit">Purchase Unit</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-replenishTypeSelectList" class="select" for="replenishTypeSelectList">Replenish Type</label>
+                                        <select name="replenishTypeSelectList" id="replenishTypeSelectList">
+                                            <option value='MANUAL' class="select-list-option-value-manual">Manual</option>
+                                            <option value='AUTO' class="select-list-option-value-auto">Auto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-displayPriority" for="displayPriority">Display Priority</label>
+                                        <input type="number" id="displayPriority" name="displayPriority" value=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <div class="ui-field-contain">
+                                        <label id="label-defaultShippingAddressSelectList" for="defaultShippingAddressSelectList">Default Shipping Address</label>
+                                        <select name="defaultShippingAddressSelectList" id="defaultShippingAddressSelectList">
+                                            <option value='-1' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div data-role="fieldcontain">
+                                        <label id="label-defaultVendorSelectList" class="select" for="defaultVendorSelectList">Default Vendor</label>
+                                        <select name="defaultVendorSelectList" id="defaultVendorSelectList">
+                                            <option value='-1' class="select-list-option-value-none">None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                            <div class="my-top-margin-button-div">
+                                <div id="btn-div-new" class="ui-grid-a hidden">
+                                    <div class="ui-block-a">
+                                        <div class="my-button-div">
+                                            <button data-theme="a" id="btnSaveNew" class="btn-save" type="button" onclick="javascript:inventoryItem.saveElement();">Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <div id="create-another-category-checkbox" data-role="fieldcontain">
+                                            <label id="label-createAnotherEntry-cb" for="createAnotherEntry-cb"  class="detail-input-createAnotherEntry-cb">Create Another</label>
+                                            <input id="createAnotherEntry-cb" name="createAnotherEntry" value="1" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="btn-div-update" class="my-button-div">
+                                    <button data-theme="a" id="btnSaveUpdate" class="btn-save" type="button" onclick="javascript:inventoryItem.saveElement();">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <datalist id="itemUnitSelectList">
+                    </datalist>
+                </div>
+            </div>
+            <div id="inventoryItemGroupTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="inventoryItemGroupSelectLayoutDiv">
+                        <div id="inventoryItemGroupSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-inventoryItemGroup">Item Group</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:inventoryItemGroup.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="inventoryItemGroupTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="inventoryItemGroupDetailContentDiv" class="my-detail-panel">
+                            <input id="curGroupEntryId" type="hidden">
+                            <div data-role="fieldcontain">
+                                <label id="label-groupName" for="groupName" class="detail-input-name">Name</label>
+                                <input id="groupName" readonly="readonly" value="" type="text" maxlength="30"/>
+                            </div>
+
+                            <div data-role="fieldcontain">
+                                <label id="label-groupDisplayPriority" for="groupDisplayPriority">Display Priority</label>
+                                <input id="groupDisplayPriority" readonly="readonly" value="" type="text" maxlength="7"/>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnItemGroupSave" class="btn-save" type="button" onclick="javascript:inventoryItemGroup.saveElement();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

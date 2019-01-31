@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>Menusifu POS</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/autocomplete.css" />
+
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.min.js"></script>
+    <script src="js/ObjTree.js"></script>
+    <script src="js/biscuit.js"></script>
+    <script src="js/keydownctrl.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/adminService.js"></script>
+    <script src="js/autocomplete.js"></script>
+    <script src="js/systemLanguage.js"></script>
+    <script src="js/giftCard.js"></script>
+</head>
+<body>
+<div id="loyaltyCard-page" data-role="page" data-theme="a">
+    <div id="divLoyaltyCard" data-theme="a" data-role="content" role="main" class="my-page-main-content-container">
+        <div id="tabs" data-role="tabs">
+            <div id="loyaltyCardTabList" data-role="navbar">
+                <ul>
+                    <li><a id="navbar-mainLoyaltyCardTab" href="#mainLoyaltyCardTab">Loyalty Card</a></li>
+                    <li><a id="navbar-membershipLevelTab" href="#membershipLevelTab">Membership Level</a></li>
+                </ul>
+            </div>
+
+            <div id="mainLoyaltyCardTab">
+               <div class="ui-grid-b">
+                    <div class="ui-block-a" >
+                        <div data-role="fieldcontain">
+                            <label id="label-cardNumberFilterInput" for="cardNumberFilterInput" class="detail-input-cardNumber">Card Number</label>
+                            <input id="cardNumberFilterInput" type="text" name="cardNumberFilterInput" value="" maxlength="200"/>
+                        </div>
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="fieldcontain">
+                            <label id="label-issuedToFilterInput" for="issuedToFilterInput" class="detail-input-issuedTo">Issued to</label>
+                            <input id="issuedToFilterInput" type="text" name="issuedToFilterInput" value=""/>
+                        </div>
+                    </div>
+                    <div class="ui-block-c" >
+                        <button type="submit" class="btn-search-result" onclick="loyaltyCardObj.fetchEntry();" data-theme="b">Search</button>
+                    </div>
+                </div>
+                <div class="myPlusIconDiv">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="image" id="create-oncreate" src="css/images/plus.png" data-position-to="window" data-icon="plus" data-iconpos="notext" onclick="loyaltyCardObj.newEntry();" title="Add"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailTableContainerDiv">
+                    <table id="loyaltyCardTable" class="detailTable">
+                        <thead>
+                        <tr>
+                            <th class="detail-input-cardNumber">Card Number</th>
+                            <th class="detail-input-issuedTo">Card Holder</th>
+                            <th class="detail-input-expireDate">Expire Date</th>
+                            <th class="detail-input-balance">Balance</th>
+                            <th id="lc-table-points-column-header" class="detail-input-points">Points</th>
+                            <th id="lc-table-allTimePoints-column-header" class="detail-input-allTimePoints">All Time Points</th>
+                            <th id="lc-table-membership-level-column-header" class="detail-input-membershipLevel">Membership Level</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <div data-role="popup" id="editLoyaltyCardDetailPopup" data-overlay-theme="a" data-transition="flow" data-theme="a" data-dismissible="true" class="ui-corner-all editDetailPopup">
+                    <div data-role="header" data-theme="a" class="ui-corner-top">
+                        <h1 id="editLoyaltyCardDetailPopup-header">Loyalty Card Detail</h1>
+                    </div>
+                    <div id="message" align="center" style="color:red"></div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content align-element">
+                        <div class="ui-grid-a">
+                            <div id="cardNumberInput-container-div" class="ui-block-a" >
+                                <div data-role="fieldcontain">
+                                    <label id="label-cardNumberInput" for="cardNumberInput" class="detail-input-cardNumber">Card Number</label>
+                                    <input id="cardNumberInput" type="text" name="cardNumberInput" value="" maxlength="200"/>
+                                </div>
+                            </div>
+                            <div class="ui-block-b" id="membershipLevelSelect-container-div">
+                                <div data-role="fieldcontain">
+                                    <label id="label-membership-level-select-list" class="select" for="membership-level-select-list">Membership Level</label>
+                                    <select name="membership-level-select-list" id="membership-level-select-list">
+                                        <option value='-1' class="select-list-option-value-select-one">Please select one</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="collapsible" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+                            <h3><div class="detail-input-issuedTo no-br">Card Holder</div><div id="lc-customer-name-div" class="no-br"></div></h3>
+                            <div>
+                                <div class="ui-grid-a">
+                                    <div id="customer-select-div" class="ui-block-a">
+                                        <div  data-role="fieldcontain">
+                                            <label id="label-searchSelectCustomerInput" for="searchSelectCustomerInput" class="no-br">Select from existing customers</label>
+                                            <input id="searchSelectCustomerInput" type="text" name="searchSelectCustomerInput" value="" data-wrapper-class="no-br lc-customer-select-div"/>
+                                        </div>
+                                    </div>
+                                    <div id="customer-add-remove-div" class="ui-block-b">
+                                        <div data-role="fieldcontain">
+                                            <div data-role="controlgroup" data-type="horizontal" data-mini="true" class="center-div" >
+                                                <a href="javascript:loyaltyCardObj.addNewCustomer();" data-mini="true" data-role="button" data-rel="popup" data-position-to="window" data-icon="plus" data-iconpos="notext">New Customer</a>
+                                                <a href="javascript:loyaltyCardObj.clearSelectedCustomer();" data-mini="true" data-role="button" data-rel="popup" data-position-to="window" data-icon="delete" data-iconpos="notext">Clear Customer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-firstNameInput" for="firstNameInput" class="detail-input-firstName">First Name</label>
+                                            <input id="firstNameInput" type="text" name="firstNameInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-lastNameInput" for="lastNameInput" class="detail-input-lastName">Last Name</label>
+                                            <input id="lastNameInput" type="text" name="lastNameInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-c" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-prefixInput" for="prefixInput" class="detail-input-prefix">Prefix</label>
+                                            <input id="prefixInput" type="text" name="prefixInput" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-address1Input" for="address1Input" class="detail-input-address1">Address 1</label>
+                                            <input id="address1Input" type="text" name="address1Input" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-address2Input" for="address2Input" class="detail-input-address2">Address 2</label>
+                                            <input id="address2Input" type="text" name="address2Input" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-cityInput" for="cityInput" class="detail-input-city">City</label>
+                                            <input id="cityInput" type="text" name="cityInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-stateInput" for="stateInput" class="detail-input-state">State</label>
+                                            <input id="stateInput" type="text" name="emailInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-c" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-zipcodeInput" for="zipcodeInput" class="detail-input-zipcode">ZIP code</label>
+                                            <input id="zipcodeInput" type="text" name="zipcodeInput" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-phoneInput" for="phoneInput" class="detail-input-phone">Phone</label>
+                                            <input id="phoneInput" type="text" name="phoneInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-emailInput" for="emailInput" class="detail-input-email">Email</label>
+                                            <input id="emailInput" type="text" name="emailInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-c" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-birthdayInput" for="birthdayInput" class="detail-input-birthday">Birthday</label>
+                                            <input id="birthdayInput" type="date" name="birthdayInput" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-facebookInput" for="facebookInput" class="detail-input-facebook">Facebook</label>
+                                            <input id="facebookInput" type="text" name="facebookInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-b" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-wechatInput" for="wechatInput" class="detail-input-wechat">Wechat</label>
+                                            <input id="wechatInput" type="text" name="wechatInput" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-block-c" >
+                                        <div data-role="fieldcontain">
+                                            <label id="label-twitterInput" for="twitterInput" class="detail-input-twitter">Twitter</label>
+                                            <input id="twitterInput" type="text" name="twitterInput" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-role="fieldcontain">
+                                    <label id="label-descriptionInput" for="descriptionInput" class="detail-input-description">Description</label>
+                                    <textarea id="descriptionInput" name="descriptionInput" value=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a" >
+                                <div data-role="fieldcontain">
+                                    <label id="label-expireDatePicker" for="expireDatePicker" class="detail-input-expireDate">Expire Date</label>
+                                    <input id="expireDatePicker" type="date" name="expireDatePicker" value=""/>
+                                </div>
+                            </div>
+                            <div id="balanceInput-container-div" class="ui-block-b" >
+                                <div data-role="fieldcontain">
+                                    <label id="label-balanceInput" for="balanceInput" class="detail-input-balance">Balance</label>
+                                    <input id="balanceInput" type="number" pattern="^\d+(\.|\,)\d{2}$" name="balanceInput" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-grid-a">
+                            <div id="pointsInput-container-div" class="ui-block-a" >
+                                <div data-role="fieldcontain">
+                                    <label id="label-pointsInput" for="pointsInput">Points</label>
+                                    <input id="pointsInput" type="number" name="pointsInput" value=""/>
+                                </div>
+
+                            </div>
+                            <div id="allTimePointsInput-container-div" class="ui-block-b" >
+                                <div data-role="fieldcontain">
+                                    <label id="label-allTimePointsInput" for="allTimePointsInput">All Time Points</label>
+                                    <input id="allTimePointsInput" type="number" name="allTimePointsInput" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <fieldset class="ui-grid-a">
+                            <div class="ui-block-a"><div class="my-button-div"><button id="create-onsave" type="submit" class="btn-save" onclick="loyaltyCardObj.save();" data-theme="b">Save</button></div></div>
+                            <div class="ui-block-b"><div class="my-button-div"><button id="create-oncancel" type="submit" class="btn-cancel" onclick="loyaltyCardObj.refreshWithoutChanges();" data-theme="a">Cancel</button></div></div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div id="membershipLevelTab">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a my-div-width" id="membershipLevelSelectLayoutDiv">
+                        <div id="membershipLevelSelectContentDiv" class="my-select-menu">
+                            <table class="tableone">
+                                <caption id="table-caption-membershipLevel">Membership Levels</caption>
+                                <thead>
+                                <tr>
+                                    <th class="th1" scope="col"></th>
+                                    <th class="th2" scope="col"><br></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="add-new-button-centered-div"><button class="btn-new-entry" onclick="javascript:membershipLevelObj.newEntry();">New</button></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="innerb">
+                                            <table id="membershipLevelsTable" class="tabletwo">
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ui-block-b my-div-width">
+                        <div id="membershipLevelDetailContentDiv" class="my-detail-panel">
+                            <input id="curMembershipLevelId" type="hidden">
+                            <div data-role="fieldcontain">
+                                <label id="label-membershipLevelName" for="membershipLevelName" class="detail-input-name">Name</label>
+                                <input id="membershipLevelName" value="" type="text"/>
+                            </div>
+                            <div data-role="fieldcontain" id="discountDropdownDiv">
+                                <label id="label-discount-select-list" for="discount-select-list" class="detail-input-discount">Discount</label>
+                                <select name="discount-select-list" id="discount-select-list" class="styled-select">
+                                    <option value='-1' class="select-list-option-value-select-one">Please select one</option>
+                                </select>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-minPointsThreshold" for="minPointsThreshold">Min Points Threshold</label>
+                                <input id="minPointsThreshold" value="" type="number"/>
+                            </div>
+                            <div data-role="fieldcontain">
+                                <label id="label-membershipLevelDescription" for="membershipLevelDescription" class="detail-input-description">Description</label>
+                                <textarea id="membershipLevelDescription" value=""></textarea>
+                            </div>
+                            <div class="my-top-margin-button-div">
+                                <button data-theme="a" id="btnSaveMembershipLevel" class="btn-save" type="button" onclick="javascript:membershipLevelObj.saveElement();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
