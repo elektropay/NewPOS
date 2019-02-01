@@ -65,7 +65,7 @@ class App extends React.Component {
               }
               </Breadcrumb>
               <div className="iframeCon">
-                <iframe src="./oldPages/default.html" id="mainFrame"></iframe>
+                <iframe name="mainFrame" title="mainFrame" src="./oldPages/default.html" id="mainFrame"></iframe>
               </div>
             </Content>
           </Layout>

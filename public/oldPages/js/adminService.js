@@ -10,7 +10,49 @@
         e.exports = function (e) { return null != e && (n(e) || r(e) || !!e._isBuffer) }
     }, function (e, t, n) { "use strict"; function r(e) { this.defaults = e, this.interceptors = { request: new s, response: new s } } var o = n(6), i = n(2), s = n(17), u = n(18); r.prototype.request = function (e) { "string" == typeof e && (e = i.merge({ url: arguments[0] }, arguments[1])), e = i.merge(o, { method: "get" }, this.defaults, e), e.method = e.method.toLowerCase(); var t = [u, void 0], n = Promise.resolve(e); for (this.interceptors.request.forEach(function (e) { t.unshift(e.fulfilled, e.rejected) }), this.interceptors.response.forEach(function (e) { t.push(e.fulfilled, e.rejected) }); t.length;)n = n.then(t.shift(), t.shift()); return n }, i.forEach(["delete", "get", "head", "options"], function (e) { r.prototype[e] = function (t, n) { return this.request(i.merge(n || {}, { method: e, url: t })) } }), i.forEach(["post", "put", "patch"], function (e) { r.prototype[e] = function (t, n, r) { return this.request(i.merge(r || {}, { method: e, url: t, data: n })) } }), e.exports = r }, function (e, t, n) { "use strict"; function r(e, t) { !i.isUndefined(e) && i.isUndefined(e["Content-Type"]) && (e["Content-Type"] = t) } function o() { var e; return "undefined" != typeof XMLHttpRequest ? e = n(8) : "undefined" != typeof process && (e = n(8)), e } var i = n(2), s = n(7), u = { "Content-Type": "application/x-www-form-urlencoded" }, a = { adapter: o(), transformRequest: [function (e, t) { return s(t, "Content-Type"), i.isFormData(e) || i.isArrayBuffer(e) || i.isBuffer(e) || i.isStream(e) || i.isFile(e) || i.isBlob(e) ? e : i.isArrayBufferView(e) ? e.buffer : i.isURLSearchParams(e) ? (r(t, "application/x-www-form-urlencoded;charset=utf-8"), e.toString()) : i.isObject(e) ? (r(t, "application/json;charset=utf-8"), JSON.stringify(e)) : e }], transformResponse: [function (e) { if ("string" == typeof e) try { e = JSON.parse(e) } catch (e) { } return e }], timeout: 0, xsrfCookieName: "XSRF-TOKEN", xsrfHeaderName: "X-XSRF-TOKEN", maxContentLength: -1, validateStatus: function (e) { return e >= 200 && e < 300 } }; a.headers = { common: { Accept: "application/json, text/plain, */*" } }, i.forEach(["delete", "get", "head"], function (e) { a.headers[e] = {} }), i.forEach(["post", "put", "patch"], function (e) { a.headers[e] = i.merge(u) }), e.exports = a }, function (e, t, n) { "use strict"; var r = n(2); e.exports = function (e, t) { r.forEach(e, function (n, r) { r !== t && r.toUpperCase() === t.toUpperCase() && (e[t] = n, delete e[r]) }) } }, function (e, t, n) { "use strict"; var r = n(2), o = n(9), i = n(12), s = n(13), u = n(14), a = n(10), c = "undefined" != typeof window && window.btoa && window.btoa.bind(window) || n(15); e.exports = function (e) { return new Promise(function (t, f) { var p = e.data, d = e.headers; r.isFormData(p) && delete d["Content-Type"]; var l = new XMLHttpRequest, h = "onreadystatechange", m = !1; if ("undefined" == typeof window || !window.XDomainRequest || "withCredentials" in l || u(e.url) || (l = new window.XDomainRequest, h = "onload", m = !0, l.onprogress = function () { }, l.ontimeout = function () { }), e.auth) { var y = e.auth.username || "", w = e.auth.password || ""; d.Authorization = "Basic " + c(y + ":" + w) } if (l.open(e.method.toUpperCase(), i(e.url, e.params, e.paramsSerializer), !0), l.timeout = e.timeout, l[h] = function () { if (l && (4 === l.readyState || m) && (0 !== l.status || l.responseURL && 0 === l.responseURL.indexOf("file:"))) { var n = "getAllResponseHeaders" in l ? s(l.getAllResponseHeaders()) : null, r = e.responseType && "text" !== e.responseType ? l.response : l.responseText, i = { data: r, status: 1223 === l.status ? 204 : l.status, statusText: 1223 === l.status ? "No Content" : l.statusText, headers: n, config: e, request: l }; o(t, f, i), l = null } }, l.onerror = function () { f(a("Network Error", e, null, l)), l = null }, l.ontimeout = function () { f(a("timeout of " + e.timeout + "ms exceeded", e, "ECONNABORTED", l)), l = null }, r.isStandardBrowserEnv()) { var g = n(16), v = (e.withCredentials || u(e.url)) && e.xsrfCookieName ? g.read(e.xsrfCookieName) : void 0; v && (d[e.xsrfHeaderName] = v) } if ("setRequestHeader" in l && r.forEach(d, function (e, t) { "undefined" == typeof p && "content-type" === t.toLowerCase() ? delete d[t] : l.setRequestHeader(t, e) }), e.withCredentials && (l.withCredentials = !0), e.responseType) try { l.responseType = e.responseType } catch (t) { if ("json" !== e.responseType) throw t } "function" == typeof e.onDownloadProgress && l.addEventListener("progress", e.onDownloadProgress), "function" == typeof e.onUploadProgress && l.upload && l.upload.addEventListener("progress", e.onUploadProgress), e.cancelToken && e.cancelToken.promise.then(function (e) { l && (l.abort(), f(e), l = null) }), void 0 === p && (p = null), l.send(p) }) } }, function (e, t, n) { "use strict"; var r = n(10); e.exports = function (e, t, n) { var o = n.config.validateStatus; n.status && o && !o(n.status) ? t(r("Request failed with status code " + n.status, n.config, null, n.request, n)) : e(n) } }, function (e, t, n) { "use strict"; var r = n(11); e.exports = function (e, t, n, o, i) { var s = new Error(e); return r(s, t, n, o, i) } }, function (e, t) { "use strict"; e.exports = function (e, t, n, r, o) { return e.config = t, n && (e.code = n), e.request = r, e.response = o, e } }, function (e, t, n) { "use strict"; function r(e) { return encodeURIComponent(e).replace(/%40/gi, "@").replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]") } var o = n(2); e.exports = function (e, t, n) { if (!t) return e; var i; if (n) i = n(t); else if (o.isURLSearchParams(t)) i = t.toString(); else { var s = []; o.forEach(t, function (e, t) { null !== e && "undefined" != typeof e && (o.isArray(e) ? t += "[]" : e = [e], o.forEach(e, function (e) { o.isDate(e) ? e = e.toISOString() : o.isObject(e) && (e = JSON.stringify(e)), s.push(r(t) + "=" + r(e)) })) }), i = s.join("&") } return i && (e += (e.indexOf("?") === -1 ? "?" : "&") + i), e } }, function (e, t, n) { "use strict"; var r = n(2), o = ["age", "authorization", "content-length", "content-type", "etag", "expires", "from", "host", "if-modified-since", "if-unmodified-since", "last-modified", "location", "max-forwards", "proxy-authorization", "referer", "retry-after", "user-agent"]; e.exports = function (e) { var t, n, i, s = {}; return e ? (r.forEach(e.split("\n"), function (e) { if (i = e.indexOf(":"), t = r.trim(e.substr(0, i)).toLowerCase(), n = r.trim(e.substr(i + 1)), t) { if (s[t] && o.indexOf(t) >= 0) return; "set-cookie" === t ? s[t] = (s[t] ? s[t] : []).concat([n]) : s[t] = s[t] ? s[t] + ", " + n : n } }), s) : s } }, function (e, t, n) { "use strict"; var r = n(2); e.exports = r.isStandardBrowserEnv() ? function () { function e(e) { var t = e; return n && (o.setAttribute("href", t), t = o.href), o.setAttribute("href", t), { href: o.href, protocol: o.protocol ? o.protocol.replace(/:$/, "") : "", host: o.host, search: o.search ? o.search.replace(/^\?/, "") : "", hash: o.hash ? o.hash.replace(/^#/, "") : "", hostname: o.hostname, port: o.port, pathname: "/" === o.pathname.charAt(0) ? o.pathname : "/" + o.pathname } } var t, n = /(msie|trident)/i.test(navigator.userAgent), o = document.createElement("a"); return t = e(window.location.href), function (n) { var o = r.isString(n) ? e(n) : n; return o.protocol === t.protocol && o.host === t.host } }() : function () { return function () { return !0 } }() }, function (e, t) { "use strict"; function n() { this.message = "String contains an invalid character" } function r(e) { for (var t, r, i = String(e), s = "", u = 0, a = o; i.charAt(0 | u) || (a = "=", u % 1); s += a.charAt(63 & t >> 8 - u % 1 * 8)) { if (r = i.charCodeAt(u += .75), r > 255) throw new n; t = t << 8 | r } return s } var o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="; n.prototype = new Error, n.prototype.code = 5, n.prototype.name = "InvalidCharacterError", e.exports = r }, function (e, t, n) { "use strict"; var r = n(2); e.exports = r.isStandardBrowserEnv() ? function () { return { write: function (e, t, n, o, i, s) { var u = []; u.push(e + "=" + encodeURIComponent(t)), r.isNumber(n) && u.push("expires=" + new Date(n).toGMTString()), r.isString(o) && u.push("path=" + o), r.isString(i) && u.push("domain=" + i), s === !0 && u.push("secure"), document.cookie = u.join("; ") }, read: function (e) { var t = document.cookie.match(new RegExp("(^|;\\s*)(" + e + ")=([^;]*)")); return t ? decodeURIComponent(t[3]) : null }, remove: function (e) { this.write(e, "", Date.now() - 864e5) } } }() : function () { return { write: function () { }, read: function () { return null }, remove: function () { } } }() }, function (e, t, n) { "use strict"; function r() { this.handlers = [] } var o = n(2); r.prototype.use = function (e, t) { return this.handlers.push({ fulfilled: e, rejected: t }), this.handlers.length - 1 }, r.prototype.eject = function (e) { this.handlers[e] && (this.handlers[e] = null) }, r.prototype.forEach = function (e) { o.forEach(this.handlers, function (t) { null !== t && e(t) }) }, e.exports = r }, function (e, t, n) { "use strict"; function r(e) { e.cancelToken && e.cancelToken.throwIfRequested() } var o = n(2), i = n(19), s = n(20), u = n(6), a = n(21), c = n(22); e.exports = function (e) { r(e), e.baseURL && !a(e.url) && (e.url = c(e.baseURL, e.url)), e.headers = e.headers || {}, e.data = i(e.data, e.headers, e.transformRequest), e.headers = o.merge(e.headers.common || {}, e.headers[e.method] || {}, e.headers || {}), o.forEach(["delete", "get", "head", "post", "put", "patch", "common"], function (t) { delete e.headers[t] }); var t = e.adapter || u.adapter; return t(e).then(function (t) { return r(e), t.data = i(t.data, t.headers, e.transformResponse), t }, function (t) { return s(t) || (r(e), t && t.response && (t.response.data = i(t.response.data, t.response.headers, e.transformResponse))), Promise.reject(t) }) } }, function (e, t, n) { "use strict"; var r = n(2); e.exports = function (e, t, n) { return r.forEach(n, function (n) { e = n(e, t) }), e } }, function (e, t) { "use strict"; e.exports = function (e) { return !(!e || !e.__CANCEL__) } }, function (e, t) { "use strict"; e.exports = function (e) { return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(e) } }, function (e, t) { "use strict"; e.exports = function (e, t) { return t ? e.replace(/\/+$/, "") + "/" + t.replace(/^\/+/, "") : e } }, function (e, t) { "use strict"; function n(e) { this.message = e } n.prototype.toString = function () { return "Cancel" + (this.message ? ": " + this.message : "") }, n.prototype.__CANCEL__ = !0, e.exports = n }, function (e, t, n) { "use strict"; function r(e) { if ("function" != typeof e) throw new TypeError("executor must be a function."); var t; this.promise = new Promise(function (e) { t = e }); var n = this; e(function (e) { n.reason || (n.reason = new o(e), t(n.reason)) }) } var o = n(23); r.prototype.throwIfRequested = function () { if (this.reason) throw this.reason }, r.source = function () { var e, t = new r(function (t) { e = t }); return { token: t, cancel: e } }, e.exports = r }, function (e, t) { "use strict"; e.exports = function (e) { return function (t) { return e.apply(null, t) } } }])
 });
-//# sourceMappingURL=axios.min.map
+
+/** 请求前，从xml中提取ajax信息 */
+function transRequest(xml) {
+    var json = {
+        url: ""
+    }
+    var xmlString = xml.substring(xml.indexOf("<soapenv:Body>") + 14, xml.indexOf("</soapenv:Body>"))
+    if (xmlString[xmlString.indexOf(">") - 1] === "/") {
+        json.url = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf("/>"));
+        xmlString = "";
+    } else {
+        json.url = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf(">"));
+        xmlString = xmlString.substring(xmlString.indexOf(">") + 1, xmlString.lastIndexOf("</app"));
+    }
+
+    var xmlArray = [];
+    if (xmlString.indexOf("app") > 0) {
+        xmlArray = xmlString.split("<app:");
+        if (xmlArray.length > 1) {
+            json.param = {};
+            for (var i = 1; i < xmlArray.length; i++) {
+                var value = xmlArray[i].substring(xmlArray[i].indexOf(">") + 1, xmlArray[i].indexOf("</app"));
+                if (value === "true") value = true;
+                if (value == "false") value = false;
+                json.param[xmlArray[i].substring(0, xmlArray[i].indexOf(">"))] = value;
+            }
+        }
+    }
+    return json;
+}
+/** 转换返回值的格式
+ * obj:{code:0,info:"",data:{...}}
+ * =>
+ * resp:{result:{successful:"true"},...data}
+*/
+function transResponse(obj) {
+    var resp = {
+        result: {
+            successful: obj.code === 0 ? "true" : "false"
+        }
+    };
+    return Object.assign(resp, obj.data);
+}
 
 var serverUrl = getServerUrl() + "/kpos/ws/kposService";
 if (typeof XML != "undefined") {
@@ -21,20 +63,19 @@ function getServerUrl() {
     var thisurl = window.location.href.split('/');
     var suburl = '';
     var ishttps = false;
-    for(var i in thisurl)
-    {
-        if(thisurl[i] == 'http:')continue;
-        else if(thisurl[i] == 'https:'){ishttps = true;continue;}
-        else if(thisurl[i] == '')continue;
-        else{return(ishttps?"https://":"http://")+thisurl[i]+suburl;}
+    for (var i in thisurl) {
+        if (thisurl[i] == 'http:') continue;
+        else if (thisurl[i] == 'https:') { ishttps = true; continue; }
+        else if (thisurl[i] == '') continue;
+        else { return (ishttps ? "https://" : "http://") + thisurl[i] + suburl; }
     }
 }
 
-function obj2str(o){
+function obj2str(o) {
     return JSON.stringify(o);
 }
-function strToObj(json){
-    if(json != undefined && json != null && json != "") {
+function strToObj(json) {
+    if (json != undefined && json != null && json != "") {
         return JSON.parse(json);
     }
 }
@@ -45,7 +86,6 @@ var soapXMLBegin = '<?xml version="1.0" encoding="UTF-8"?>' +
 var soapXMLEnd = '</soapenv:Body></soapenv:Envelope>';
 
 function callWebService(soapType, responseHandler, args) {
-    /** yang **/
     if (!admin.hasAdminAccess()) {
         disablePage();
         return;
@@ -53,56 +93,59 @@ function callWebService(soapType, responseHandler, args) {
     var soapXML = soapType.getXML();
     if (args && args.$http) {
         args.$http.post(serverUrl, soapXML).then(
-            function(response) {
+            function (response) {
                 var data = response.data;
                 var start = data.indexOf("<soap:Body>");
                 var end = data.indexOf("</soap:Body>");
-                data = data.substring(start+11, end);
+                data = data.substring(start + 11, end);
 
                 var myJsonObject = xmlObjTree.parseXML(data);
                 responseHandler(myJsonObject, args);
             },
-            function(response) {
+            function (response) {
                 //TODO. Better http level error handling
                 console.log("HTTP Error: " + response);
             });
     } else {
         var parser;
         var xmlhttp = null;
-        if(window.XMLHttpRequest) {
+        if (window.XMLHttpRequest) {
             xmlhttp = new XMLHttpRequest();
         } else {
             // Internet Explorer
-            try
-            {
+            try {
                 xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
             }
-            catch (e)
-            {
+            catch (e) {
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
         }
         var async = args && (typeof args.isAsync == "boolean") ? args.isAsync : true;
         xmlhttp.open("POST", serverUrl, async);
-        var currentUser = biscuit ? biscuit.u(): null;
+        var currentUser = biscuit ? biscuit.u() : null;
         if (util.isValidVariable(currentUser) && biscuitHelper) {
             xmlhttp.setRequestHeader('Merchant-ID', biscuitHelper.getMerchantInfo(currentUser).merchantIds);
         } else {
             console.log('biscuit.js or util.js is not properly loaded!!!');
         }
-        xmlhttp.onreadystatechange = function() {
+        xmlhttp.onreadystatechange = function () {responseHandler
             if (xmlhttp.readyState == 4) {
                 var responseText = xmlhttp.responseText;
 
                 var start = responseText.indexOf("<soap:Body>");
                 var end = responseText.indexOf("</soap:Body>");
-                responseText = responseText.substring(start+11, end);
+                responseText = responseText.substring(start + 11, end);
 
                 var myJsonObject = xmlObjTree.parseXML(responseText);
                 responseHandler(myJsonObject, args);
             }
         }
         xmlhttp.send(soapXML);
+
+        // var requestObj = transRequest(soapXML)
+        // axios.post(requestObj.url,requestObj.data).then(function (response) {
+        //     responseHandler(transResponse(response))
+        // })
     }
 }
 
@@ -122,7 +165,7 @@ function Printer(id, name, ip, realName, languageSetting, realNameSecondLanguage
     this.kitchenName = kitchenName;
     this.tag = "<app:printer>";
     this.endTag = "</app:printer>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
         if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
@@ -130,22 +173,22 @@ function Printer(id, name, ip, realName, languageSetting, realNameSecondLanguage
         if (this.myName != null && this.myName != "") {
             xml += "<app:name>" + this.myName + "</app:name>";
         }
-        if(this.myIP != null && this.myIP != "") {
+        if (this.myIP != null && this.myIP != "") {
             xml += "<app:ipAddr>" + this.myIP + "</app:ipAddr>";
         }
-        if(this.realName != null && this.realName != "") {
+        if (this.realName != null && this.realName != "") {
             xml += "<app:realName>" + this.realName + "</app:realName>";
         }
-        if(this.languageSetting != null && this.languageSetting != "") {
+        if (this.languageSetting != null && this.languageSetting != "") {
             xml += "<app:languageSetting>" + this.languageSetting + "</app:languageSetting>";
         }
-        if(this.realNameSecondLanguage != null && this.realNameSecondLanguage != "") {
+        if (this.realNameSecondLanguage != null && this.realNameSecondLanguage != "") {
             xml += "<app:nameSecondLanguage>" + this.realNameSecondLanguage + "</app:nameSecondLanguage>";
         }
-        if(this.secondLanguageID != null && this.secondLanguageID != "") {
+        if (this.secondLanguageID != null && this.secondLanguageID != "") {
             xml += "<app:secondLanguageID>" + this.secondLanguageID + "</app:secondLanguageID>";
         }
-        if(this.thirdLanguageID != null && this.thirdLanguageID != "") {
+        if (this.thirdLanguageID != null && this.thirdLanguageID != "") {
             xml += "<app:thirdLanguageID>" + this.thirdLanguageID + "</app:thirdLanguageID>";
         }
         if (util.isValidVariable(this.backupPrinterId)) {
@@ -172,7 +215,7 @@ function AddPrinterType(name, ipaddr, realname, languagesetting, realnamesecondl
     this.myPrinter = new Printer("", name, ipaddr, realname, languagesetting, realnamesecondlanguage, secondlanguageid, thirdlanguageid, backupPrinterId, printOneItemPerTicket, printerType, model, kitchenName);
     this.tag = "<app:CreatePrinterType>";
     this.endTag = "</app:CreatePrinterType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myPrinter.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -182,7 +225,7 @@ function AddPrinterType(name, ipaddr, realname, languagesetting, realnamesecondl
 
 function ListPrintersType() {
     this.tag = "<app:ListPrintersType/>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag + soapXMLEnd;
         return xml;
     };
@@ -190,7 +233,7 @@ function ListPrintersType() {
 
 function ListAvailablePrintersType() {
     this.tag = "<app:ListAvailablePrintersType/>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag + soapXMLEnd;
         return xml;
     };
@@ -200,7 +243,7 @@ function UpdatePrinterType(id, name, ip, realName, languageSetting, nameSecondLa
     this.myPrinter = new Printer(id, name, ip, realName, languageSetting, nameSecondLanguage, secondLanguageId, thirdLanguageId, backupPrinterId, printOneItemPerTicket, printerType, model, kitchenName);
     this.tag = "<app:UpdatePrinterType>";
     this.endTag = "</app:UpdatePrinterType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myPrinter.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -211,7 +254,7 @@ function UpdatePrinterType(id, name, ip, realName, languageSetting, nameSecondLa
 function ListPropertiesType(target) {
     this.tag = "<app:ListPropertiesType>";
     this.endTag = "</app:ListPropertiesType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + "<app:target>" + target + "</app:target>" + this.endTag;
         xml += soapXMLEnd;
@@ -222,9 +265,9 @@ function ListPropertiesType(target) {
 function DeletePrinterType(id) {
     this.tag = "<app:DeletePrinterType>";
     this.endTag = "</app:DeletePrinterType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
-        xml += this.tag + "<app:id>"+id+"</app:id>" + this.endTag;
+        xml += this.tag + "<app:id>" + id + "</app:id>" + this.endTag;
         xml += soapXMLEnd;
         return xml;
     };
@@ -238,9 +281,9 @@ function MenuGroupType(aId, aName, aDescription, eMenuDisplayTemplate, tipOutPer
     this.tipOutPercentage = tipOutPercentage;
     this.tag = "<app:catGroup>";
     this.endTag = "</app:catGroup>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         xml += "<app:name>" + this.myName + "</app:name>";
@@ -261,7 +304,7 @@ function CreateMenuGroupType(name, description, eMenuDisplayTemplate, tipOutPerc
     this.myGroup = new MenuGroupType(null, name, description, eMenuDisplayTemplate, tipOutPercentage, aHours);
     this.tag = "<app:CreateCategoryGroupType>";
     this.endTag = "</app:CreateCategoryGroupType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myGroup.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -272,7 +315,7 @@ function UpdateMenuGroupType(id, name, description, eMenuDisplayTemplate, tipOut
     this.myMenuGroup = new MenuGroupType(id, name, description, eMenuDisplayTemplate, tipOutPercentage, hours);
     this.tag = "<app:UpdateCategoryGroupType>";
     this.endTag = "</app:UpdateCategoryGroupType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myMenuGroup.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -280,7 +323,7 @@ function UpdateMenuGroupType(id, name, description, eMenuDisplayTemplate, tipOut
     };
 }
 function ListCategoryGroupType(id) {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListCategoryGroupType></app:ListCategoryGroupType>";
         xml += soapXMLEnd;
@@ -289,9 +332,9 @@ function ListCategoryGroupType(id) {
 }
 function DeleteMenuGroupType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
-        xml += "<app:DeleteCategoryGroupType><app:groupId>"+this.myId+"</app:groupId></app:DeleteCategoryGroupType>";
+        xml += "<app:DeleteCategoryGroupType><app:groupId>" + this.myId + "</app:groupId></app:DeleteCategoryGroupType>";
         xml += soapXMLEnd;
         return xml;
     }
@@ -322,22 +365,22 @@ function Category(id, name, notes, thumb, printerIds, groupId, reportGroupId, re
     this.courseNumber = courseNumber;
     this.tag = "<app:category>";
     this.endTag = "</app:category>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         if (util.isValidVariable(this.myName)) {
             xml += "<app:name>" + this.myName + "</app:name>";
         }
-        if(typeof this.myNotes != "undefined" && this.myNotes != null) {
+        if (typeof this.myNotes != "undefined" && this.myNotes != null) {
             xml += "<app:notes>" + this.myNotes + "</app:notes>";
         }
-        if(this.myThumb != null && this.myThumb != "") {
+        if (this.myThumb != null && this.myThumb != "") {
             xml += "<app:thumbPath>" + this.myThumb + "</app:thumbPath>";
         }
-        if(this.myPrinterIds != null) {
-            for(var i = 0; i < this.myPrinterIds.length; i++){
+        if (this.myPrinterIds != null) {
+            for (var i = 0; i < this.myPrinterIds.length; i++) {
                 xml += "<app:printerIds>" + this.myPrinterIds[i] + "</app:printerIds>";
             }
         }
@@ -393,8 +436,8 @@ function Category(id, name, notes, thumb, printerIds, groupId, reportGroupId, re
             }
         }
 
-        if(this.myTaxIds != null) {
-            for(var j = 0; j < this.myTaxIds.length; j++) {
+        if (this.myTaxIds != null) {
+            for (var j = 0; j < this.myTaxIds.length; j++) {
                 xml += "<app:taxIds>" + this.myTaxIds[j] + "</app:taxIds>";
             }
         }
@@ -406,7 +449,7 @@ function CreateCategoryType(name, notes, thumb, printerIds, groupId, reportGroup
     this.myCategory = new Category(null, name, notes, thumb, printerIds, groupId, reportGroupId, readOnly, doNotDisplayForEMenu, requireCategory, applicableToOrderDiscount, discountAllowed, onlineOrderGroupId, taxIds, type, shortName, propertyList, displayPriority, color, alternateName, onlineOrderDisplayName, courseNumber);
     this.tag = "<app:CreateCategoryType>";
     this.endTag = "</app:CreateCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myCategory.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -419,7 +462,7 @@ function UpdateCategoriesType(categoryList, updateDetails) {
     this.updateDetails = updateDetails;
     this.tag = "<app:UpdateCategoryType>";
     this.endTag = "</app:UpdateCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         if (util.isValidVariable(this.updateDetails)) {
             xml += "<app:updateDetails>" + this.updateDetails + "</app:updateDetails>";
@@ -436,7 +479,7 @@ function UpdateCategoryType(id, name, notes, thumb, printerIds, groupId, reportG
     this.myCategory = new Category(id, name, notes, thumb, printerIds, groupId, reportGroupId, readOnly, doNotDisplayForEMenu, requireCategory, applicableToOrderDiscount, discountAllowed, onlineOrderGroupId, taxIds, type, shortName, propertyList, displayPriority, color, alternateName, onlineOrderDisplayName, courseNumber);
     this.tag = "<app:UpdateCategoryType>";
     this.endTag = "</app:UpdateCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myCategory.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -446,7 +489,7 @@ function UpdateCategoryType(id, name, notes, thumb, printerIds, groupId, reportG
 
 function ListCategoriesType() {
     this.tag = "<app:ListCategoryType/>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag + soapXMLEnd;
         return xml;
     };
@@ -456,7 +499,7 @@ function DeleteCategoryType(ids) {
     this.ids = ids;
     this.tag = "<app:DeleteCategoryType>";
     this.endTag = "</app:DeleteCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < ids.length; i++) {
             xml += "<app:categoryId>" + ids[i] + "</app:categoryId>";
@@ -471,9 +514,9 @@ function SaleItemPriceType(aId, aPrice, aType, aSizeId, aSize) {
     this.type = aType;
     this.sizeId = aSizeId;
     this.size = aSize;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
-        if(this.id && this.id != null) {
+        if (this.id && this.id != null) {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += "<app:price>" + this.price + "</app:price>";
@@ -491,7 +534,7 @@ function ItemPropertyType(name, value) {
     this.value = value;
     this.tag = "<app:properties>";
     this.endTag = "</app:properties>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
         if (this.name != null && this.name !== "") {
             xml += "<app:name>" + this.name + "</app:name>";
@@ -505,7 +548,7 @@ function ItemPropertyType(name, value) {
 }
 
 function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb, printerIds, allowModifierActions, sendToKitchenRequired, forComboOnly, marketPriceItem, giftCardItem, price, isTaxable, itemPrice, propertyList, isOffMenu, hhRate,
-                  taxRate, allowedHH, comboType, comboItem, color, alternateName, onlineOrderDisplayName, doNotDisplayForOnlineOrder, baseWeight, itemNumber, defaultSaleItemSizeId, ktvItem, outOfStock, attributeList) {
+    taxRate, allowedHH, comboType, comboItem, color, alternateName, onlineOrderDisplayName, doNotDisplayForOnlineOrder, baseWeight, itemNumber, defaultSaleItemSizeId, ktvItem, outOfStock, attributeList) {
     this.myId = id;
     this.myCatId = catId;
     this.myReportGroupId = reportGroupId;
@@ -541,12 +584,12 @@ function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb,
     this.attributeList = attributeList;
     this.tag = "<app:saleItem>";
     this.endTag = "</app:saleItem>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
-        if(this.myCatId != null && this.myCatId !== "") {
+        if (this.myCatId != null && this.myCatId !== "") {
             xml += "<app:catId>" + this.myCatId + "</app:catId>";
         }
         if (this.myReportGroupId != null && this.myReportGroupId !== "") {
@@ -558,21 +601,21 @@ function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb,
         if (typeof this.myDescription != "undefined" && this.myDescription != null) {
             xml += "<app:description>" + this.myDescription + "</app:description>";
         }
-        if(typeof this.myShortName != "undefined" && this.myShortName != null) {
+        if (typeof this.myShortName != "undefined" && this.myShortName != null) {
             xml += "<app:shortName>" + this.myShortName + "</app:shortName>";
         }
-        if(this.myPrice != null && this.myPrice != "") {
+        if (this.myPrice != null && this.myPrice != "") {
             xml += "<app:price>" + this.myPrice + "</app:price>";
         }
-        if(this.myItemPrice != null) {
-            for(var i = 0; i < this.myItemPrice.length; i++) {
+        if (this.myItemPrice != null) {
+            for (var i = 0; i < this.myItemPrice.length; i++) {
                 xml += "<app:itemPrice>" + this.myItemPrice[i].getXML() + "</app:itemPrice>";
             }
         }
         if (util.isValidBooleanVariable(this.myTaxable)) {
             xml += "<app:taxable>" + this.myTaxable + "</app:taxable>";
         }
-        if(this.myTaxRate!=null && this.myTaxRate!='') {
+        if (this.myTaxRate != null && this.myTaxRate != '') {
             xml += "<app:taxRate>" + this.myTaxRate + "</app:taxRate>";
         }
 
@@ -604,7 +647,7 @@ function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb,
             xml += "<app:hhRate>" + this.myHHRate + "</app:hhRate>";
         }
 
-        if(this.myThumb != null && this.myThumb != "") {
+        if (this.myThumb != null && this.myThumb != "") {
             xml += "<app:thumbPath>" + this.myThumb + "</app:thumbPath>";
         }
 
@@ -624,15 +667,15 @@ function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb,
         if (util.isValidVariable(this.baseWeight)) {
             xml += "<app:baseWeight>" + this.baseWeight + "</app:baseWeight>";
         }
-        if(this.itemNumber != null && typeof this.itemNumber != "undefined") {
+        if (this.itemNumber != null && typeof this.itemNumber != "undefined") {
             xml += "<app:itemNumber>" + this.itemNumber + "</app:itemNumber>";
         }
         if (util.isValidVariable(this.defaultSaleItemSizeId)) {
             xml += "<app:defaultItemSizeId>" + this.defaultSaleItemSizeId + "</app:defaultItemSizeId>";
         }
 
-        if(this.myPrinterIds != null) {
-            for(var i = 0; i < this.myPrinterIds.length; i++){
+        if (this.myPrinterIds != null) {
+            for (var i = 0; i < this.myPrinterIds.length; i++) {
                 xml += "<app:printerIds>" + this.myPrinterIds[i] + "</app:printerIds>";
             }
         }
@@ -643,15 +686,15 @@ function SaleItem(id, catId, reportGroupId, name, shortName, description, thumb,
             }
         }
 
-        if(this.comboType != null && this.comboType != "") {
+        if (this.comboType != null && this.comboType != "") {
             xml += "<app:comboType>" + this.comboType + "</app:comboType>";
-            if(this.comboItem != null && this.comboItem != "") {
+            if (this.comboItem != null && this.comboItem != "") {
                 xml += "<app:comboItem>" + this.comboItem.getXML() + "</app:comboItem>";
             }
         }
 
         if (typeof this.attributeList != "undefined" && this.attributeList != null) {
-            for(var i = 0; i < this.attributeList.length; i++) {
+            for (var i = 0; i < this.attributeList.length; i++) {
                 xml += "<app:attributes>" + this.attributeList[i].getXML() + "</app:attributes>";
             }
         }
@@ -666,9 +709,9 @@ function ComboItem(id, name, fixedItem, priceAdjustable, comboSections) {
     this.fixedItem = fixedItem;
     this.priceAdjustable = priceAdjustable;
     this.myComboSections = comboSections;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         xml += "<app:name>" + this.myName + "</app:name>";
@@ -678,8 +721,8 @@ function ComboItem(id, name, fixedItem, priceAdjustable, comboSections) {
         if (util.isValidBooleanVariable(this.priceAdjustable)) {
             xml += "<app:priceAdjustable>" + this.priceAdjustable + "</app:priceAdjustable>";
         }
-        if(this.myComboSections != null && this.myComboSections != "") {
-            for (var i = 0; i < this.myComboSections.length; i++){
+        if (this.myComboSections != null && this.myComboSections != "") {
+            for (var i = 0; i < this.myComboSections.length; i++) {
                 xml += "<app:comboSections>" + this.myComboSections[i].getXML() + "</app:comboSections>";
             }
         }
@@ -694,7 +737,7 @@ function ComboSection(id, name, numOfSelectionsAllowed, saleItems) {
     this.mySaleItems = saleItems;
     //this.tag = "<app:comboItem>";
     //this.endTag = "</app:comboItem>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
         if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
@@ -703,8 +746,8 @@ function ComboSection(id, name, numOfSelectionsAllowed, saleItems) {
         if (this.myNumOfSelectionsAllowed != null && this.myNumOfSelectionsAllowed != "") {
             xml += "<app:numOfSelectionsAllowed>" + this.myNumOfSelectionsAllowed + "</app:numOfSelectionsAllowed>";
         }
-        if(this.mySaleItems != null && this.mySaleItems != "") {
-            for (var i = 0; i < this.mySaleItems.length; i++){
+        if (this.mySaleItems != null && this.mySaleItems != "") {
+            for (var i = 0; i < this.mySaleItems.length; i++) {
                 xml += "<app:saleItems>" + this.mySaleItems[i].getXML() + "</app:saleItems>";
             }
         }
@@ -716,7 +759,7 @@ function ComboSection(id, name, numOfSelectionsAllowed, saleItems) {
 function SaleItemReference(id, name, displayPriority) {
     this.myId = id;
     this.displayPriority = displayPriority;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
         xml += "<app:id>" + this.myId + "</app:id>";
         if (util.isValidVariable(this.displayPriority)) {
@@ -730,7 +773,7 @@ function CreateSaleItemsType(saleItems) {
     this.saleItems = saleItems;
     this.tag = "<app:CreateSaleItemType>";
     this.endTag = "</app:CreateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < this.saleItems.length; i++) {
             xml += this.saleItems[i].getXML();
@@ -744,7 +787,7 @@ function CreateItemType(catId, reportGroupId, name, shortName, description, thum
     this.myItem = new SaleItem(null, catId, reportGroupId, name, shortName, description, thumb, printerIds, allowModifierAction, sendToKitchenRequired, forComboOnly, marketPriceItem, giftCardItem, price, isTaxable, itemPrice, propertyList, isOffMenu, hhRate, taxRate, allowHH, false, null, color, alternateName, onlineOrderDisplayName, doNotDisplayForOnlineOrder, baseWeight, itemNumber, defaultSaleItemSizeId, ktvItem, outOfStock, attributeList);
     this.tag = "<app:CreateSaleItemType>";
     this.endTag = "</app:CreateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myItem.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -761,12 +804,12 @@ function MenuSetupUpdateItemsType(items, itemType) {
     this.updateDetails = false;
     this.tag = "<app:Update" + itemType + "Type>";
     this.endTag = "</app:Update" + itemType + "Type>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += "<app:updateDetails>" + this.updateDetails + "</app:updateDetails>";
         if (this.items != null) {
-            for(var i = 0; i < this.items.length; i++){
+            for (var i = 0; i < this.items.length; i++) {
                 xml += this.items[i].getXML();
             }
         }
@@ -784,7 +827,7 @@ function MenuSetupItemType(id, displayPriority, displayPriorityType, color, item
     this.itemType = itemType;
     this.tag = "<app:" + itemType + ">";
     this.endTag = "</app:" + itemType + ">";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
         if (this.id != null) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -805,7 +848,7 @@ function UpdateItemType(id, catId, reportGroupId, name, shortName, description, 
     this.myItem = new SaleItem(id, catId, reportGroupId, name, shortName, description, thumb, printerIds, allowModifierActions, sendToKitchenRequired, forComboOnly, marketPriceItem, giftCardItem, price, isTaxable, itemPrice, propertyList, isOffMenu, happyRate, taxRate, allowHH, false, null, color, alternateName, onlineOrderDisplayName, doNotDisplayForOnlineOrder, baseWeight, itemNumber, defaultSaleItemSizeId, ktvItem, outOfStock, null);
     this.tag = "<app:UpdateSaleItemType>";
     this.endTag = "</app:UpdateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myItem.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -819,7 +862,7 @@ function UpdateSaleItemsType(saleItemList, updateDetails, adminBatchUpdates) {
     this.adminBatchUpdates = adminBatchUpdates;
     this.tag = "<app:UpdateSaleItemType>";
     this.endTag = "</app:UpdateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         if (util.isValidVariable(this.updateDetails)) {
             xml += "<app:updateDetails>" + this.updateDetails + "</app:updateDetails>";
@@ -844,28 +887,28 @@ function ListSaleItemsForCategoryType(catId, showOffMenu, showNonCombo, fetchOpt
     this.myNameIdOnly = nameIdOnly;
     this.tag = "<app:ListSaleItemsForCategoryType>";
     this.endTag = "</app:ListSaleItemsForCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + "<app:categoryId>" + this.myCatId + "</app:categoryId>";
-        if(this.myNameIdOnly != null && (this.myNameIdOnly == true || this.myNameIdOnly == false)) {
+        if (this.myNameIdOnly != null && (this.myNameIdOnly == true || this.myNameIdOnly == false)) {
             xml += "<app:nameIdOnly>" + this.myNameIdOnly + "</app:nameIdOnly>";
         } else {
             xml += "<app:nameIdOnly>false</app:nameIdOnly>";
         }
-        if(this.myShowOffMenu != null && (this.myShowOffMenu == true || this.myShowOffMenu == false))
+        if (this.myShowOffMenu != null && (this.myShowOffMenu == true || this.myShowOffMenu == false))
             xml += "<app:showOffMenuItems>" + this.myShowOffMenu + "</app:showOffMenuItems>";
         else
             xml += "<app:showOffMenuItems>true</app:showOffMenuItems>";
-        if(this.myShowNonCombo != null && (this.myShowNonCombo== true || this.myShowNonCombo==false))
+        if (this.myShowNonCombo != null && (this.myShowNonCombo == true || this.myShowNonCombo == false))
             xml += "<app:showNonCombo>" + this.myShowNonCombo + "</app:showNonCombo>";
         else
             xml += "<app:showNonCombo>true</app:showNonCombo>";
-        if(this.myFetchOptions != null && (this.myFetchOptions==true || this.myFetchOptions==false))
+        if (this.myFetchOptions != null && (this.myFetchOptions == true || this.myFetchOptions == false))
             xml += "<app:fetchOptions>" + this.myFetchOptions + "</app:fetchOptions>";
         else
             xml += "<app:fetchOptions>false</app:fetchOptions>";
-        if(this.myIncludeCatOptions != null && (this.myIncludeCatOptions==true || this.myIncludeCatOptions==false))
-            xml += "<app:includeCategoryAttributesAndOptions>"+this.myIncludeCatOptions+"</app:includeCategoryAttributesAndOptions>";
+        if (this.myIncludeCatOptions != null && (this.myIncludeCatOptions == true || this.myIncludeCatOptions == false))
+            xml += "<app:includeCategoryAttributesAndOptions>" + this.myIncludeCatOptions + "</app:includeCategoryAttributesAndOptions>";
         else
             xml += "<app:includeCategoryAttributesAndOptions>false</app:includeCategoryAttributesAndOptions>";
         xml += this.endTag;
@@ -882,15 +925,15 @@ function FetchSaleItemType(itemId, showOffMenu, showNonCombo, fetchOptions, incl
     this.nameIdOnly = nameIdOnly;
     this.tag = "<app:FetchSaleItemType>";
     this.endTag = "</app:FetchSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
-        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId>"
-        if(this.myFetchOptions != null && (this.myFetchOptions==true || this.myFetchOptions==false))
+        xml += this.tag + "<app:itemId>" + this.myId + "</app:itemId>"
+        if (this.myFetchOptions != null && (this.myFetchOptions == true || this.myFetchOptions == false))
             xml += "<app:fetchOptions>" + this.myFetchOptions + "</app:fetchOptions>";
         else
             xml += "<app:fetchOptions>false</app:fetchOptions>";
-        if(this.myIncludeCatOptions != null && (this.myIncludeCatOptions==true || this.myIncludeCatOptions==false))
-            xml += "<app:includeCategoryAttributesAndOptions>"+this.myIncludeCatOptions+"</app:includeCategoryAttributesAndOptions>";
+        if (this.myIncludeCatOptions != null && (this.myIncludeCatOptions == true || this.myIncludeCatOptions == false))
+            xml += "<app:includeCategoryAttributesAndOptions>" + this.myIncludeCatOptions + "</app:includeCategoryAttributesAndOptions>";
         else
             xml += "<app:includeCategoryAttributesAndOptions>false</app:includeCategoryAttributesAndOptions>";
 
@@ -912,7 +955,7 @@ function DeleteSaleItemType(ids) {
     this.ids = ids;
     this.tag = "<app:DeleteSaleItemType>";
     this.endTag = "</app:DeleteSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < ids.length; i++) {
             xml += "<app:itemId>" + ids[i] + "</app:itemId>";
@@ -931,31 +974,31 @@ function GlobalOptionType(id, name, price, optionShortName, catID, onlineOrderDi
     this.onlineOrderDisplayName = onlineOrderDisplayName;
     this.optionCode = optionCode;
     this.doNotDisplayForOnlineOrder = doNotDisplayForOnlineOrder;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:globalOption>";
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
         xml += "<app:name>" + this.myName + "</app:name>";
-        if(this.myPrice != null && this.myPrice != "") {
+        if (this.myPrice != null && this.myPrice != "") {
             xml += "<app:price>" + this.myPrice + "</app:price>";
         }
-        if(this.myOptionShortName != null && this.myOptionShortName != "") {
+        if (this.myOptionShortName != null && this.myOptionShortName != "") {
             xml += "<app:shortName>" + this.myOptionShortName + "</app:shortName>";
         }
-        if(this.myCatID != null && this.myCatID != "") {
+        if (this.myCatID != null && this.myCatID != "") {
             xml += "<app:categoryID>" + this.myCatID + "</app:categoryID>";
         }
         if (util.isValidVariable(this.onlineOrderDisplayName)) {
             xml += "<app:onlineOrderDisplayName>" + this.onlineOrderDisplayName + "</app:onlineOrderDisplayName>";
         }
-        if(this.optionCode != null && this.optionCode != "") {
+        if (this.optionCode != null && this.optionCode != "") {
             xml += "<app:optionCode>" + this.optionCode + "</app:optionCode>";
         }
         if (util.isValidBooleanVariable(this.doNotDisplayForOnlineOrder)) {
             xml += "<app:doNotDisplayForOnlineOrder>" + this.doNotDisplayForOnlineOrder + "</app:doNotDisplayForOnlineOrder>";
         }
-        if(this.myOptionPrice != null) {
+        if (this.myOptionPrice != null) {
             for (var i = 0; i < this.myOptionPrice.length; i++) {
                 xml += "<app:optionPrice>" + this.myOptionPrice[i].getXML() + "</app:optionPrice>";
             }
@@ -966,7 +1009,7 @@ function GlobalOptionType(id, name, price, optionShortName, catID, onlineOrderDi
 }
 function ListGlobalOptionsType(groupByCategory) {
     this.groupByCategory = groupByCategory;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListGlobalOptionType>";
         if (util.isValidVariable(this.groupByCategory)) {
@@ -979,7 +1022,7 @@ function ListGlobalOptionsType(groupByCategory) {
 }
 function CreateGlobalOptionType(name, price, optionShortName, catID, onlineOrderDisplayName, optionCode, doNotDisplayForOnlineOrder, optionPrice) {
     this.optionType = new GlobalOptionType(null, name, price, optionShortName, catID, onlineOrderDisplayName, optionCode, doNotDisplayForOnlineOrder, optionPrice);
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:CreateGlobalOptionType>";
         xml += this.optionType.getXML();
@@ -991,7 +1034,7 @@ function CreateGlobalOptionType(name, price, optionShortName, catID, onlineOrder
 function UpdateGlobalOptionType(id, name, price, optionShortName, catID, onlineOrderDisplayName, optionCode, doNotDisplayForOnlineOrder, optionPrice, updateDetails) {
     this.optionType = new GlobalOptionType(id, name, price, optionShortName, catID, onlineOrderDisplayName, optionCode, doNotDisplayForOnlineOrder, optionPrice);
     this.updateDetails = updateDetails;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:UpdateGlobalOptionType>";
         xml += this.optionType.getXML();
@@ -1005,7 +1048,7 @@ function UpdateGlobalOptionType(id, name, price, optionShortName, catID, onlineO
 }
 function DeleteGlobalOptionType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteGlobalOptionType>";
         xml += "<app:id>" + this.myId + "</app:id>";
@@ -1016,7 +1059,7 @@ function DeleteGlobalOptionType(id) {
 }
 function FetchGlobalOptionType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchGlobalOptionType>" + "<app:id>" + this.myId + "</app:id>";
         xml += "</app:FetchGlobalOptionType>";
@@ -1036,12 +1079,12 @@ function ItemOptionType(id, name, shortName, thumbPath, desc, displayPriority, p
     this.myOptionPrice = optionPrice;
     this.onlineOrderDisplayName = onlineOrderDisplayName;
     this.doNotDisplayForOnlineOrder = doNotDisplayForOnlineOrder;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
-        if(this.myId != null && this.myId !== "") {
+        if (this.myId != null && this.myId !== "") {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
-        xml += "<app:name>"+this.myName+"</app:name>";
+        xml += "<app:name>" + this.myName + "</app:name>";
         if (util.isValidSoapRequestVariable(this.myDesc)) {
             xml += "<app:description>" + this.myDesc + "</app:description>";
         }
@@ -1067,7 +1110,7 @@ function ItemOptionType(id, name, shortName, thumbPath, desc, displayPriority, p
             xml += "<app:attributeId>" + this.itemAttributeId + "</app:attributeId>";
         }
         if (this.myOptionPrice != null) {
-            for(var i = 0; i < this.myOptionPrice.length; i++) {
+            for (var i = 0; i < this.myOptionPrice.length; i++) {
                 xml += "<app:optionPrice>" + this.myOptionPrice[i].getXML() + "</app:optionPrice>";
             }
         }
@@ -1078,7 +1121,7 @@ function SaveItemOptionType(id, name, shortName, thumbPath, desc, displayPriorit
     this.myOption = new ItemOptionType(id, name, shortName, thumbPath, desc, displayPriority, price, optionPrice, onlineOrderDisplayName, doNotDisplayForOnlineOrder, itemAttributeId);
     this.categoryId = categoryId;
     this.saleItemId = saleItemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveItemOptionType>";
         if (util.isValidVariable(this.categoryId)) {
@@ -1095,10 +1138,10 @@ function SaveItemOptionType(id, name, shortName, thumbPath, desc, displayPriorit
 }
 function FetchItemOptionType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchItemOptionType>";
-        xml += "<app:id>"+this.myId + "</app:id>";
+        xml += "<app:id>" + this.myId + "</app:id>";
         xml += "</app:FetchItemOptionType>";
         xml += soapXMLEnd;
         return xml;
@@ -1106,10 +1149,10 @@ function FetchItemOptionType(id) {
 }
 function DeleteItemOptionType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteItemOptionType>";
-        xml += "<app:id>"+this.myId + "</app:id>";
+        xml += "<app:id>" + this.myId + "</app:id>";
         xml += "</app:DeleteItemOptionType>";
         xml += soapXMLEnd;
         return xml;
@@ -1118,7 +1161,7 @@ function DeleteItemOptionType(id) {
 function ListItemOptionsType(categoryId, saleItemId) {
     this.categoryId = categoryId;
     this.saleItemId = saleItemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListItemOptionsType>";
         if (util.isValidVariable(this.categoryId)) {
@@ -1142,7 +1185,7 @@ function ItemAttributeType(id, name, minNumSelections, maxNumSelections, display
     this.doNotDisplayForOnlineOrder = doNotDisplayForOnlineOrder;
     this.type = type;
     this.optionList = optionList;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
         if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -1167,7 +1210,7 @@ function ItemAttributeType(id, name, minNumSelections, maxNumSelections, display
             xml += "<app:type>" + this.type + "</app:type>";
         }
         if (typeof this.optionList != "undefined" && this.optionList != null) {
-            for(var i = 0; i < this.optionList.length; i++) {
+            for (var i = 0; i < this.optionList.length; i++) {
                 xml += "<app:options>" + this.optionList[i].getXML() + "</app:options>";
             }
         }
@@ -1178,7 +1221,7 @@ function SaveItemAttributeType(id, name, minNumSelections, maxNumSelections, dis
     this.itemAttribute = new ItemAttributeType(id, name, minNumSelections, maxNumSelections, displayPriority, onlineOrderDisplayName, doNotDisplayForOnlineOrder, null);
     this.categoryId = categoryId;
     this.saleItemId = saleItemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveItemAttributeType>";
         xml += "<app:attribute>" + this.itemAttribute.getXML() + "</app:attribute>";
@@ -1195,7 +1238,7 @@ function SaveItemAttributeType(id, name, minNumSelections, maxNumSelections, dis
 }
 function DeleteItemAttributeType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteItemAttributeType><app:id>" + this.myId + "</app:id></app:DeleteItemAttributeType>";
         xml += soapXMLEnd;
@@ -1204,7 +1247,7 @@ function DeleteItemAttributeType(id) {
 }
 function FetchItemAttributeType(id) {
     this.myId = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchItemAttributeType><app:id>" + this.myId + "</app:id></app:FetchItemAttributeType>";
         xml += soapXMLEnd;
@@ -1214,7 +1257,7 @@ function FetchItemAttributeType(id) {
 function ListItemAttributesType(categoryId, saleItemId) {
     this.categoryId = categoryId;
     this.saleItemId = saleItemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListItemAttributesType>";
         if (this.categoryId != null && this.categoryId !== "") {
@@ -1242,15 +1285,15 @@ function Table(aId, aName, aX, aY, aAreaId, aDefaultGuestCount, width, height, s
     this.seatingOrientation = seatingOrientation;
     this.defaultSaleItemId = defaultSaleItemId;
     this.tableCategoryId = tableCategoryId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:table>";
-        if(this.id != null && parseInt(this.id) > 0) {
+        if (this.id != null && parseInt(this.id) > 0) {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        xml += "<app:name>"+this.name+"</app:name>";
+        xml += "<app:name>" + this.name + "</app:name>";
         xml += "<app:x>" + this.x + "</app:x>";
         xml += "<app:y>" + this.y + "</app:y>";
-        if(this.areaId != null && parseInt(this.areaId) > 0) {
+        if (this.areaId != null && parseInt(this.areaId) > 0) {
             xml += "<app:areaId>" + this.areaId + "</app:areaId>";
         }
         if (this.width != null && typeof this.width != "undefined") {
@@ -1281,7 +1324,7 @@ function Table(aId, aName, aX, aY, aAreaId, aDefaultGuestCount, width, height, s
 }
 function SaveTableType(aTable) {
     this.table = aTable;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveTableType>";
         xml += this.table.getXML();
@@ -1292,16 +1335,16 @@ function SaveTableType(aTable) {
 }
 function DeleteTableType(aId) {
     this.id = aId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
-        xml += "<app:DeleteTableType><app:id>"+this.id+"</app:id></app:DeleteTableType>";
+        xml += "<app:DeleteTableType><app:id>" + this.id + "</app:id></app:DeleteTableType>";
         xml += soapXMLEnd;
         return xml;
     }
 }
 function ListAreasType(fetchOrders) {
     this.fetchOrders = fetchOrders;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + "<app:ListAreasType>";
         if (typeof this.fetchOrders != "undefined" && this.fetchOrders != null && this.fetchOrders !== "") {
             xml += "<app:fetchOrders>" + this.fetchOrders + "</app:fetchOrders>";
@@ -1314,19 +1357,19 @@ function SaveAreaType(aName, aId) {
     this.name = aName;
     this.id = aId;
     this.tables = new Array();
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveSeatingAreaType>";
         xml += "<app:areaType><app:name>" + this.name + "</app:name>";
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        for(var i = 0; i < this.tables.length; i++) {
+        for (var i = 0; i < this.tables.length; i++) {
             xml += "<app:tables>";
-            if(this.tables[i].id != null && parseInt(this.tables[i].id) > 0) {
+            if (this.tables[i].id != null && parseInt(this.tables[i].id) > 0) {
                 xml += "<app:id>" + this.tables[i].id + "</app:id>";
             }
-            xml += "<app:name>"+this.tables[i].name+"</app:name>";
+            xml += "<app:name>" + this.tables[i].name + "</app:name>";
             xml += "<app:x>" + this.tables[i].x + "</app:x>";
             xml += "<app:y>" + this.tables[i].y + "</app:y>";
             xml += "<app:defaultGuestCount>" + this.tables[i].defaultGuestCount + "</app:defaultGuestCount>";
@@ -1353,7 +1396,7 @@ function SaveAreaType(aName, aId) {
 }
 function DeleteAreaType(aId) {
     this.id = aId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteSeatingAreaType>"
         xml += "<app:id>" + aId + "</app:id>";
@@ -1366,9 +1409,9 @@ function DeleteAreaType(aId) {
 function FunctionModuleType(aId, aName) {
     this.id = aId;
     this.name = aName;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:name>" + this.name + "</app:name>";
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         return xml;
@@ -1388,43 +1431,43 @@ function UserType(aId, aPasscode, aSwipeData, systemUser) {
     this.modules = new Array();
     this.roles = new Array();
     this.subscribedTopics = new Array();
-    this.getXML = function() {
-        if (this.passcode !=  null && this.passcode != "***") {
+    this.getXML = function () {
+        if (this.passcode != null && this.passcode != "***") {
             var xml = "<app:passcode>" + this.passcode + "</app:passcode>";
         }
-        if(this.id != null && this.id != "") {
+        if (this.id != null && this.id != "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        if(this.swipeData != null && this.swipeData != "********") {
+        if (this.swipeData != null && this.swipeData != "********") {
             xml += "<app:swipeData>" + this.swipeData + "</app:swipeData>";
         }
-        for(var i = 0; i < this.modules.length; i++) {
+        for (var i = 0; i < this.modules.length; i++) {
             xml += "<app:functions>" + this.modules[i].getXML() + "</app:functions>";
         }
-        for(var i = 0; i < this.roles.length; i++) {
+        for (var i = 0; i < this.roles.length; i++) {
             xml += "<app:roles>" + this.roles[i].getXML() + "</app:roles>";
         }
-        for(var i = 0; i < this.subscribedTopics.length; i++) {
+        for (var i = 0; i < this.subscribedTopics.length; i++) {
             xml += "<app:subscribedTopics>" + this.subscribedTopics[i].getXML() + "</app:subscribedTopics>";
         }
         return xml;
     }
 }
-function SaveTaxType(aId, aRate, aOutRate, aName, aDescription, aTaxFileNumber,aTaxIncreases,aPriceLimit,aTaxIncreaseName,aTaxIncreaseRate) {
+function SaveTaxType(aId, aRate, aOutRate, aName, aDescription, aTaxFileNumber, aTaxIncreases, aPriceLimit, aTaxIncreaseName, aTaxIncreaseRate) {
     this.id = aId;
     this.rate = aRate;
     this.outRate = aOutRate;
     this.name = aName;
     this.description = aDescription;
     this.taxFileNumber = aTaxFileNumber;
-    this.taxIncrease = aTaxIncreases ;
+    this.taxIncrease = aTaxIncreases;
     this.priceLimit = aPriceLimit;
-    this.taxIncreaseName=aTaxIncreaseName ;
-    this.taxIncreaseRate =  aTaxIncreaseRate
-    this.getXML = function() {
+    this.taxIncreaseName = aTaxIncreaseName;
+    this.taxIncreaseRate = aTaxIncreaseRate
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveTaxType><app:tax>";
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += "<app:rate>" + this.rate + "</app:rate>";
@@ -1437,7 +1480,7 @@ function SaveTaxType(aId, aRate, aOutRate, aName, aDescription, aTaxFileNumber,a
             xml += "<app:taxFileNumber>" + this.taxFileNumber + "</app:taxFileNumber>";
         }
         xml += "<app:taxIncrease>" + this.taxIncrease + "</app:taxIncrease>";
-        console.log(this.taxIncrease+"==");
+        console.log(this.taxIncrease + "==");
         if (this.taxIncrease != "DEFAULT") {
             xml += "<app:priceLimit>" + this.priceLimit + "</app:priceLimit>";
             xml += "<app:taxIncreaseName>" + this.taxIncreaseName + "</app:taxIncreaseName>";
@@ -1451,10 +1494,10 @@ function SaveTaxType(aId, aRate, aOutRate, aName, aDescription, aTaxFileNumber,a
 }
 function ListTaxesType(aHtmlObject) {
     this.htmlObject = aHtmlObject;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListTaxesType>";
-        if(this.htmlObject != null && this.htmlObject != "") {
+        if (this.htmlObject != null && this.htmlObject != "") {
             xml += "<app:htmlObject>" + this.htmlObject + "</app:htmlObject>";
         }
         xml += "</app:ListTaxesType>";
@@ -1464,7 +1507,7 @@ function ListTaxesType(aHtmlObject) {
 }
 function DeleteTaxType(aId) {
     this.id = aId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteTaxType><app:taxId>" + this.id + "</app:taxId></app:DeleteTaxType>";
         xml += soapXMLEnd;
@@ -1475,11 +1518,11 @@ function ListOrdersByDateNumberType(aStart, aEnd, aServerId) {
     this.start = aStart;
     this.end = aEnd;
     this.serverId = aServerId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListOrdersByDateNumberType><app:startTime>" + this.start + "</app:startTime>";
         xml += "<app:endTime>" + this.end + "</app:endTime>";
-        if(this.serverId != null && this.serverId != "") {
+        if (this.serverId != null && this.serverId != "") {
             xml += "<app:serverId>" + this.serverId + "</app:serverId>";
         }
         xml += "</app:ListOrdersByDateNumberType>";
@@ -1491,7 +1534,7 @@ function ListOrdersByDateNumberType(aStart, aEnd, aServerId) {
 function ListAllSaleItemsByCategoryAndGroupType(showOnlineOrderItems, showSummaryOnly) {
     this.showOnlineOrderItems = showOnlineOrderItems;
     this.showSummaryOnly = showSummaryOnly;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListAllSaleItemsByCategoryAndGroupType>"
         xml += "<app:showOffMenuItems>" + false + "</app:showOffMenuItems>";
@@ -1521,7 +1564,7 @@ function CreateComboItemType(catId, reportGroupId, name, description, thumb, pri
     this.myItem = new SaleItem(id, catId, reportGroupId, name, description, thumb, printerIds, allowModifierActions, price, isTaxable, itemPrice, isOffMenu, hhRate, taxRate, allowHH, comboType, comboItems, null);
     this.tag = "<app:CreateSaleItemType>";
     this.endTag = "</app:CreateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myItem.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1534,7 +1577,7 @@ function UpdateComboItemType(id, catId, reportGroupId, name, shortName, descript
     this.updateDetails = false;
     this.tag = "<app:UpdateSaleItemType>";
     this.endTag = "</app:UpdateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += "<app:updateDetails>" + this.updateDetails + "</app:updateDetails>";
@@ -1548,7 +1591,7 @@ function AddComboItemType(catId, reportGroupId, name, shortName, description, th
     this.myItem = new SaleItem(null, catId, reportGroupId, name, shortName, description, thumb, printerIds, allowModifierActions, sendToKitchenRequired, forComboOnly, marketPriceItem, giftCardItem, price, isTaxable, itemPrice, propertyList, isOffMenu, hhRate, taxRate, allowHH, comboType, comboItems);
     this.tag = "<app:CreateSaleItemType>";
     this.endTag = "</app:CreateSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.myItem.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1560,9 +1603,9 @@ function DeleteComboItemType(itemId) {
     this.myId = itemId;
     this.tag = "<app:DeleteSaleItemType>";
     this.endTag = "</app:DeleteSaleItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
-        xml += this.tag + "<app:itemId>"+this.myId+"</app:itemId>" + this.endTag;
+        xml += this.tag + "<app:itemId>" + this.myId + "</app:itemId>" + this.endTag;
         xml += soapXMLEnd;
         return xml;
     }
@@ -1571,7 +1614,7 @@ function DeleteComboItemType(itemId) {
 function ListDiscountRatesType() {
     this.tag = "<app:ListDiscountRatesType>";
     this.endTag = "</app:ListDiscountRatesType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.endTag;
         xml += soapXMLEnd;
@@ -1580,7 +1623,7 @@ function ListDiscountRatesType() {
 }
 
 function ListFieldDisplayNamesGroupType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListFieldDisplayNamesGroupType>"
         xml += "</app:ListFieldDisplayNamesGroupType>"
@@ -1592,7 +1635,7 @@ function ListFieldDisplayNamesGroupType() {
 function AddSystemLanguageType(name, code) {
     this.name = name;
     this.code = code;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:AddSystemLanguageType><app:systemLanguage>";
         xml += "<app:name>" + this.name + "</app:name>";
@@ -1608,7 +1651,7 @@ function UpdateSystemLanguageType(id, name, code, enabled) {
     this.code = code;
     this.id = id;
     this.enabled = enabled;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:UpdateSystemLanguageType><app:systemLanguage>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1618,7 +1661,7 @@ function UpdateSystemLanguageType(id, name, code, enabled) {
         if (typeof this.code != "undefined" && this.code) {
             xml += "<app:code>" + this.code + "</app:code>";
         }
-        if (typeof this.enabled != "undefined" && this.enabled != null && this.enabled !=="") {
+        if (typeof this.enabled != "undefined" && this.enabled != null && this.enabled !== "") {
             xml += "<app:enabled>" + this.enabled + "</app:enabled>";
         }
         xml += "</app:systemLanguage></app:UpdateSystemLanguageType>";
@@ -1629,7 +1672,7 @@ function UpdateSystemLanguageType(id, name, code, enabled) {
 
 function DeleteSystemLanguageType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteSystemLanguageType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1645,7 +1688,7 @@ function AddFieldDisplayNameType(name, itemID, fieldName, languageID, fieldType)
     this.fieldName = fieldName;
     this.languageID = languageID;
     this.fieldType = fieldType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:AddFieldDisplayNameType><app:fieldDisplayName>";
         xml += "<app:name><![CDATA[" + this.name + "]]></app:name>";
@@ -1666,23 +1709,23 @@ function UpdateFieldDisplayNameType(id, name, itemID, fieldName, languageID, fie
     this.fieldName = fieldName;
     this.languageID = languageID;
     this.fieldType = fieldType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:UpdateFieldDisplayNameType><app:fieldDisplayName>";
         xml += "<app:id>" + this.id + "</app:id>";
-        if(this.name != null && this.name != "") {
+        if (this.name != null && this.name != "") {
             xml += "<app:name><![CDATA[" + this.name + "]]></app:name>";
         }
-        if(this.itemID != null && this.itemID != "") {
+        if (this.itemID != null && this.itemID != "") {
             xml += "<app:itemID>" + this.itemID + "</app:itemID>";
         }
-        if(this.fieldName != null && this.fieldName != "") {
+        if (this.fieldName != null && this.fieldName != "") {
             xml += "<app:fieldName><![CDATA[" + this.fieldName + "]]></app:fieldName>";
         }
-        if(this.languageID != null && this.languageID != "") {
+        if (this.languageID != null && this.languageID != "") {
             xml += "<app:languageID>" + this.languageID + "</app:languageID>";
         }
-        if(this.fieldType != null && this.fieldType != "") {
+        if (this.fieldType != null && this.fieldType != "") {
             xml += "<app:fieldType><![CDATA[" + this.fieldType + "]]></app:fieldType>";
         }
         xml += "</app:fieldDisplayName></app:UpdateFieldDisplayNameType>";
@@ -1693,7 +1736,7 @@ function UpdateFieldDisplayNameType(id, name, itemID, fieldName, languageID, fie
 
 function DeleteFieldDisplayNameType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteFieldDisplayNameType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1704,7 +1747,7 @@ function DeleteFieldDisplayNameType(id) {
 }
 
 function ListSystemLanguagesType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListSystemLanguagesType>"
         xml += "</app:ListSystemLanguagesType>"
@@ -1717,7 +1760,7 @@ function CreateRestaurantHoursType(name, from, to, fromDayOfWeek, toDayOfWeek, d
     this.restaurantHours = new RestaurantHoursType(null, name, from, to, fromDayOfWeek, toDayOfWeek, description);
     this.tag = "<app:AddRestaurantHoursType>";
     this.endTag = "</app:AddRestaurantHoursType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.restaurantHours.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1729,7 +1772,7 @@ function UpdateRestaurantHoursType(id, name, from, to, fromDayOfWeek, toDayOfWee
     this.restaurantHours = new RestaurantHoursType(id, name, from, to, fromDayOfWeek, toDayOfWeek, description);
     this.tag = "<app:UpdateRestaurantHoursType>";
     this.endTag = "</app:UpdateRestaurantHoursType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.restaurantHours.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1739,7 +1782,7 @@ function UpdateRestaurantHoursType(id, name, from, to, fromDayOfWeek, toDayOfWee
 
 function DeleteRestaurantHoursType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteRestaurantHoursType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1751,7 +1794,7 @@ function DeleteRestaurantHoursType(id) {
 
 function FetchRestaurantHoursType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchRestaurantHoursType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1762,7 +1805,7 @@ function FetchRestaurantHoursType(id) {
 }
 
 function ListAllRestaurantHoursType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListRestaurantHoursType>"
         xml += "</app:ListRestaurantHoursType>"
@@ -1779,7 +1822,7 @@ function RestaurantHoursType(id, name, from, to, fromDayOfWeek, toDayOfWeek, des
     this.fromDayOfWeek = fromDayOfWeek;
     this.toDayOfWeek = toDayOfWeek;
     this.description = description;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:hours>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -1814,7 +1857,7 @@ function ModifierActionType(id, name, shortName, modifierCode, priceMultiplier, 
     this.modifierCode = modifierCode;
     this.priceMultiplier = priceMultiplier;
     this.description = description;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:modifierAction>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -1840,7 +1883,7 @@ function ModifierActionType(id, name, shortName, modifierCode, priceMultiplier, 
 }
 
 function ListModifierActionsType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListModifierActionsType>"
         xml += "</app:ListModifierActionsType>"
@@ -1853,7 +1896,7 @@ function CreateModifierActionType(name, shortName, modifierCode, priceMultiplier
     this.modifierAction = new ModifierActionType(null, name, shortName, modifierCode, priceMultiplier, description);
     this.tag = "<app:AddModifierActionType>";
     this.endTag = "</app:AddModifierActionType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.modifierAction.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1865,7 +1908,7 @@ function UpdateModifierActionType(id, name, shortName, modifierCode, priceMultip
     this.modifierAction = new ModifierActionType(id, name, shortName, modifierCode, priceMultiplier, description);
     this.tag = "<app:UpdateModifierActionType>";
     this.endTag = "</app:UpdateModifierActionType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.modifierAction.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1875,7 +1918,7 @@ function UpdateModifierActionType(id, name, shortName, modifierCode, priceMultip
 
 function DeleteModifierActionType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteModifierActionType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1887,7 +1930,7 @@ function DeleteModifierActionType(id) {
 
 function FetchModifierActionType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchModifierActionType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1898,7 +1941,7 @@ function FetchModifierActionType(id) {
 }
 
 function ListGlobalOptionCategoriesType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListGlobalOptionCategoryType>"
         xml += "</app:ListGlobalOptionCategoryType>"
@@ -1911,7 +1954,7 @@ function CreateGlobalOptionCategoryType(name) {
     this.globalOptionCategory = new GlobalOptionCategoryType(null, name);
     this.tag = "<app:CreateGlobalOptionCategoryType>";
     this.endTag = "</app:CreateGlobalOptionCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.globalOptionCategory.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1923,7 +1966,7 @@ function UpdateGlobalOptionCategoryType(id, name) {
     this.globalOptionCategory = new GlobalOptionCategoryType(id, name);
     this.tag = "<app:UpdateGlobalOptionCategoryType>";
     this.endTag = "</app:UpdateGlobalOptionCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.globalOptionCategory.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -1933,7 +1976,7 @@ function UpdateGlobalOptionCategoryType(id, name) {
 
 function DeleteGlobalOptionCategoryType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteGlobalOptionCategoryType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1945,7 +1988,7 @@ function DeleteGlobalOptionCategoryType(id) {
 
 function FetchGlobalOptionCategoryType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchGlobalOptionCategoryType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -1958,7 +2001,7 @@ function FetchGlobalOptionCategoryType(id) {
 function GlobalOptionCategoryType(id, name) {
     this.id = id;
     this.name = name;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:globalOptionCategory>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -1989,7 +2032,7 @@ function DeviceType(id, name, realName, type, manufacturerName, printerId, defau
     this.staffList = staffList;
     this.terminalId = terminalId;
     this.pairingToken = pairingToken;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:device>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2033,8 +2076,8 @@ function DeviceType(id, name, realName, type, manufacturerName, printerId, defau
         if (util.isValidVariableOrEmpty(this.pinPadSignatureAdjustment)) {
             xml += "<app:pinPadSignatureAdjustment>" + this.pinPadSignatureAdjustment + "</app:pinPadSignatureAdjustment>"
         }
-        if(util.isValidVariable(this.staffList)) {
-            for (var i = 0; i < this.staffList.length; i++){
+        if (util.isValidVariable(this.staffList)) {
+            for (var i = 0; i < this.staffList.length; i++) {
                 xml += "<app:staffs>" + this.staffList[i].getXML() + "</app:staffs>";
             }
         }
@@ -2052,7 +2095,7 @@ function DeviceType(id, name, realName, type, manufacturerName, printerId, defau
 function FindDevicesType(id, type) {
     this.id = id;
     this.type = type;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindDevicesType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2071,7 +2114,7 @@ function SaveDeviceType(id, name, realName, type, manufacturerName, printerId, d
     this.device = new DeviceType(id, name, realName, type, manufacturerName, printerId, defaultDeviceId, ipAddr, port, modelName, communicationType, additionalSettings, pinPadTipAdjustment, pinPadSignatureAdjustment, staffList, terminalId, pairingToken);
     this.tag = "<app:SaveDeviceType>";
     this.endTag = "</app:SaveDeviceType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.device.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -2081,7 +2124,7 @@ function SaveDeviceType(id, name, realName, type, manufacturerName, printerId, d
 
 function DeleteDeviceType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteDeviceType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -2091,7 +2134,7 @@ function DeleteDeviceType(id) {
     }
 }
 
-function PaymentServiceProviderType(id, name, displayName, merchantName, merchantId, merchantKey, merchantUrl, setupPassword,resellerInfor) {
+function PaymentServiceProviderType(id, name, displayName, merchantName, merchantId, merchantKey, merchantUrl, setupPassword, resellerInfor) {
     this.id = id;
     this.name = name;
     this.displayName = displayName;
@@ -2101,7 +2144,7 @@ function PaymentServiceProviderType(id, name, displayName, merchantName, merchan
     this.merchantUrl = merchantUrl;
     this.setupPassword = setupPassword;
     this.resellerInfor = resellerInfor;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:paymentServiceProvider>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2137,7 +2180,7 @@ function PaymentServiceProviderType(id, name, displayName, merchantName, merchan
 
 function FindPaymentServiceProvidersType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindPaymentServiceProvidersType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2150,11 +2193,11 @@ function FindPaymentServiceProvidersType(id) {
 }
 
 function SavePaymentServiceProviderType(id, name, displayName, merchantName, merchantId, merchantKey, merchantUrl, setupPassword, resellerInfor, userAuth) {
-    this.paymentServiceProvider = new PaymentServiceProviderType(id, name, displayName, merchantName, merchantId, merchantKey, merchantUrl, setupPassword,resellerInfor);
+    this.paymentServiceProvider = new PaymentServiceProviderType(id, name, displayName, merchantName, merchantId, merchantKey, merchantUrl, setupPassword, resellerInfor);
     this.userAuth = userAuth;
     this.tag = "<app:SavePaymentServiceProviderType>";
     this.endTag = "</app:SavePaymentServiceProviderType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += this.paymentServiceProvider.getXML();
@@ -2177,7 +2220,7 @@ function AppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, callerI
     this.weightScaleEnabled = weightScaleEnabled;
     this.customerDisplayEnabled = customerDisplayEnabled;
     this.customerDisplayModel = customerDisplayModel;
-    this.deviceManagerPort =  deviceManagerPort;
+    this.deviceManagerPort = deviceManagerPort;
     this.devices = devices;
     this.settings = settings;
     this.waitStatusEnabled = waitStatusEnabled;
@@ -2188,7 +2231,7 @@ function AppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, callerI
     this.forewarn = forewarn;
     this.areaId = areaId;
     this.waitlistPrinterId = waitlistPrinterId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:appInstance>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2221,12 +2264,12 @@ function AppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, callerI
             xml += "<app:deviceManagerPort>" + this.deviceManagerPort + "</app:deviceManagerPort>";
         }
         if (this.devices != null && typeof this.devices != "undefined") {
-            for(var i = 0; i < this.devices.length; i++) {
+            for (var i = 0; i < this.devices.length; i++) {
                 xml += this.devices[i].getXML();
             }
         }
         if (this.settings != null && typeof this.settings != "undefined") {
-            for(var i = 0; i < this.settings.length; i++) {
+            for (var i = 0; i < this.settings.length; i++) {
                 xml += this.settings[i].getXML();
             }
         }
@@ -2264,7 +2307,7 @@ function AppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, callerI
 
 function FindAppInstancesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindAppInstancesType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2281,7 +2324,7 @@ function SaveAppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, cal
     this.userAuth = userAuth;
     this.tag = "<app:SaveAppInstanceType>";
     this.endTag = "</app:SaveAppInstanceType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += this.appInstance.getXML();
@@ -2296,7 +2339,7 @@ function SaveAppInstanceType(id, printerId, cashDrawerId, paymentTerminalId, cal
 
 function DeleteAppInstanceType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteAppInstanceType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -2310,7 +2353,7 @@ function DeleteOrdersType(userAuth, fromDate, toDate) {
     this.fromDate = fromDate;
     this.toDate = toDate;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteOrdersType>";
         if (util.isValidVariable(this.fromDate)) {
@@ -2332,7 +2375,7 @@ function DeleteOrdersType(userAuth, fromDate, toDate) {
 }
 
 function RegisterServerInstanceType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:RegisterServerInstanceType>";
         xml += "</app:RegisterServerInstanceType>";
@@ -2345,7 +2388,7 @@ function SaveGlobalDeviceType(id, receiptPrinterID, packagePrinterID, packagePri
     this.globalDevice = new GlobalDeviceType(id, receiptPrinterID, packagePrinterID, packagePrinterID2, runnerPrinterID, cashDrawerID, srmID, reportPrinterID, paymentTerminalId, waitlistPrinterId, openFoodPrinterId);
     this.tag = "<app:SaveGlobalDeviceType>";
     this.endTag = "</app:SaveGlobalDeviceType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.globalDevice.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -2365,7 +2408,7 @@ function GlobalDeviceType(id, receiptPrinterID, packagePrinterID, packagePrinter
     this.paymentTerminalId = paymentTerminalId;
     this.waitlistPrinterID = waitlistPrinterID;
     this.openFoodPrinterId = openFoodPrinterId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:globalDevice>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2407,7 +2450,7 @@ function GlobalDeviceType(id, receiptPrinterID, packagePrinterID, packagePrinter
 
 function FindGlobalDevicesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindGlobalDevicesType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2420,10 +2463,10 @@ function FindGlobalDevicesType(id) {
 }
 
 function SaveGiftCardType(id, name, number, value, balance, expireTime, enabled, issuedTo, customerID, syncFromCloud, userAuth) {
-    this.giftCard = new GiftCardType(id, name, number, value, balance, expireTime, enabled, issuedTo, customerID, syncFromCloud, userAuth,null,null,null,null);
+    this.giftCard = new GiftCardType(id, name, number, value, balance, expireTime, enabled, issuedTo, customerID, syncFromCloud, userAuth, null, null, null, null);
     this.tag = "<app:SaveGiftCardType>";
     this.endTag = "</app:SaveGiftCardType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.giftCard.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -2431,7 +2474,7 @@ function SaveGiftCardType(id, name, number, value, balance, expireTime, enabled,
     };
 }
 
-function GiftCardType(id, name, number, value, balance, expireTime, enabled, issuedTo, customerID, syncFromCloud, userAuth,consumptionTimes,rechargeAmount,amountSpent,endingBalance) {
+function GiftCardType(id, name, number, value, balance, expireTime, enabled, issuedTo, customerID, syncFromCloud, userAuth, consumptionTimes, rechargeAmount, amountSpent, endingBalance) {
     this.id = id;
     this.name = name;
     this.number = number;
@@ -2443,11 +2486,11 @@ function GiftCardType(id, name, number, value, balance, expireTime, enabled, iss
     this.issuedTo = issuedTo;
     this.syncFromCloud = syncFromCloud;
     this.userAuth = userAuth;
-    this.consumptionTimes =consumptionTimes ;
-    this.rechargeAmount= rechargeAmount;
+    this.consumptionTimes = consumptionTimes;
+    this.rechargeAmount = rechargeAmount;
     this.amountSpent = amountSpent;
-    this.endingBalance=endingBalance;
-    this.getXML = function() {
+    this.endingBalance = endingBalance;
+    this.getXML = function () {
         var xml = "<app:giftCard>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2510,7 +2553,7 @@ function FindCustomerInfoType(id, firstName, lastName, email, phone, birthdayFro
     this.birthdayTo = birthdayTo;
     this.query = query;
     this.searchAllFields = searchAllFields;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindCustomerInfoType>"
         if (util.isValidVariable(this.id)) {
@@ -2546,13 +2589,13 @@ function FindCustomerInfoType(id, firstName, lastName, email, phone, birthdayFro
     }
 }
 
-function FindGiftCardsType(id, issuedTo, cardNumber,fromDatePicker,toDatePicker) {
+function FindGiftCardsType(id, issuedTo, cardNumber, fromDatePicker, toDatePicker) {
     this.id = id;
     this.issuedTo = issuedTo;
     this.cardNumber = cardNumber;
     this.fromDatePicker = fromDatePicker;
     this.toDatePicker = toDatePicker;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindGiftCardsType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2581,7 +2624,7 @@ function DeleteGiftCardType(id, cardNumber, userAuth) {
     this.id = id;
     this.cardNumber = cardNumber;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteGiftCardType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2603,7 +2646,7 @@ function SaveSalesRecordingMachineType(id, name, srmDeviceName, operatingMode, c
     this.salesRecordingMachine = new SalesRecordingMachineType(id, name, srmDeviceName, operatingMode, connectionType, host, port, connectedPrinter, counterServiceMode, printClosingReceipt, tpsId, tvqId, enabled);
     this.tag = "<app:SaveSalesRecordingMachineType>";
     this.endTag = "</app:SaveSalesRecordingMachineType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.salesRecordingMachine.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -2625,7 +2668,7 @@ function SalesRecordingMachineType(id, name, srmDeviceName, operatingMode, conne
     this.tpsId = tpsId;
     this.tvqId = tvqId;
     this.enabled = enabled;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:salesRecordingMachine>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2674,7 +2717,7 @@ function SalesRecordingMachineType(id, name, srmDeviceName, operatingMode, conne
 function FindSalesRecordingMachinesType(id, showDetails) {
     this.id = id;
     this.showDetails = showDetails;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindSalesRecordingMachinesType>"
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
@@ -2691,7 +2734,7 @@ function FindSalesRecordingMachinesType(id, showDetails) {
 
 function DeleteSalesRecordingMachineType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteSalesRecordingMachineType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -2704,7 +2747,7 @@ function DeleteSalesRecordingMachineType(id) {
 function FindSystemConfigurationsType(name, fetchDetails) {
     this.name = name;
     this.fetchDetails = fetchDetails;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListSystemConfigurationsType>";
         if (typeof name != 'undefined' && name) {
@@ -2725,7 +2768,7 @@ function UpdateSystemConfigurationsType(configurations, userAuth) {
     this.userAuth = userAuth;
     this.tag = "<app:UpdateSystemConfigurationType>";
     this.endTag = "</app:UpdateSystemConfigurationType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < this.systemConfigurations.length; i++) {
             xml += this.systemConfigurations[i].getXML();
@@ -2743,7 +2786,7 @@ function SystemConfigurationType(id, name, value, dataType) {
     this.name = name;
     this.value = value;
     this.dataType = dataType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:systemConfiguration>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2767,7 +2810,7 @@ function UserConfigurationType(id, name, value, dataType) {
     this.name = name;
     this.value = value;
     this.dataType = dataType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:settings>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2791,7 +2834,7 @@ function AppConfigurationType(id, name, value, dataType) {
     this.name = name;
     this.value = value;
     this.dataType = dataType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:settings>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2811,7 +2854,7 @@ function AppConfigurationType(id, name, value, dataType) {
 }
 
 function ListDiscountsType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListDiscountRatesType></app:ListDiscountRatesType>";
         xml += soapXMLEnd;
@@ -2819,7 +2862,7 @@ function ListDiscountsType() {
     }
 }
 function FetchPrintingConfigType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchPrintingConfigType></app:FetchPrintingConfigType>";
         xml += soapXMLEnd;
@@ -2834,7 +2877,7 @@ function SavePrintingConfigType(printingTemplates, receiptFooterTemplateId, rece
     this.waitlistTicketFooterTemplateId = waitlistTicketFooterTemplateId;
     this.tag = "<app:SavePrintingConfigType>";
     this.endTag = "</app:SavePrintingConfigType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < this.printingTemplates.length; i++) {
             xml += this.printingTemplates[i].getXML();
@@ -2859,7 +2902,7 @@ function PrintingTemplateType(value, reportType, selected) {
     this.value = value;
     this.reportType = reportType;
     this.selected = selected;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:templates>";
         if (util.isValidVariable(this.value)) {
             xml += "<app:value>" + this.value + "</app:value>";
@@ -2876,7 +2919,7 @@ function PrintingTemplateType(value, reportType, selected) {
 }
 
 function FetchReceiptFooterContentType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FetchReceiptFooterContentType></app:FetchReceiptFooterContentType>";
         xml += soapXMLEnd;
@@ -2887,7 +2930,7 @@ function SaveReceiptFooterContentType(receiptContentList) {
     this.receiptContentList = receiptContentList;
     this.tag = "<app:SaveReceiptFooterContentType>";
     this.endTag = "</app:SaveReceiptFooterContentType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         for (var i = 0; i < this.receiptContentList.length; i++) {
             xml += this.receiptContentList[i].getXML();
@@ -2898,7 +2941,7 @@ function SaveReceiptFooterContentType(receiptContentList) {
 }
 function DeleteReceiptFooterContentType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteReceiptFooterContentType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -2912,7 +2955,7 @@ function ReceiptFooterContentType(id, displayName, content, qrCodeUrl) {
     this.displayName = displayName;
     this.content = content;
     this.qrCodeUrl = qrCodeUrl;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:footerContent>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -2937,7 +2980,7 @@ function SaveDiscountType(aId, aRate, aRateType, aName, aDescription) {
     this.rateType = aRateType;
     this.name = aName;
     this.description = aDescription;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveDiscountRateType>";
         xml += "<app:rate>" + this.rate + "</app:rate>";
@@ -2946,7 +2989,7 @@ function SaveDiscountType(aId, aRate, aRateType, aName, aDescription) {
         if (typeof this.description != "undefined" && this.description) {
             xml += "<app:description>" + this.description + "</app:description>";
         }
-        if(this.id != null && this.id != "") {
+        if (this.id != null && this.id != "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += "</app:SaveDiscountRateType>";
@@ -2956,7 +2999,7 @@ function SaveDiscountType(aId, aRate, aRateType, aName, aDescription) {
 }
 function DeleteDiscountType(aDiscountId) {
     this.id = aDiscountId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteDiscountRateType><app:discountId>" + this.id + "</app:discountId>";
         xml += "</app:DeleteDiscountRateType>";
@@ -2965,7 +3008,7 @@ function DeleteDiscountType(aDiscountId) {
     }
 }
 function ListChargesType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListChargesType></app:ListChargesType>";
         xml += soapXMLEnd;
@@ -2981,7 +3024,7 @@ function SaveChargeType(aId, aRate, aRateType, aName, aDescription, aType, minGu
     this.type = aType;
     this.minGuest = minGuest;
     this.minMileage = minMileage;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveChargeType><app:charge>";
         xml += "<app:rate>" + this.rate + "</app:rate>";
@@ -3007,7 +3050,7 @@ function SaveChargeType(aId, aRate, aRateType, aName, aDescription, aType, minGu
 }
 function DeleteChargeType(aChargeId) {
     this.id = aChargeId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteChargeType><app:chargeId>" + this.id + "</app:chargeId>";
         xml += "</app:DeleteChargeType>";
@@ -3035,40 +3078,40 @@ function CompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZi
     this.merchantCode = merchantCode;
     this.region = region;
     this.hours = aHours;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "";
-        if(this.id != null && this.id != '') {
+        if (this.id != null && this.id != '') {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += "<app:name>" + util.getXMLSafeValue(this.name) + "</app:name>";
-        if(this.address1 != null && this.address1 != "") {
+        if (this.address1 != null && this.address1 != "") {
             xml += "<app:address1>" + util.getXMLSafeValue(this.address1) + "</app:address1>";
         }
-        if(this.address2 != null && this.address2 != "") {
+        if (this.address2 != null && this.address2 != "") {
             xml += "<app:address2>" + util.getXMLSafeValue(this.address2) + "</app:address2>";
         }
-        if(this.city != null && this.city != "") {
+        if (this.city != null && this.city != "") {
             xml += "<app:city>" + util.getXMLSafeValue(this.city) + "</app:city>";
         }
-        if(this.state != null && this.state != "") {
+        if (this.state != null && this.state != "") {
             xml += "<app:state>" + util.getXMLSafeValue(this.state) + "</app:state>";
         }
-        if(this.zipcode != null && this.zipcode != "") {
+        if (this.zipcode != null && this.zipcode != "") {
             xml += "<app:zipcode>" + this.zipcode + "</app:zipcode>";
         }
-        if(this.telephone1 != null && this.telephone1 != "") {
+        if (this.telephone1 != null && this.telephone1 != "") {
             xml += "<app:telephone1>" + this.telephone1 + "</app:telephone1>";
         }
-        if(this.telephone2 != null && this.telephone2 != "") {
+        if (this.telephone2 != null && this.telephone2 != "") {
             xml += "<app:telephone2>" + this.telephone2 + "</app:telephone2>";
         }
-        if(this.email != null && this.email != "") {
+        if (this.email != null && this.email != "") {
             xml += "<app:email>" + util.getXMLSafeValue(this.email) + "</app:email>";
         }
-        if(this.website != null && this.website != "") {
+        if (this.website != null && this.website != "") {
             xml += "<app:website>" + util.getXMLSafeValue(this.website) + "</app:website>";
         }
-        if(this.fax != null && this.fax != "") {
+        if (this.fax != null && this.fax != "") {
             xml += "<app:fax>" + this.fax + "</app:fax>";
         }
         if (this.reseller != null && this.reseller != "") {
@@ -3095,7 +3138,7 @@ function CompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZi
 }
 function FetchCompanyProfileType(fetchLicenseDetails) {
     this.fetchLicenseDetails = fetchLicenseDetails;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + "<app:FetchCompanyProfileType>"
         if (util.isValidBooleanVariable(this.fetchLicenseDetails)) {
             xml += "<app:fetchLicenseDetails>" + this.fetchLicenseDetails + "</app:fetchLicenseDetails>";
@@ -3106,7 +3149,7 @@ function FetchCompanyProfileType(fetchLicenseDetails) {
 }
 function SaveCompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZipcode, aTelephone1, aTelephone2, aEmail, aWebsite, aFax, reseller, region, merchantGroupId, storeId, aHours, merchantCode) {
     this.company = new CompanyProfileType(aId, aName, aAddress1, aAddress2, aCity, aState, aZipcode, aTelephone1, aTelephone2, aEmail, aWebsite, aFax, reseller, region, merchantGroupId, storeId, aHours, merchantCode);
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveCompanyProfileType><app:company>";
         xml += this.company.getXML();
@@ -3180,7 +3223,7 @@ function StaffBreak(id, startTime, endTime, staffId, attendanceId, adjustmentRea
 }
 function StaffCardInType(aPasscode) {
     this.passCode = aPasscode;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:StaffCardType>";
         xml += "<app:passcode>" + this.passcode + "</app:passcode>";
@@ -3192,7 +3235,7 @@ function StaffCardInType(aPasscode) {
 }
 function StaffCardOutType(aPasscode) {
     this.passCode = aPasscode;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:StaffCardType>";
         xml += "<app:passcode>" + this.passcode + "</app:passcode>";
@@ -3226,7 +3269,7 @@ function FetchAttendanceType(aFromDate, aToDate, aStaffId) {
 function DeleteAttendanceType(aId, userAuth) {
     this.id = aId;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteAttendanceType>";
         if (util.isValidVariable(this.id)) {
@@ -3286,12 +3329,12 @@ function RoleType(aId, aName, aReadOnly) {
     this.name = aName;
     this.readOnly = aReadOnly;
     this.functionIds = new Array();
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:name>" + this.name + "</app:name>";
-        if(this.id != null && this.id != "") {
+        if (this.id != null && this.id != "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        for(var i = 0; i < this.functionIds.length; i++) {
+        for (var i = 0; i < this.functionIds.length; i++) {
             xml += "<app:function><app:id>" + this.functionIds[i] + "</app:id>";
             xml += "<app:name></app:name></app:function>";
         }
@@ -3313,7 +3356,7 @@ function LocationDTO(aId, aName) {
     this.name = aName;
 }
 function ListRolesType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListRolesType/>";
         xml += soapXMLEnd;
@@ -3322,7 +3365,7 @@ function ListRolesType() {
 }
 function SaveRoleType(aRoleType) {
     this.roleType = aRoleType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveRoleType><app:role>";
         xml += this.roleType.getXML();
@@ -3333,7 +3376,7 @@ function SaveRoleType(aRoleType) {
 }
 function DeleteRoleType(aId) {
     this.id = aId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteRoleType>"
         xml += "<app:roleId>" + this.id + "</app:roleId>";
@@ -3350,7 +3393,7 @@ function ListStaffType(fetchSettings, adminMode, showPrevStaff, showPasscode, fe
     this.fetchDetails = fetchDetails;
     this.tag = "<app:ListStaffType>";
     this.endTag = "</app:ListStaffType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + this.tag;
         if (typeof this.fetchSettings != "undefined" && this.fetchSettings != "" && this.fetchSettings != null) {
             xml += "<app:fetchSettings>" + this.fetchSettings + "</app:fetchSettings>";
@@ -3373,7 +3416,7 @@ function ListStaffType(fetchSettings, adminMode, showPrevStaff, showPasscode, fe
 }
 function DeleteStaffType(aId) {
     this.id = aId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteStaffType><app:staffId>" + this.id + "</app:staffId></app:DeleteStaffType>";
         xml += soapXMLEnd;
@@ -3383,7 +3426,7 @@ function DeleteStaffType(aId) {
 function SaveStaffType(aStaff, updateSettings) {
     this.staff = aStaff;
     this.updateSettings = updateSettings;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveStaffType><app:staff>" + this.staff.getXML() + "</app:staff>";
         if (typeof this.updateSettings != "undefined" && this.updateSettings != "" && this.updateSettings != null) {
@@ -3403,7 +3446,7 @@ function SaveStaffUserConfigType(staffId, userId, configurations, updateSettings
     this.configurations = configurations;
     this.updateSettings = updateSettings;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveStaffType><app:staff><app:id>" + this.staffId + "</app:id>";
         xml += "<app:user><app:id>" + this.userId + "</app:id>";
@@ -3448,35 +3491,35 @@ function StaffType(aId, aName, lastName, aAge, aWage, aWageType, aRequireClockIn
     this.mappingId = mappingEmployeeId;
     this.maxWeeklyHours = maxWeeklyHours;
     this.email = email;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:name>" + this.name + "</app:name>";
         if (util.isValidVariable(this.lastName)) {
             xml += "<app:lastName>" + this.lastName + "</app:lastName>";
         }
-        if(this.id != null && this.id != "") {
+        if (this.id != null && this.id != "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        if(this.age != null && this.age != "")
+        if (this.age != null && this.age != "")
             xml += "<app:age>" + this.age + "</app:age>";
-        if(this.wage != null && this.wage != "")
+        if (this.wage != null && this.wage != "")
             xml += "<app:wage>" + this.wage + "</app:wage>";
-        if(this.wageType != null && this.wageType != "")
+        if (this.wageType != null && this.wageType != "")
             xml += "<app:wageType>" + this.wageType + "</app:wageType>";
-        if(this.homePhone != null && this.homePhone != "")
-            xml +="<app:homePhone>" + this.homePhone + "</app:homePhone>";
-        if(this.cellPhone != null && this.cellPhone != "")
-            xml +="<app:cellPhone>" + this.cellPhone + "</app:cellPhone>";
-        if(this.street != null && this.street != "")
+        if (this.homePhone != null && this.homePhone != "")
+            xml += "<app:homePhone>" + this.homePhone + "</app:homePhone>";
+        if (this.cellPhone != null && this.cellPhone != "")
+            xml += "<app:cellPhone>" + this.cellPhone + "</app:cellPhone>";
+        if (this.street != null && this.street != "")
             xml += "<app:street>" + this.street + "</app:street>";
-        if(this.city != null && this.city != "")
+        if (this.city != null && this.city != "")
             xml += "<app:city>" + this.city + "</app:city>";
-        if(this.state != null && this.state != "")
+        if (this.state != null && this.state != "")
             xml += "<app:state>" + this.state + "</app:state>";
-        if(this.zipcode != null && this.zipcode != "")
+        if (this.zipcode != null && this.zipcode != "")
             xml += "<app:zipcode>" + this.zipcode + "</app:zipcode>";
-        if(this.notes != null && this.notes != "")
+        if (this.notes != null && this.notes != "")
             xml += "<app:notes>" + this.notes + "</app:notes>";
-        if(this.user != null) {
+        if (this.user != null) {
             xml += "<app:user>" + this.user.getXML() + "</app:user>";
         }
         if (util.isValidBooleanVariable(this.requireClockInOut)) {
@@ -3498,8 +3541,8 @@ function UserDTO(aId, aName, lastName, posPasscode1, posPasscode2, aWage, aWageT
     this.id = aId;
     this.name = aName;
     this.lastName = lastName;
-    if (posPasscode1!=null && posPasscode1!="***"){this.posPasscode1 = posPasscode1;}
-    if (posPasscode2!=null && posPasscode2!="********"){this.posPasscode2 = posPasscode2;}
+    if (posPasscode1 != null && posPasscode1 != "***") { this.posPasscode1 = posPasscode1; }
+    if (posPasscode2 != null && posPasscode2 != "********") { this.posPasscode2 = posPasscode2; }
     this.wage = aWage;
     this.wageType = aWageType;
     this.companyId = companyId;
@@ -3535,7 +3578,7 @@ function UpdateUserStatusRequestDTO(userId, companyId, active, fromLocationId) {
 function CheckPrivilegeType(aPasscode, aFunctionId) {
     this.passcode = aPasscode;
     this.functionId = aFunctionId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:CheckPrivilegeType><app:passcode>" + this.passcode + "</app:passcode>";
         xml += "<app:functionId>" + this.functionId + "</app:functionId></app:CheckPrivilegeType>";
@@ -3546,7 +3589,7 @@ function CheckPrivilegeType(aPasscode, aFunctionId) {
 
 function ListPrivilegesType(roleId) {
     this.roleId = roleId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin + "<app:ListPrivilegesType>";
         if (typeof this.roleId != "undefined" && this.roleId != null && this.roleId != "") {
             xml += "<app:roleId>" + this.roleId + "</app:roleId>";
@@ -3560,7 +3603,7 @@ function SaveLoyaltyCardType(id, name, number, points, allTimePoints, balance, e
     this.loyaltyCard = new LoyaltyCardType(id, name, number, points, allTimePoints, balance, expireTime, enabled, issuedTo, membershipLevelId, customer, syncFromCloud, userAuth);
     this.tag = "<app:SaveLoyaltyCardType>";
     this.endTag = "</app:SaveLoyaltyCardType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.loyaltyCard.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -3574,7 +3617,7 @@ function FindLoyaltyCardsType(id, fetchCustomerDetails, fetchTransactions, issue
     this.fetchTransactions = fetchTransactions;
     this.issuedTo = issuedTo;
     this.cardNumber = cardNumber;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindLoyaltyCardsType>"
         if (util.isValidVariable(this.id)) {
@@ -3602,7 +3645,7 @@ function DeleteLoyaltyCardType(id, cardNumber, userAuth) {
     this.id = id;
     this.cardNumber = cardNumber;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteLoyaltyCardType>"
         if (util.isValidVariable(this.id)) {
@@ -3634,7 +3677,7 @@ function LoyaltyCardType(id, name, number, points, allTimePoints, balance, expir
     this.customer = customer;
     this.syncFromCloud = syncFromCloud;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:loyaltyCard>";
         if (this.id != null && this.id !== "" && typeof this.id != "undefined") {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3684,7 +3727,7 @@ function SaveCustomerInfoType(customer) {
     this.customer = customer;
     this.tag = "<app:SaveCustomerInfoType>";
     this.endTag = "</app:SaveCustomerInfoType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.customer.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -3694,7 +3737,7 @@ function SaveCustomerInfoType(customer) {
 
 function DeleteCustomerInfoType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteCustomerInfoType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -3721,7 +3764,7 @@ function CustomerInfoType(id, firstName, lastName, prefix, email, birthday, desc
     this.lastOtherOrderTime = lastOtherOrderTime;
     this.addressList = addressList;
     this.phoneList = phoneList;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:customer>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3790,7 +3833,7 @@ function AddressInfoType(id, address1, address2, state, city, zipcode, type, des
     this.type = type;
     this.description = description;
     this.primaryUse = primaryUse;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:address>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3831,7 +3874,7 @@ function PhoneInfoType(id, number, extension, type, description, primaryUse) {
     this.type = type;
     this.description = description;
     this.primaryUse = primaryUse;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:phone>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3860,7 +3903,7 @@ function SaveMembershipLevelType(id, name, description, discountId, minPointsThr
     this.membershipLevel = new MembershipLevelType(id, name, description, discountId, minPointsThreshold);
     this.tag = "<app:SaveMembershipLevelType>";
     this.endTag = "</app:SaveMembershipLevelType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.membershipLevel.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -3870,7 +3913,7 @@ function SaveMembershipLevelType(id, name, description, discountId, minPointsThr
 
 function FindMembershipLevelsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindMembershipLevelsType>"
         if (util.isValidVariable(this.id)) {
@@ -3884,7 +3927,7 @@ function FindMembershipLevelsType(id) {
 
 function DeleteMembershipLevelType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteMembershipLevelType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -3900,7 +3943,7 @@ function MembershipLevelType(id, name, description, discountId, minPointsThresho
     this.description = description;
     this.discountId = discountId;
     this.minPointsThreshold = minPointsThreshold;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:membershipLevel>"
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3923,7 +3966,7 @@ function MembershipLevelType(id, name, description, discountId, minPointsThresho
 }
 
 function SyncCustomerDataType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SyncOnlineOrderCustomerInfoType/>"
         xml += soapXMLEnd;
@@ -3933,7 +3976,7 @@ function SyncCustomerDataType() {
 
 function FindPaymentAccountsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindPaymentAccountsType>"
         if (+util.isValidVariable(this.id)) {
@@ -3949,7 +3992,7 @@ function SavePaymentAccountType(id, name, description, billedToSelf) {
     this.paymentAccount = new PaymentAccountType(id, name, description, billedToSelf);
     this.tag = "<app:SavePaymentAccountType>";
     this.endTag = "</app:SavePaymentAccountType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.paymentAccount.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -3962,7 +4005,7 @@ function PaymentAccountType(id, name, description, billedToSelf) {
     this.name = name;
     this.description = description;
     this.billedToSelf = billedToSelf;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:paymentAccount>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -3983,7 +4026,7 @@ function PaymentAccountType(id, name, description, billedToSelf) {
 
 function DeletePaymentAccountType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeletePaymentAccountType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -3995,7 +4038,7 @@ function DeletePaymentAccountType(id) {
 
 function FindItemSizesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindItemSizesType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4011,7 +4054,7 @@ function SaveItemSizeType(id, name, shortName) {
     this.itemSize = new ItemSizeType(id, name, shortName);
     this.tag = "<app:SaveItemSizeType>";
     this.endTag = "</app:SaveItemSizeType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.itemSize.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4023,7 +4066,7 @@ function ItemSizeType(id, name, shortName) {
     this.id = id;
     this.name = name;
     this.shortName = shortName;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:itemSize>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4041,7 +4084,7 @@ function ItemSizeType(id, name, shortName) {
 
 function DeleteItemSizeType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteItemSizeType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4053,7 +4096,7 @@ function DeleteItemSizeType(id) {
 
 function DeleteAppInstanceType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteAppInstanceType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4065,7 +4108,7 @@ function DeleteAppInstanceType(id) {
 
 function UpdateSystemStatusType(cloudServiceAction) {
     this.cloudServiceAction = cloudServiceAction;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:UpdateSystemStatusType>";
         if (util.isValidVariable(this.cloudServiceAction)) {
@@ -4079,7 +4122,7 @@ function UpdateSystemStatusType(cloudServiceAction) {
 
 function FindDeliveryAreasType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindDeliveryAreasType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4095,7 +4138,7 @@ function SaveDeliveryAreaType(id, city, state, zipCode) {
     this.deliveryArea = new DeliveryAreaType(id, city, state, zipCode);
     this.tag = "<app:SaveDeliveryAreaType>";
     this.endTag = "</app:SaveDeliveryAreaType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.deliveryArea.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4108,7 +4151,7 @@ function DeliveryAreaType(id, city, state, zipCode) {
     this.city = city;
     this.state = state;
     this.zipCode = zipCode;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:deliveryArea>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4129,7 +4172,7 @@ function DeliveryAreaType(id, city, state, zipCode) {
 
 function DeleteDeliveryAreaType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteDeliveryAreaType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4143,7 +4186,7 @@ function FindCustomTransactionsType(id, fromDate, toDate) {
     this.id = id;
     this.fromDate = fromDate;
     this.toDate = toDate;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindCustomTransactionsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4165,7 +4208,7 @@ function SaveCustomTransactionType(id, fromStaffId, fromCashDrawerId, from, toSt
     this.customTransaction = new CustomTransactionType(id, fromStaffId, fromCashDrawerId, from, toStaffId, toCashDrawerId, to, type, amount, description, voided, authorizedBy, transactionDate);
     this.tag = "<app:SaveCustomTransactionType>";
     this.endTag = "</app:SaveCustomTransactionType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.customTransaction.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4187,7 +4230,7 @@ function CustomTransactionType(id, fromStaffId, fromCashDrawerId, from, toStaffI
     this.voided = voided;
     this.authorizedBy = authorizedBy;
     this.transactionDate = transactionDate;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:customTransaction>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4235,7 +4278,7 @@ function CustomTransactionType(id, fromStaffId, fromCashDrawerId, from, toStaffI
 
 function DeleteCustomTransactionType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteCustomTransactionType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4249,7 +4292,7 @@ function FindCashRegisterActivitiesType(id, fromDate, toDate) {
     this.id = id;
     this.fromDate = fromDate;
     this.toDate = toDate;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindCashRegisterActivitiesType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4271,7 +4314,7 @@ function SaveCashRegisterActivityType(id, staffId, cashDrawerId, from, to, inAmo
     this.customTransaction = new CashRegisterActivityType(id, staffId, cashDrawerId, from, to, inAmount, outAmount, expectedOutAmount, discrepancyReason);
     this.tag = "<app:SaveCashRegisterActivityType>";
     this.endTag = "</app:SaveCashRegisterActivityType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.customTransaction.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4289,7 +4332,7 @@ function CashRegisterActivityType(id, staffId, cashDrawerId, from, to, inAmount,
     this.outAmount = outAmount;
     this.expectedOutAmount = expectedOutAmount;
     this.discrepancyReason = discrepancyReason;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:cashRegisterActivity>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4325,7 +4368,7 @@ function CashRegisterActivityType(id, staffId, cashDrawerId, from, to, inAmount,
 
 function DeleteCashRegisterActivityType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteCashRegisterActivityType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4337,7 +4380,7 @@ function DeleteCashRegisterActivityType(id) {
 
 function FindInventoryVendorsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindInventoryVendorsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4353,7 +4396,7 @@ function SaveInventoryVendorType(id, name, phoneNum, description) {
     this.inventoryVendor = new InventoryVendorType(id, name, phoneNum, description);
     this.tag = "<app:SaveInventoryVendorType>";
     this.endTag = "</app:SaveInventoryVendorType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.inventoryVendor.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4366,7 +4409,7 @@ function InventoryVendorType(id, name, phoneNum, description) {
     this.name = name;
     this.phoneNum = phoneNum;
     this.description = description;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryVendor>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4387,7 +4430,7 @@ function InventoryVendorType(id, name, phoneNum, description) {
 
 function DeleteInventoryVendorType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteInventoryVendorType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4399,7 +4442,7 @@ function DeleteInventoryVendorType(id) {
 
 function FindInventoryLocationsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindInventoryLocationsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4415,7 +4458,7 @@ function SaveInventoryLocationType(id, name, contactInfo, address1, address2, ci
     this.inventoryLocation = new InventoryLocationType(id, name, contactInfo, address1, address2, city, state, zipCode, phoneNum, description);
     this.tag = "<app:SaveInventoryLocationType>";
     this.endTag = "</app:SaveInventoryLocationType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.inventoryLocation.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4434,7 +4477,7 @@ function InventoryLocationType(id, name, contactInfo, address1, address2, city, 
     this.zipCode = zipCode;
     this.phoneNum = phoneNum;
     this.description = description;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryLocation>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4473,7 +4516,7 @@ function InventoryLocationType(id, name, contactInfo, address1, address2, city, 
 
 function DeleteInventoryLocationType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteInventoryLocationType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4485,7 +4528,7 @@ function DeleteInventoryLocationType(id) {
 
 function FindItemUnitsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindItemUnitsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4501,7 +4544,7 @@ function SaveItemUnitType(id, name) {
     this.itemUnit = new ItemUnitType(id, name);
     this.tag = "<app:SaveItemUnitType>";
     this.endTag = "</app:SaveItemUnitType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.itemUnit.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4512,7 +4555,7 @@ function SaveItemUnitType(id, name) {
 function ItemUnitType(id, name) {
     this.id = id;
     this.name = name;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:itemUnit>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4527,7 +4570,7 @@ function ItemUnitType(id, name) {
 
 function DeleteItemUnitType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteItemUnitType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4539,7 +4582,7 @@ function DeleteItemUnitType(id) {
 
 function FindInventoryItemGroupsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindInventoryItemGroupsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4555,7 +4598,7 @@ function SaveInventoryItemGroupType(id, name, displayPriority) {
     this.inventoryItemGroup = new InventoryItemGroupType(id, name, displayPriority);
     this.tag = "<app:SaveInventoryItemGroupType>";
     this.endTag = "</app:SaveInventoryItemGroupType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.inventoryItemGroup.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4567,7 +4610,7 @@ function InventoryItemGroupType(id, name, displayPriority) {
     this.id = id;
     this.name = name;
     this.displayPriority = displayPriority;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryItemGroup>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4585,7 +4628,7 @@ function InventoryItemGroupType(id, name, displayPriority) {
 
 function DeleteInventoryItemGroupType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteInventoryItemGroupType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4597,7 +4640,7 @@ function DeleteInventoryItemGroupType(id) {
 
 function FindInventoryItemsType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindInventoryItemsType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -4610,14 +4653,14 @@ function FindInventoryItemsType(id) {
 }
 
 function SaveInventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, purchaseUnit, purchaseUnitToBaseUnitRatio, productionUnit, baseUnitToProductionUnitRatio,
-                               lowStockAlertThreshold, targetStockQty, defaultPurchaseQty, displayPriority, groupId, defaultShippingAddressId, defaultVendorId, baseItemId,
-                               inventoryCountUnit, replenishType, targetStockQTYCalculation) {
+    lowStockAlertThreshold, targetStockQty, defaultPurchaseQty, displayPriority, groupId, defaultShippingAddressId, defaultVendorId, baseItemId,
+    inventoryCountUnit, replenishType, targetStockQTYCalculation) {
     this.inventoryItem = new InventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, purchaseUnit, purchaseUnitToBaseUnitRatio,
         productionUnit, baseUnitToProductionUnitRatio, lowStockAlertThreshold, targetStockQty, defaultPurchaseQty, displayPriority,
         groupId, defaultShippingAddressId, defaultVendorId, baseItemId, inventoryCountUnit, replenishType, targetStockQTYCalculation);
     this.tag = "<app:SaveInventoryItemType>";
     this.endTag = "</app:SaveInventoryItemType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.inventoryItem.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -4626,8 +4669,8 @@ function SaveInventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, pu
 }
 
 function InventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, purchaseUnit, purchaseUnitToBaseUnitRatio, productionUnit, baseUnitToProductionUnitRatio,
-                           lowStockAlertThreshold, targetStockQty, defaultPurchaseQty, displayPriority, groupId, defaultShippingAddressId, defaultVendorId, baseItemId,
-                           inventoryCountUnit, replenishType, targetStockQTYCalculation) {
+    lowStockAlertThreshold, targetStockQty, defaultPurchaseQty, displayPriority, groupId, defaultShippingAddressId, defaultVendorId, baseItemId,
+    inventoryCountUnit, replenishType, targetStockQTYCalculation) {
     this.id = id;
     this.name = name;
     this.sku = sku;
@@ -4648,7 +4691,7 @@ function InventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, purcha
     this.inventoryCountUnit = inventoryCountUnit;
     this.replenishType = replenishType;
     this.targetStockQTYCalculation = targetStockQTYCalculation;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryItem>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4717,7 +4760,7 @@ function InventoryItemType(id, name, sku, defaultPurchasePrice, baseUnit, purcha
 
 function DeleteInventoryItemType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteInventoryItemType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -4732,7 +4775,7 @@ function SaveInventoryCountRecordType(id, startingStockValue, endingStockValue, 
     this.userAuth = userAuth;
     this.tag = "<app:SaveInventoryCountRecordType>";
     this.endTag = "</app:SaveInventoryCountRecordType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += this.inventoryCountRecord.getXML();
@@ -4751,7 +4794,7 @@ function InventoryCountRecordType(id, startingStockValue, endingStockValue, stoc
     this.endingStockValue = endingStockValue;
     this.stockValueUsed = stockValueUsed;
     this.itemChangeRecords = itemChangeRecords;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryCountRecord>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4783,7 +4826,7 @@ function ItemChangeRecordType(id, originalStockQty, changedStockQty, originalEst
     this.adjustmentReason = adjustmentReason;
     this.itemId = itemId;
     this.lowStockAlertThreshold = lowStockAlertThreshold;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:itemChangeRecords>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4826,7 +4869,7 @@ function FindPurchaseOrdersType(id, from, to, status, vendorId, shippingAddressI
     this.shippingAddressId = shippingAddressId;
     this.tag = "<app:FindPurchaseOrdersType>";
     this.endTag = "</app:FindPurchaseOrdersType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         if (util.isValidVariable(this.id)) {
@@ -4859,7 +4902,7 @@ function SavePurchaseOrderType(id, subtotal, tax, paidAmount, notes, type, statu
     this.isSendEmail = isSendEmail;
     this.tag = "<app:SavePurchaseOrderType>";
     this.endTag = "</app:SavePurchaseOrderType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += this.purchaseOrder.getXML();
@@ -4887,7 +4930,7 @@ function PurchaseOrderType(id, subtotal, tax, paidAmount, notes, type, status, v
     this.shippingAddressId = shippingAddressId;
     this.vendorId = vendorId;
     this.orderItems = orderItems;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:purchaseOrder>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4937,7 +4980,7 @@ function PurchaseOrderItemType(id, name, sku, qty, purchaseUnitType, inStockUnit
     this.inStockToPurchaseQtyRatio = inStockToPurchaseQtyRatio;
     this.pricePerUnit = pricePerUnit;
     this.itemId = itemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:orderItems>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -4973,7 +5016,7 @@ function PurchaseOrderItemType(id, name, sku, qty, purchaseUnitType, inStockUnit
 
 function FindMenuRecipeType(itemId) {
     this.itemId = itemId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindMenuRecipesType>";
         if (util.isValidVariable(this.itemId)) {
@@ -4991,7 +5034,7 @@ function SaveMenuRecipeType(itemId, itemName, itemSizeId, itemSizeName, inventor
     this.itemCost = itemCost;
     this.tag = "<app:SaveMenuRecipeType>";
     this.endTag = "</app:SaveMenuRecipeType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         xml += this.menuRecipe.getXML();
@@ -5013,7 +5056,7 @@ function MenuRecipeType(itemId, itemName, itemSizeId, itemSizeName, inventoryIte
     this.itemSizeId = itemSizeId;
     this.itemSizeName = itemSizeName;
     this.inventoryItems = inventoryItems;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:menuRecipe>";
         if (util.isValidVariable(this.itemId)) {
             xml += "<app:itemId>" + this.itemId + "</app:itemId>";
@@ -5038,7 +5081,7 @@ function MenuRecipeType(itemId, itemName, itemSizeId, itemSizeName, inventoryIte
 function MenuRecipeInventoryItemType(id, units) {
     this.id = id;
     this.units = units;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:inventoryItems>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -5061,7 +5104,7 @@ function FindInventoryItemChangeRecordsType(id, from, to, itemId, itemGroupId, t
     this.groupBy = groupBy;
     this.tag = "<app:FindInventoryItemChangeRecordsType>";
     this.endTag = "</app:FindInventoryItemChangeRecordsType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         if (util.isValidVariable(this.id)) {
@@ -5094,7 +5137,7 @@ function FindInventoryItemChangeRecordsType(id, from, to, itemId, itemGroupId, t
 function UserAuthenticationType(userId, sessionKey) {
     this.userId = userId;
     this.sessionKey = sessionKey;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:userAuth>";
         if (util.isValidVariable(this.userId)) {
             xml += "<app:userId>" + this.userId + "</app:userId>";
@@ -5110,13 +5153,13 @@ function UserAuthenticationType(userId, sessionKey) {
 function FindGalleryType(id, prepareFor) {
     this.id = id;
     this.prepareFor = prepareFor;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindGalleryType>";
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        if(this.prepareFor != null && this.prepareFor !== "") {
+        if (this.prepareFor != null && this.prepareFor !== "") {
             xml += "<app:prepareFor>" + this.prepareFor + "</app:prepareFor>";
         }
         xml += "</app:FindGalleryType>";
@@ -5132,14 +5175,14 @@ function SaveGalleryImage(thumb, galleryList, displayOrder, displayTime, id, tra
     this.galleryList = galleryList;
     this.tag = "<app:SaveGalleryType>";
     this.endTag = "</app:SaveGalleryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag
-        if(this.thumb != null && this.thumb !== "" || this.displayTime != null && this.displayTime !== "") {
+        if (this.thumb != null && this.thumb !== "" || this.displayTime != null && this.displayTime !== "") {
             xml += this.image.getXML();
         }
-        if(this.galleryList != null) {
-            for(var i= 0; i<this.galleryList.length; i++) {
+        if (this.galleryList != null) {
+            for (var i = 0; i < this.galleryList.length; i++) {
                 xml += this.galleryList[i].getXML();
             }
         }
@@ -5156,31 +5199,31 @@ function GalleryImage(id, thumb, displayOrder, displayTime, transitionEffect, pr
     this.displayTime = displayTime;
     this.transitionEffect = transitionEffect;
     this.prepareFor = prepareFor;
-    if(this.thumb != null || this.displayTime != null) {
+    if (this.thumb != null || this.displayTime != null) {
         this.tag = "<app:gallery>";
         this.endTag = "</app:gallery>";
     } else {
         this.tag = "<app:galleryList>";
         this.endTag = "</app:galleryList>";
     }
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = this.tag;
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
-        if(this.thumb != null && this.thumb !== "") {
+        if (this.thumb != null && this.thumb !== "") {
             xml += "<app:thumbPath>" + this.thumb + "</app:thumbPath>";
         }
-        if(this.displayOrder != null && this.displayOrder !== "") {
+        if (this.displayOrder != null && this.displayOrder !== "") {
             xml += "<app:displayOrder>" + this.displayOrder + "</app:displayOrder>";
         }
-        if(this.displayTime != null && this.displayTime !== "") {
+        if (this.displayTime != null && this.displayTime !== "") {
             xml += "<app:displayTime>" + this.displayTime + "</app:displayTime>";
         }
-        if(this.transitionEffect != null && this.transitionEffect !== "") {
+        if (this.transitionEffect != null && this.transitionEffect !== "") {
             xml += "<app:transitionEffect>" + this.transitionEffect + "</app:transitionEffect>"
         }
-        if(this.prepareFor != null && this.prepareFor !== "") {
+        if (this.prepareFor != null && this.prepareFor !== "") {
             xml += "<app:prepareFor>" + this.prepareFor + "</app:prepareFor>"
         }
         xml += this.endTag;
@@ -5192,10 +5235,10 @@ function DeleteGalleryImage(id) {
     this.id = id;
     this.tag = "<app:DeleteGalleryType>";
     this.endTag = "</app:DeleteGalleryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
-        if(this.id != null && this.id !== ""){
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         xml += this.endTag;
@@ -5212,7 +5255,7 @@ function FindAuditLogType(id, from, to, displayName, user) {
     this.user = user;
     this.tag = "<app:FindAuditLogType>";
     this.endTag = "</app:FindAuditLogType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag;
         if (util.isValidVariable(this.id)) {
@@ -5239,7 +5282,7 @@ function FindAuditLogType(id, from, to, displayName, user) {
 function DeleteSaleItemReviewsType(fromDate, toDate) {
     this.fromDate = fromDate;
     this.toDate = toDate;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteSaleItemReviewType>";
         if (util.isValidVariable(this.fromDate)) {
@@ -5256,7 +5299,7 @@ function DeleteSaleItemReviewsType(fromDate, toDate) {
 
 function FindCoursesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindCoursesType>";
         if (typeof this.id != 'undefined' && this.id) {
@@ -5272,7 +5315,7 @@ function SaveCourseType(id, number, name) {
     this.course = new CourseType(id, number, name);
     this.tag = "<app:SaveCourseType>";
     this.endTag = "</app:SaveCourseType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.course.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -5284,7 +5327,7 @@ function CourseType(id, number, name) {
     this.id = id;
     this.number = number;
     this.name = name;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:course>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -5302,7 +5345,7 @@ function CourseType(id, number, name) {
 
 function DeleteCourseType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteCourseType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -5313,7 +5356,7 @@ function DeleteCourseType(id) {
 }
 
 function ListComboSaleItemType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListComboSaleItemType>"
         xml += "<app:fetchOptions>" + false + "</app:fetchOptions>";
@@ -5335,7 +5378,7 @@ function SendCommandToDevice(deviceId, deviceName, deviceType, command) {
     this.deviceName = deviceName;
     this.deviceType = deviceType;
     this.command = command;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SendCommandToDeviceType>"
         if (util.isValidVariable(this.deviceId)) {
@@ -5352,9 +5395,9 @@ function SendCommandToDevice(deviceId, deviceName, deviceType, command) {
     }
 }
 
-function BalanceCashDrawer (userId) {
+function BalanceCashDrawer(userId) {
     this.userId = userId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:BalanceCashDrawerType>"
         if (util.isValidVariable(this.userId)) {
@@ -5368,7 +5411,7 @@ function BalanceCashDrawer (userId) {
 
 function FindPrintJobRoutingRulesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindPrintJobRoutingRulesType>";
         if (util.isValidVariable(this.id)) {
@@ -5384,7 +5427,7 @@ function SavePrintJobRoutingRuleType(id, sourcePrinterId, targetPrinterId, order
     this.printJobRoutingRule = new PrintJobRoutingRuleType(id, sourcePrinterId, targetPrinterId, orderTypes, hoursId, appInstanceId);
     this.tag = "<app:SavePrintJobRoutingRuleType>";
     this.endTag = "</app:SavePrintJobRoutingRuleType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.printJobRoutingRule.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -5399,7 +5442,7 @@ function PrintJobRoutingRuleType(id, sourcePrinterId, targetPrinterId, orderType
     this.orderTypes = orderTypes;
     this.hoursId = hoursId;
     this.appInstanceId = appInstanceId;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:printJobRoutingRule>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -5426,7 +5469,7 @@ function PrintJobRoutingRuleType(id, sourcePrinterId, targetPrinterId, orderType
 
 function DeletePrintJobRoutingRuleType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeletePrintJobRoutingRuleType>"
         xml += "<app:id>" + this.id + "</app:id>";
@@ -5437,7 +5480,7 @@ function DeletePrintJobRoutingRuleType(id) {
 }
 
 function ListPricingRuleType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListPricingRuleType/>";
         xml += soapXMLEnd;
@@ -5447,7 +5490,7 @@ function ListPricingRuleType() {
 
 function DeletePricingRuleType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeletePricingRuleType>";
         xml += "<app:pricingRuleId>" + this.id + "</app:pricingRuleId>";
@@ -5458,7 +5501,7 @@ function DeletePricingRuleType(id) {
 }
 
 function SavePricingRuleType(id, name, appliedOnOrder, dateFrom, dateTo, weekdays, hourFrom, hourTo, thresholdPrice, thresholdQty, orderType,
-                             discountCashId, discountPercentageId, promotionPrice, promotionQty, saleItemList) {
+    discountCashId, discountPercentageId, promotionPrice, promotionQty, saleItemList) {
     this.myId = id;
     this.myName = name;
     this.myDateFrom = dateFrom;
@@ -5475,57 +5518,57 @@ function SavePricingRuleType(id, name, appliedOnOrder, dateFrom, dateTo, weekday
     this.myPromotionPrice = promotionPrice;
     this.myPromotionQty = promotionQty;
     this.mySaleItemList = saleItemList;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SavePricingRuleType>";
         xml += "<app:pricingRule>";
-        if(util.isValidVariable(this.myId)) {
+        if (util.isValidVariable(this.myId)) {
             xml += "<app:id>" + this.myId + "</app:id>";
         }
-        if(util.isValidVariable(this.myName)) {
+        if (util.isValidVariable(this.myName)) {
             xml += "<app:name>" + this.myName + "</app:name>";
         }
-        if(util.isValidVariable(this.myDateFrom)) {
+        if (util.isValidVariable(this.myDateFrom)) {
             xml += "<app:dateFrom>" + this.myDateFrom + "</app:dateFrom>";
         }
-        if(util.isValidVariable(this.myDateTo)) {
+        if (util.isValidVariable(this.myDateTo)) {
             xml += "<app:dateTo>" + this.myDateTo + "</app:dateTo>";
         }
         if (util.isValidBooleanVariable(this.myAppliedOnOrder)) {
             xml += "<app:appliedOnOrder>" + this.myAppliedOnOrder + "</app:appliedOnOrder>";
         }
-        if(util.isValidVariable(this.myWeekdays)) {
+        if (util.isValidVariable(this.myWeekdays)) {
             xml += "<app:weekdays>" + this.myWeekdays + "</app:weekdays>";
         }
-        if(util.isValidVariable(this.myHourFrom)) {
+        if (util.isValidVariable(this.myHourFrom)) {
             xml += "<app:hourFrom>" + this.myHourFrom + "</app:hourFrom>";
         }
-        if(util.isValidVariable(this.myHourTo)) {
+        if (util.isValidVariable(this.myHourTo)) {
             xml += "<app:hourTo>" + this.myHourTo + "</app:hourTo>";
         }
-        if(util.isValidVariable(this.myThresholdPrice)) {
+        if (util.isValidVariable(this.myThresholdPrice)) {
             xml += "<app:thresholdPrice>" + this.myThresholdPrice + "</app:thresholdPrice>";
         }
-        if(util.isValidVariable(this.myThresholdQty)) {
+        if (util.isValidVariable(this.myThresholdQty)) {
             xml += "<app:thresholdQty>" + this.myThresholdQty + "</app:thresholdQty>";
         }
-        if(util.isValidVariable(this.myOrderType)) {
+        if (util.isValidVariable(this.myOrderType)) {
             xml += "<app:orderType>" + this.myOrderType + "</app:orderType>";
         }
-        if(util.isValidVariable(this.myDiscountCashId)) {
+        if (util.isValidVariable(this.myDiscountCashId)) {
             xml += "<app:discountCashId>" + this.myDiscountCashId + "</app:discountCashId>";
         }
-        if(util.isValidVariable(this.myDiscountPercentageId)) {
+        if (util.isValidVariable(this.myDiscountPercentageId)) {
             xml += "<app:discountPercentageId>" + this.myDiscountPercentageId + "</app:discountPercentageId>";
         }
-        if(util.isValidVariable(this.myPromotionPrice)) {
+        if (util.isValidVariable(this.myPromotionPrice)) {
             xml += "<app:promotionPrice>" + this.myPromotionPrice + "</app:promotionPrice>";
         }
-        if(util.isValidVariable(this.myPromotionQty)) {
+        if (util.isValidVariable(this.myPromotionQty)) {
             xml += "<app:promotionQty>" + this.myPromotionQty + "</app:promotionQty>";
         }
-        if(util.isValidVariable(this.mySaleItemList)) {
-            for (var i = 0; i < this.mySaleItemList.length; i++){
+        if (util.isValidVariable(this.mySaleItemList)) {
+            for (var i = 0; i < this.mySaleItemList.length; i++) {
                 xml += this.mySaleItemList[i].getXML();
             }
         }
@@ -5538,7 +5581,7 @@ function SavePricingRuleType(id, name, appliedOnOrder, dateFrom, dateTo, weekday
 
 function DeleteHourlyRateType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteHourlyRateType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -5558,7 +5601,7 @@ function SaveHourlyRateType(id, from, to, step, price, fixPrice, saleItemId) {
     this.saleItemId = saleItemId;
     this.tag = "<app:hourlyRate>";
     this.endTag = "</app:hourlyRate>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveHourlyRateType>";
         xml += this.tag;
@@ -5591,7 +5634,7 @@ function SaveHourlyRateType(id, from, to, step, price, fixPrice, saleItemId) {
 }
 
 function ListHourlyRatesBySaleItemType() {
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListHourlyRatesBySaleItemType/>";
         xml += soapXMLEnd;
@@ -5601,7 +5644,7 @@ function ListHourlyRatesBySaleItemType() {
 
 function ListOrderTypeSettingsType(isFetchInUsedCustomOrderType) {
     this.fetchInUsedCustomOrderType = isFetchInUsedCustomOrderType;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:ListOrderTypeSettingsType>";
         if (util.isValidBooleanVariable(this.fetchInUsedCustomOrderType)) {
@@ -5620,7 +5663,7 @@ function SaveOrderTypeSettingType(id, displayName, shortName, orderType, default
     this.orderType = orderType;
     this.defaultAreaId = defaultAreaId;
     this.type = type;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveOrderTypeSettingType>";
         xml += "<app:orderTypeSetting>";
@@ -5651,7 +5694,7 @@ function SaveOrderTypeSettingType(id, displayName, shortName, orderType, default
 
 function FindSaleItemsType(onlyKTVItem) {
     this.onlyKTVItem = onlyKTVItem;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindSaleItemsType>";
         if (util.isValidVariable(this.onlyKTVItem)) {
@@ -5665,7 +5708,7 @@ function FindSaleItemsType(onlyKTVItem) {
 
 function FindMerchantStoresType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindMerchantStoresType>";
         if (util.isValidVariable(this.id)) {
@@ -5681,7 +5724,7 @@ function SaveMerchantStoreType(id, merchantId, name, storeId, busyIndicatorSetup
     this.merchantStore = new MerchantStoreType(id, merchantId, name, storeId, busyIndicatorSetup);
     this.tag = "<app:SaveMerchantStoreType>";
     this.endTag = "</app:SaveMerchantStoreType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.merchantStore.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -5691,7 +5734,7 @@ function SaveMerchantStoreType(id, merchantId, name, storeId, busyIndicatorSetup
 
 function DeleteMerchantStoreType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteMerchantStoreType>";
         xml += "<app:id>" + this.id + "</app:id>";
@@ -5707,7 +5750,7 @@ function MerchantStoreType(id, merchantId, name, storeId, busyIndicatorSetup) {
     this.name = name;
     this.storeId = storeId;
     this.busyIndicatorSetup = busyIndicatorSetup;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:merchantStore>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -5733,7 +5776,7 @@ function BatchPrintReceiptsType(userAuth, from, to) {
     this.userAuth = userAuth;
     this.from = from;
     this.to = to;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:PrintReceiptType>";
         xml += "<app:fromDate>" + this.from + "</app:fromDate>";
@@ -5749,7 +5792,7 @@ function BatchPrintReceiptsType(userAuth, from, to) {
 function SaveStaffBreakType(staffBreakList, userAuth) {
     this.staffBreakList = staffBreakList
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:SaveStaffBreakType>";
         if (util.isValidVariable(this.staffBreakList)) {
@@ -5768,7 +5811,7 @@ function SaveStaffBreakType(staffBreakList, userAuth) {
 function DeleteStaffBreakType(idList, userAuth) {
     this.idList = idList;
     this.userAuth = userAuth;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteStaffBreakType>";
         if (util.isValidVariable(this.idList)) {
@@ -5788,7 +5831,7 @@ function PrintReceiptType(userAuth, attendanceId, customTransactionId) {
     this.userAuth = userAuth;
     this.attendanceId = attendanceId;
     this.customTransactionId = customTransactionId
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:PrintReceiptType>";
         if (util.isValidVariable(this.attendanceId)) {
@@ -5809,9 +5852,9 @@ function PrintReceiptType(userAuth, attendanceId, customTransactionId) {
 function SubscribedTopics(aId, aName) {
     this.id = aId;
     this.name = aName;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:name>" + this.name + "</app:name>";
-        if(this.id != null && this.id !== "") {
+        if (this.id != null && this.id !== "") {
             xml += "<app:id>" + this.id + "</app:id>";
         }
         return xml;
@@ -5820,7 +5863,7 @@ function SubscribedTopics(aId, aName) {
 
 function FindTableCategoriesType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:FindTableCategoriesType>";
         if (util.isValidVariable(this.id)) {
@@ -5836,7 +5879,7 @@ function SaveTableCategoryType(id, name, description, minSeats, maxSeats) {
     this.tableCategory = new TableCategoryType(id, name, description, minSeats, maxSeats);
     this.tag = "<app:SaveTableCategoryType>";
     this.endTag = "</app:SaveTableCategoryType>";
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += this.tag + this.tableCategory.getXML() + this.endTag;
         xml += soapXMLEnd;
@@ -5850,7 +5893,7 @@ function TableCategoryType(id, name, description, minSeats, maxSeats) {
     this.description = description;
     this.minSeats = minSeats;
     this.maxSeats = maxSeats;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = "<app:tableCategory>";
         if (util.isValidVariable(this.id)) {
             xml += "<app:id>" + this.id + "</app:id>";
@@ -5874,7 +5917,7 @@ function TableCategoryType(id, name, description, minSeats, maxSeats) {
 
 function DeleteTableCategoryType(id) {
     this.id = id;
-    this.getXML = function() {
+    this.getXML = function () {
         var xml = soapXMLBegin;
         xml += "<app:DeleteTableCategoryType>"
         xml += "<app:id>" + this.id + "</app:id>";
