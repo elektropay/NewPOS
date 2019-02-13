@@ -1,0 +1,76 @@
+.welcomePage {
+    height: 100%;
+    position: relative;
+    img {
+        position: absolute;
+    }
+    .ele1 {
+        top: 50px;
+        left: 120px;
+        animation: ele1 2.5s infinite alternate;
+    }
+    .ele5 {
+        top: 380px;
+        right: 120px;
+        animation: ele5 3s infinite alternate;
+    }
+    .ele2 {
+        left: 200px;
+        top: 400px;
+        animation: ele2 4s infinite alternate;
+    }
+    .ele3 {
+        left: 50%;
+        margin-left: -120px;
+        bottom: 150px;
+        animation: ele3 3s infinite alternate;
+    }
+    .ele4 {
+        right: 80px;
+        top: 120px;
+        animation: ele2 3.5s infinite alternate;
+    }
+    @media screen and (max-width: 1400px) {
+        .ele3,
+        .ele4 {
+            display: none;
+        }
+    }
+}
+
+@keyframes ele1 {
+    from {
+        transform: translateY(-5px)
+    }
+    to {
+        transform: translateY(10px)
+    }
+}
+
+@keyframes ele2 {
+    from {
+        transform: translateX(-15px)
+    }
+    to {
+        transform: translateX(15px)
+    }
+}
+
+@keyframes ele3 {
+    from {
+        transform: translateX(-10px)
+    }
+    to {
+        transform: translateX(10px)
+    }
+}
+
+
+@keyframes ele5 {
+    from {
+        transform: translateY(-10px)
+    }
+    to {
+        transform: translateY(10px)
+    }
+}

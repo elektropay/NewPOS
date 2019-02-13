@@ -1,26 +1,27 @@
 .logo {
-    margin: 20px;
     text-align: center;
-    background: #fff;
-    border-radius: 6px;
-    padding: 10px 15px;
+    overflow: hidden;
+    height: 30px;
+}
+
+.logo span {
+    font-size: 20px;
+    color: #fff;
+    vertical-align: middle;
+    font-weight: bold;
 }
 
 .logo img {
-    width: 100%;
+    width: 30px;
+    margin-right: 10px;
 }
 
 .minLogo {
-    margin: 20px 15px;
-    width: 50px;
-    padding: 5px;
-    background: #fff;
-    border-radius: 6px;
+    text-align: center;
 }
 
 .minLogo img {
-    width: 40px;
-    border-radius: 50%;
+    width: 30px;
 }
 
 .iframeCon {
@@ -29,8 +30,17 @@
     height: calc(100vh - 68px);
 }
 
-.iframeCon iframe{
-  border: none;
-  width: 100%;
-  height: 100%;
+.iframeCon iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title .anticon {
+    font-size: 20px;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+    background-color: #faad14;
 }
