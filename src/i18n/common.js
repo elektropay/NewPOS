@@ -35,6 +35,49 @@ export default {
         vi: 'Xác nhận',
         ms: 'ยืนยัน'
     },
+    loadFail:{
+        en: 'Unable to load data',
+        'zh-cn': '读取数据失败',
+        'zh-Hant': '讀取數據失敗',
+        es: 'No se puede cargar datos',
+        ko: '데이터 로드를 할 수 없습니다',
+        vi: 'Không thể tải dữ liệu',
+        ms: 'ไม่สามารถโหลดข้อมูล'
+    },
+    submitSuccess:{
+        en: 'Submitted Successfully!',
+        'zh-cn': '保存成功',
+        'zh-Hant': '保存成功',
+        es: 'Enviado con éxito!\r\r\n\r\r\n',
+        vi: 'Đã gửi thành công!',
+        ms: 'ส่งเรียบร้อยแล้ว!'
+    },
+    submitFail:{
+        en: 'Unable to submit your request.',
+        'zh-cn': '保存失败.',
+        'zh-Hant': '保存失敗.',
+        es: 'No se ha podido enviar su solicitud.',
+        vi: 'Không thể gửi yêu cầu của bạn.',
+        ms: 'ไม่สามารถส่งคำขอของคุณ'
+    },
+    deleteSuccess:{
+        en: 'Entry have been successfully deleted',
+        'zh-cn': '删除成功',
+        'zh-Hant': '刪除成功',
+        es: 'Entrada se han eliminado con éxito',
+        ko: '엔트리가 완벽하게 지워졌습니다',
+        vi: 'Mục đã được xóa thành công',
+        ms: 'รายการได้ถูกลบไปแล้วประสบความสำเร็จ'
+    },
+    deleteFail:{
+        en: 'Unable to delete entry',
+        'zh-cn': '删除失败',
+        'zh-Hant': '刪除失敗',
+        es: 'No se puede eliminar la entrada',
+        ko: '엔트리를 지울수 없습니다',
+        vi: 'Không thể xóa entry',
+        ms: 'ไม่สามารถที่จะลบรายการ'
+    },
     add: {
         en: 'Add',
         'zh-cn': '添加',

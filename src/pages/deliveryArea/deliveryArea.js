@@ -61,7 +61,7 @@ class deliveryAreaPage extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 setTimeout(() => {
-                    message.success('提交成功');
+                    message.success(i18n.submitSuccess);
                     if (this.state.editState === "create") {
                         values.id = this.state.list.length + 1;
                         this.state.list.push(values)
@@ -78,7 +78,7 @@ class deliveryAreaPage extends React.Component {
                         loading: false,
                         editState:"wait"
                     })
-                }, 1000)
+                }, 500)
             }
         });
     }
@@ -96,7 +96,7 @@ class deliveryAreaPage extends React.Component {
         });
 
         setTimeout(() => {
-            message.success('删除成功');
+            message.success(i18n.deleteSuccess);
             var index;
             for (var i = 0; i < this.state.list.length; i++) {
                 if (this.state.list[i].id === item.id) {
