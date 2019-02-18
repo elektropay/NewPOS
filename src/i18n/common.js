@@ -1,4 +1,8 @@
 export default {
+    language:{
+        en:'Language',
+        "zh-cn":"语言"
+    },
     new: {
         en: 'New',
         'zh-cn': '新建',

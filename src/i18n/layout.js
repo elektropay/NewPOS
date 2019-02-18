@@ -131,7 +131,7 @@ export default {
         icon: "setting",
         zh_cn: "系统设置",
         zh_Hant: "系统设置",
-        en: "System1"
+        en: "System"
     },
     "Setting": {
         zh_cn: "系统",
