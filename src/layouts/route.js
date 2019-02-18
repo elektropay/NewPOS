@@ -1,3 +1,8 @@
+// 静态页面用url标记地址
+// route组件用component引入
+
+import deliveryArea from '../pages/deliveryArea/deliveryArea'
+
 export default [
     {
         id: "Restaurant",
@@ -13,7 +18,7 @@ export default [
             url: "tables.html"
         }, {
             id: "Delivery",
-            url: "deliveryArea.html"
+            component: deliveryArea
         }, {
             id: "Gallery",
             url: "gallery.html"

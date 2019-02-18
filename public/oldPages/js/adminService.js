@@ -11,32 +11,44 @@
 /** 请求前，从xml中提取ajax信息 */
 function transRequest(xml) {
     var json = {
+        api:"",
         url: ""
     }
     var xmlString = xml.substring(xml.indexOf("<soapenv:Body>") + 14, xml.indexOf("</soapenv:Body>"))
     if (xmlString[xmlString.indexOf(">") - 1] === "/") {
-        json.url = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf("/>"));
+        json.api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf("/>"));
         xmlString = "";
     } else {
-        json.url = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf(">"));
+        json.api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf(">"));
         xmlString = xmlString.substring(xmlString.indexOf(">") + 1, xmlString.lastIndexOf("</app"));
     }
-
-    var xmlArray = [];
-    if (xmlString.indexOf("app") > 0) {
-        xmlArray = xmlString.split("<app:");
-        if (xmlArray.length > 1) {
-            json.data = {};
-            for (var i = 1; i < xmlArray.length; i++) {
-                var value = xmlArray[i].substring(xmlArray[i].indexOf(">") + 1, xmlArray[i].indexOf("</app"));
-                if (value === "true") value = true;
-                if (value == "false") value = false;
-                json.data[xmlArray[i].substring(0, xmlArray[i].indexOf(">"))] = value;
-            }
-        }
+    json.url = "/api/" + json.api.charAt(0).toLowerCase() + json.api.substring(1, json.api.length);
+    if (json.url.substring(json.url.length - 4, json.url.length) == "Type") {
+        json.url = json.url.substring(0, json.url.length - 4)
     }
+    json.data = transRequestParam(xmlString, {})
     return json;
 }
+function transRequestParam(str, data) {
+    if (str.indexOf("<app:") > -1) {
+        var firstFlag = str.substring(str.indexOf("<app:") + 5, str.indexOf(">"));
+        var firstFlagContent = str.substring(str.indexOf(">") + 1, str.lastIndexOf(firstFlag) - 6);
+        if (firstFlagContent.indexOf("<app:") > -1) {
+            data[firstFlag] = transRequestParam(firstFlagContent, {})
+        } else {
+            // 无法知道“true”是否是用户输入的字符串
+            // data[firstFlag] = firstFlagContent === "true" ? true : firstFlagContent === "false" ? false : firstFlagContent
+            data[firstFlag] = firstFlagContent
+        }
+
+        var rest = str.substring(str.lastIndexOf(firstFlag) + firstFlag.length + 1, str.length);
+        if (rest.indexOf("<app:") > -1) {
+            transRequestParam(rest, data)
+        }
+    }
+    return data;
+}
+
 /** 转换返回值的格式
  * obj:{code:0,info:"",data:{...}}
  * =>
@@ -127,7 +139,7 @@ function callWebService(soapType, responseHandler, args) {
         } else {
             console.log('biscuit.js or util.js is not properly loaded!!!');
         }
-        xmlhttp.onreadystatechange = function () {responseHandler
+        xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 var responseText = xmlhttp.responseText;
 
@@ -143,7 +155,9 @@ function callWebService(soapType, responseHandler, args) {
 
         // var requestObj = transRequest(soapXML)
         // axios.post(requestObj.url,requestObj.data).then(function (response) {
-        //     responseHandler(transResponse(response))
+        // var responseData={}
+        // responseData[requestObj.api.toLowerCase() +"responsetype"] = transResponse(response)
+        //     responseHandler(responseData)
         // })
     }
 }

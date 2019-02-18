@@ -1,14 +1,22 @@
-import WELCOME from './welcome';
-import LAYOUT from './layout';
+// common中包含一些常用字段，会包含在在各语言模块中导出
+import Common from './common'
+import Welcome from './welcome';
+import Layout from './layout';
+import Restaurant from './restaurant';
+import DeliveryArea from './deliveryArea'
 
 const locale = "zh_cn";
+const localeDefault = "en";
 
-function getLocale(locales){
-    Object.keys(locales).forEach(function(key){
-        locales[key] = locales[key][locale]
+export const welcome = getLocale(Welcome);
+export const layout = getLocale(Layout);
+export const restaurant = getLocale(Restaurant);
+export const deliveryArea = getLocale(DeliveryArea)
+
+function getLocale(locales) {
+    var lan = Object.assign({}, Common, locales);
+    Object.keys(lan).forEach(function (key) {
+        lan[key] = lan[key][locale] || lan[key][locale.replace(/_/i, "-")] || lan[key][localeDefault]
     });
-    return locales;
+    return lan;
 }
-
-export const welcome = getLocale(WELCOME);
-export const layout = getLocale(LAYOUT);
