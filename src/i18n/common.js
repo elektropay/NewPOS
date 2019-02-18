@@ -44,6 +44,10 @@ export default {
         vi: 'Không thể tải dữ liệu',
         ms: 'ไม่สามารถโหลดข้อมูล'
     },
+    editOrCreate:{
+        'zh-cn':"选择列表中的项目进行编辑，或者新建一个项目",
+        en:"Select a item in the list to edit, or create a new item"
+    },
     submitSuccess:{
         en: 'Submitted Successfully!',
         'zh-cn': '保存成功',

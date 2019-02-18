@@ -144,7 +144,7 @@ class deliveryAreaPage extends React.Component {
                 <div className="right">
                     <div style={{ display: this.state.editState === "wait" ? "block" : "none" }} className="editTip">
                         <div className="editTipCon">
-                            <p>选择列表中的项目进行编辑，或者新建一个项目</p>
+                            <p>{i18n.editOrCreate}</p>
                             <Button className="editTipBtn" type="primary" onClick={this.createNew.bind(this)}>{i18n.new}</Button>
                         </div>
                     </div>
