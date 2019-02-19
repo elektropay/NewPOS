@@ -95,7 +95,6 @@ function callWebService(soapType, responseHandler, args) {
         return;
     }
     var soapXML = soapType.getXML();
-    console.log("request", JSON.stringify(transRequest(soapXML)))
     if (args && args.$http) {
         args.$http.post(serverUrl, soapXML).then(
             function (response) {
@@ -142,7 +141,6 @@ function callWebService(soapType, responseHandler, args) {
                 responseText = responseText.substring(start + 11, end);
 
                 var myJsonObject = xmlObjTree.parseXML(responseText);
-                console.log("response",JSON.stringify(myJsonObject))
                 responseHandler(myJsonObject, args);
             }
         }

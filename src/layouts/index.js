@@ -11,6 +11,24 @@ import { layout as i18n } from '../i18n'
 const { Content, Sider, Header } = Layout;
 const SubMenu = Menu.SubMenu;
 
+// 解析路由，获取当前页面的菜单位置和面包屑文字
+const path = window.location.pathname.split("/");
+const pathname = path[path.length - 1];
+let breadcrumb = [""], openKeys = [],defaultKey=[];
+if (pathname !== "") {
+  Object.keys(route).forEach((parentKey) => {
+    const children = route[parentKey].children;
+    Object.keys(children).forEach((subKey) => {
+      console.log(children[subKey])
+      if ((children[subKey].component && children[subKey].id === pathname) || (children[subKey].url && children[subKey].url === pathname + ".html")) {
+        breadcrumb = [i18n[route[parentKey].id], i18n[children[subKey].id]]
+        openKeys = [route[parentKey].id];
+        defaultKey = [children[subKey].id]
+      }
+    })
+  })
+}
+
 message.config({
   top: 10,
   duration: 2,
@@ -20,8 +38,17 @@ message.config({
 class App extends React.Component {
   state = {
     collapsed: false,
-    breadcrumb: [""]
-  };
+    breadcrumb,
+    openKeys,
+    defaultKey
+  }
+
+  onOpenChange = (openKeys) => {
+    const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+    this.setState({
+      openKeys: latestOpenKey ? [latestOpenKey] : [],
+    });
+  }
 
   dropMenu = (
     <Menu>
@@ -76,7 +103,7 @@ class App extends React.Component {
                 </div>
               </Link>
             </div>
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+            <Menu theme="dark" defaultSelectedKeys={this.state.defaultKey} mode="inline" openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}>
               {
                 route.map((items) => {
                   return (
