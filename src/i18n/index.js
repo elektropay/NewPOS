@@ -5,8 +5,7 @@ import Layout from './layout';
 import Restaurant from './restaurant';
 import DeliveryArea from './deliveryArea'
 
-const locale = window.storage.getItem("locale") || "zh_cn";
-const localeDefault = "en";
+const locale = window.storage.getItem("locale") || "en";
 
 export const welcome = getLocale(Welcome);
 export const layout = getLocale(Layout);
@@ -16,7 +15,7 @@ export const deliveryArea = getLocale(DeliveryArea)
 function getLocale(locales) {
     var lan = Object.assign({}, Common, locales);
     Object.keys(lan).forEach(function (key) {
-        lan[key] = lan[key][locale] || lan[key][locale.replace(/-/i, "_")] || lan[key][locale.replace(/_/i, "-")] || lan[key][localeDefault]
+        lan[key] = lan[key][locale] || lan[key][locale.replace(/-/i, "_")] || lan[key][locale.replace(/_/i, "-")];
     });
     return lan;
 }

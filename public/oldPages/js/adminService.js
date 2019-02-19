@@ -11,42 +11,35 @@
 /** 请求前，从xml中提取ajax信息 */
 function transRequest(xml) {
     var json = {
-        api:"",
-        url: ""
+        url: "",
+        data:{}
     }
+    var api="";
     var xmlString = xml.substring(xml.indexOf("<soapenv:Body>") + 14, xml.indexOf("</soapenv:Body>"))
     if (xmlString[xmlString.indexOf(">") - 1] === "/") {
-        json.api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf("/>"));
-        xmlString = "";
+        api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf("/>"));
     } else {
-        json.api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf(">"));
-        xmlString = xmlString.substring(xmlString.indexOf(">") + 1, xmlString.lastIndexOf("</app"));
+        api = xmlString.substring(xmlString.indexOf(":") + 1, xmlString.indexOf(">"));
     }
-    json.url = "/api/" + json.api.charAt(0).toLowerCase() + json.api.substring(1, json.api.length);
+    json.url = "/api/" + api.charAt(0).toLowerCase() + api.substring(1, api.length);
     if (json.url.substring(json.url.length - 4, json.url.length) == "Type") {
         json.url = json.url.substring(0, json.url.length - 4)
     }
-    json.data = transRequestParam(xmlString, {})
+    var appData = xmlObjTree.parseXML(xml)['soapenv:envelope']['soapenv:body'];
+    if (Object.keys(appData).length>0){
+        appData = appData[Object.keys(appData)[0]]
+        json.data = mapAppData(appData)
+    }
     return json;
 }
-function transRequestParam(str, data) {
-    if (str.indexOf("<app:") > -1) {
-        var firstFlag = str.substring(str.indexOf("<app:") + 5, str.indexOf(">"));
-        var firstFlagContent = str.substring(str.indexOf(">") + 1, str.lastIndexOf(firstFlag) - 6);
-        if (firstFlagContent.indexOf("<app:") > -1) {
-            data[firstFlag] = transRequestParam(firstFlagContent, {})
-        } else {
-            // 无法知道“true”是否是用户输入的字符串
-            // data[firstFlag] = firstFlagContent === "true" ? true : firstFlagContent === "false" ? false : firstFlagContent
-            data[firstFlag] = firstFlagContent
+function mapAppData(appData){
+    var mapData = {}
+    Object.keys(appData).forEach((key) => {
+        if (key.indexOf("app:") > -1) {
+            mapData[key.substring(4, key.length)] = typeof appData[key] === "object" ? mapAppData(appData[key]) : appData[key]
         }
-
-        var rest = str.substring(str.lastIndexOf(firstFlag) + firstFlag.length + 1, str.length);
-        if (rest.indexOf("<app:") > -1) {
-            transRequestParam(rest, data)
-        }
-    }
-    return data;
+    })
+    return mapData
 }
 
 /** 转换返回值的格式
@@ -102,6 +95,7 @@ function callWebService(soapType, responseHandler, args) {
         return;
     }
     var soapXML = soapType.getXML();
+    console.log("request", JSON.stringify(transRequest(soapXML)))
     if (args && args.$http) {
         args.$http.post(serverUrl, soapXML).then(
             function (response) {
@@ -148,6 +142,7 @@ function callWebService(soapType, responseHandler, args) {
                 responseText = responseText.substring(start + 11, end);
 
                 var myJsonObject = xmlObjTree.parseXML(responseText);
+                console.log("response",JSON.stringify(myJsonObject))
                 responseHandler(myJsonObject, args);
             }
         }

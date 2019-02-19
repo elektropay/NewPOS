@@ -33,6 +33,7 @@ class App extends React.Component {
     <Menu>
       <Menu.Item onClick={this.changeLanguage.bind(this, "en")}>English</Menu.Item>
       <Menu.Item onClick={this.changeLanguage.bind(this, "zh-cn")}>中文</Menu.Item>
+      <Menu.Item onClick={this.changeLanguage.bind(this, "zh-Hant")}>繁體中文</Menu.Item>
     </Menu>
   )
 
@@ -109,19 +110,18 @@ class App extends React.Component {
                   }
                 </Breadcrumb>
                 <div style={{ float: "right" }}>
-                  <Dropdown overlay={this.languageMenu} style={{ width: "60px" }}>
+                  <Dropdown overlay={this.dropMenu} style={{ width: "100px" }}>
                     <div className="dropMenu">
-                      <span style={{ margin: "0 10px" }}>{i18n.language}</span>
+                      <img alt="" src={require("../static/images/layout/user.png")} style={{ width: "32px" }} />
+                      <span style={{ margin: "0 10px" }}>Admin</span>
                       <Icon type="down" />
                     </div>
                   </Dropdown>
                 </div>
                 <div style={{ float: "right" }}>
-                  <Dropdown overlay={this.dropMenu} style={{width:"100px"}}>
-                    <div className="dropMenu">
-                      <img alt="" src={require("../static/images/layout/user.png")} style={{ width: "32px" }} />
-                      <span style={{ margin: "0 10px" }}>Admin</span>
-                      <Icon type="down" />
+                  <Dropdown overlay={this.languageMenu} style={{ width: "60px" }}>
+                    <div className="languageMenu">
+                      <span>{i18n.language}</span>
                     </div>
                   </Dropdown>
                 </div>

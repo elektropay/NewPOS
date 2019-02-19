@@ -1,6 +1,7 @@
 // 静态页面用url标记地址
 // route组件用component引入
 
+import restaurant from '../pages/restaurant/restaurant'
 import deliveryArea from '../pages/deliveryArea/deliveryArea'
 
 export default [
@@ -10,6 +11,7 @@ export default [
         children: [{
             id: "Restaurant1",
             url: "company.html"
+            // component: restaurant
         }, {
             id: "Staff",
             url: "staff.html"

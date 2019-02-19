@@ -1,7 +1,8 @@
 export default {
     language:{
-        en:'Language',
-        "zh-cn":"语言"
+        en:'English',
+        "zh-cn":"中文",
+        "zh-Hant":"繁體中文"
     },
     new: {
         en: 'New',
@@ -229,6 +230,33 @@ export default {
         ko: '주소',
         vi: 'Địa chỉ nhà',
         ms: 'ที่อยู่'
+    },
+    zipCode:{
+        en: 'ZIP Code',
+        'zh-cn': '邮编',
+        'zh-Hant': '郵編',
+        es: 'Codigo Postal',
+        ko: '우편번호',
+        vi: 'Ma bưu điện',
+        ms: 'รหัสไปรษณีย์'
+    },
+    state:{
+        en: 'State',
+        'zh-cn': '州/省',
+        'zh-Hant': '州/省',
+        es: 'Estado',
+        ko: '주',
+        vi: 'Nha Nuoc',
+        ms: 'สถานะ'
+    },
+    city: {
+        en: 'City',
+        'zh-cn': '城市',
+        'zh-Hant': '城市',
+        es: 'Ciudad',
+        ko: '도시',
+        vi: 'thành phố',
+        ms: 'เมือง'
     },
     from:{
         en: 'From',

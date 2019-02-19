@@ -55,11 +55,11 @@ class deliveryAreaPage extends React.Component {
     // 提交数据
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({
+            loading: true
+        })
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.setState({
-                    loading: true
-                })
                 setTimeout(() => {
                     message.success(i18n.submitSuccess);
                     if (this.state.editState === "create") {
@@ -76,7 +76,7 @@ class deliveryAreaPage extends React.Component {
                     }
                     this.setState({
                         loading: false,
-                        editState:"wait"
+                        editState: "wait"
                     })
                 }, 500)
             }

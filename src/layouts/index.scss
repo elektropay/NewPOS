@@ -26,6 +26,7 @@
 
 .iframeCon {
     padding: 0;
+    overflow: auto;
     background: #fff;
     height: calc(100vh - 105px);
     margin: 20px;
@@ -58,6 +59,20 @@
     cursor: default;
 }
 
+.languageMenu {
+    padding: 0 12px;
+    height: 64px;
+    cursor: default;
+    span {
+        padding: 4px 16px 6px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        &:hover {
+            background: #f6f7f8;
+        }
+    }
+}
+
 .dropMenu:hover {
     background: #f6f7f8;
 }
@@ -70,7 +85,7 @@
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
     background-color: #faad14;
 }
- 
+
 .ant-btn:hover,
 .ant-btn:active,
 .ant-btn:focus {
@@ -215,4 +230,23 @@
     line-height: 40px;
     margin-left: 30px;
     font-size: 16px;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active,
+.ant-tabs-nav .ant-tabs-tab:hover {
+    color: #faad14;
+}
+
+.ant-tabs-ink-bar {
+    background-color: #faad14;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+    font-size: 16px;
+}
+
+.ant-btn-lg{
+    width:320px;
+    height: 42px;
+    line-break: 42px;
 }

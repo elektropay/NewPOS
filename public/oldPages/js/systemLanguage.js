@@ -8,11 +8,8 @@ var systemLanguage = {
     defaultLangId : "en",
     currentLangId : null,
     init : function(langId) {
-        if (util.isValidVariable(langId)) {
-            systemLanguage.currentLangId = langId;
-        } else {
-            systemLanguage.currentLangId = systemLanguage.defaultLangId;
-        }
+        langId = localStorage.getItem("locale") ? JSON.parse(JSON.parse(localStorage.getItem("locale")).value) : systemLanguage.defaultLangId;
+        systemLanguage.currentLangId = langId ;
         for (var i = 0; i < systemLanguage.apiValueList.length; i++) {
             var element = systemLanguage.apiValueList[i];
             systemLanguage.apiValueMap[element.apiValue] = element;
