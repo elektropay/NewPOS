@@ -10,11 +10,31 @@ import { layout as i18n } from '../i18n'
 
 const { Content, Sider, Header } = Layout;
 const SubMenu = Menu.SubMenu;
+// 多语言配置
+const languages = [{
+  label: "English",
+  key: "en"
+}, {
+  label: "中文",
+  key: "zh-cn"
+}, {
+  label: "繁體中文",
+  key: "zh-Hant"
+}, {
+  label: "español",
+  key: "es"
+}, {
+  label: "한국어",
+  key: "ko"
+}, {
+  label: "tiếng việt",
+  key: "vi"
+}]
 
 // 解析路由，获取当前页面的菜单位置和面包屑文字
 const path = window.location.pathname.split("/");
 const pathname = path[path.length - 1];
-let breadcrumb = [""], openKeys = [],defaultKey=[];
+let breadcrumb = [""], openKeys = [], defaultKey = [];
 if (pathname !== "") {
   Object.keys(route).forEach((parentKey) => {
     const children = route[parentKey].children;
@@ -28,6 +48,7 @@ if (pathname !== "") {
   })
 }
 
+// 消息弹框默认配置
 message.config({
   top: 10,
   duration: 2,
@@ -49,6 +70,7 @@ class App extends React.Component {
     });
   }
 
+  // 用户名下拉菜单
   dropMenu = (
     <Menu>
       <Menu.Item>nothing</Menu.Item>
@@ -57,12 +79,11 @@ class App extends React.Component {
 
   languageMenu = (
     <Menu>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "zh-cn")}>中文</Menu.Item>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "zh-Hant")}>繁體中文</Menu.Item>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "en")}>English</Menu.Item>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "es")}>español</Menu.Item>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "ko")}>한국어</Menu.Item>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "vi")}>tiếng việt</Menu.Item>
+      {
+        languages.map((item) => (
+          < Menu.Item onClick={this.changeLanguage.bind(this, item.key)} >{item.label}</Menu.Item>
+        ))
+      }
     </Menu>
   )
 
@@ -79,14 +100,15 @@ class App extends React.Component {
     })
   }
 
+  // 点击logo触发的跳转
   toWelcome() {
-    if (document.getElementsByClassName("ant-menu-item-selected") && document.getElementsByClassName("ant-menu-item-selected")[0]){
+    if (document.getElementsByClassName("ant-menu-item-selected") && document.getElementsByClassName("ant-menu-item-selected")[0]) {
       document.getElementsByClassName("ant-menu-item-selected")[0].classList.remove("ant-menu-item-selected");
     }
     this.setState({
       breadcrumb: [""],
-      openKeys:[],
-      defaultKey:[]
+      openKeys: [],
+      defaultKey: []
     })
   }
 
