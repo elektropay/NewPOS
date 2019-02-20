@@ -1,182 +1,272 @@
 export default {
     "Restaurant": {
-        zh_cn: "餐馆",
-        zh_Hant: "餐馆",
-        en: "Restaurant"
+        en: "Restaurant",
+        "zh-cn": "餐馆",
+        "zh-Hant": "餐館",
+        es: "Restaurante",
+        vi: "Nhà hàng",
+        ko: "레스토랑"
     },
     "Restaurant1": {
-        zh_cn: "餐馆",
-        zh_Hant: "餐馆",
-        en: "Restaurant"
+        en: "Restaurant",
+        "zh-cn": "餐馆",
+        "zh-Hant": "餐館",
+        es: "Restaurante",
+        vi: "Nhà hàng",
+        ko: "레스토랑"
     },
     "Staff": {
-        zh_cn: "员工管理",
-        zh_Hant: "员工管理",
-        en: "Staff"
+        en: "Staff",
+        "zh-cn": "员工管理",
+        "zh-Hant": "員工管理",
+        es: "Personal",
+        vi: "nhân viên",
+        ko: "직원"
     },
     "Table": {
-        zh_cn: "桌子",
-        zh_Hant: "桌子",
-        en: "Table"
+        en: "Table",
+        "zh-cn": "桌子",
+        "zh-Hant": "桌子",
+        es: "Mesa y area",
+        vi: "bàn",
+        ko: "표"
     },
     "Delivery": {
-        zh_cn: "外送区域",
-        zh_Hant: "外送区域",
-        en: "Delivery Area"
+        en: "Delivery Area",
+        "zh-cn": "外送区域",
+        "zh-Hant": "外送區域",
+        es: "Area de entrega",
+        vi: "khu vực giao hàng",
+        ko: "배달 구역"
     },
     "Gallery": {
-        zh_cn: "图片库",
-        zh_Hant: "图片库",
-        en: "Gallery"
+        en: "Gallery",
+        "zh-cn": "图片库",
+        "zh-Hant": "圖片庫",
+        es: "Galeria",
+        vi: "phòng trưng bày",
+        ko: "갱도"
     },
     "Analysis": {
-        zh_cn: "分析",
-        zh_Hant: "分析",
-        en: "Analysis"
+        en: "Analysis",
+        "zh-cn": "分析",
+        "zh-Hant": "分析",
+        vi: "Phân tích",
+        ko: "분석"
     },
     "Menu": {
-        icon: "snippets",
-        zh_cn: "菜单",
-        zh_Hant: "菜单",
-        en: "Menu"
+        en: "Menu Group",
+        "zh-cn": "菜单",
+        "zh-Hant": "菜單",
+        es: "Grupo de Menu",
+        vi: "Menu Group",
+        ko: "메뉴 그룹"
     },
     "Menu1": {
-        zh_cn: "菜单编辑",
-        zh_Hant: "菜单编辑",
-        en: "Menu"
+        en: "Menu",
+        "zh-cn": "菜单编辑",
+        "zh-Hant": "菜單編輯",
+        es: "Grupo",
+        vi: "nhóm",
+        ko: "메뉴"
     },
     "Modifier": {
-        zh_cn: "调味指示",
-        zh_Hant: "调味指示",
-        en: "Modifier Actions"
+        en: "Modifier Actions",
+        "zh-cn": "调味指示",
+        "zh-Hant": "調味指示",
+        es: "Opcion-Global",
+        vi: "lựa chọn toàn cầu",
+        ko: "모디파이어 액션"
     },
     "Item": {
-        zh_cn: "菜品单位",
-        zh_Hant: "菜品单位",
-        en: "Item Size"
+        en: "Item Size",
+        "zh-cn": "菜品单位",
+        "zh-Hant": "菜品單位",
+        es: "Tamano de Articulo",
+        vi: "kích cỡ món",
+        ko: "상품 크기"
     },
     "Course": {
-        zh_cn: "菜序名",
-        zh_Hant: "菜序名",
-        en: "Course Name"
+        en: "Course Name",
+        "zh-cn": "菜序名",
+        "zh-Hant": "菜序名",
+        vi: "tên món",
+        ko: "코스 명"
     },
     "Promotion": {
-        zh_cn: "促销策略",
-        zh_Hant: "促销策略",
-        en: "Promotion"
+        en: "Promotion",
+        "zh-cn": "促销策略",
+        "zh-Hant": "促銷策略",
+        ko: "승진"
     },
     "TimeBase": {
-        zh_cn: "按时计费",
-        zh_Hant: "按时计费",
-        en: "TimeBase Fee"
+        en: "TimeBase Fee",
+        "zh-cn": "按时计费",
+        "zh-Hant": "按時計費",
+        ko: "타임베이스 수수료"
     },
     "Order": {
-        zh_cn: "订单类型",
-        zh_Hant: "订单类型",
-        en: "Order Type"
+        en: "Order Type",
+        "zh-cn": "订单类型",
+        "zh-Hant": "訂單類型",
+        ko: "주문 유형"
     },
     "Inventory": {
-        icon: "database",
-        zh_cn: "库存管理",
-        zh_Hant: "库存管理",
-        en: "Inventory"
+        en: "Inventory",
+        "zh-cn": "库存管理",
+        "zh-Hant": "庫存管理",
+        es: "Inventario",
+        vi: "Hàng tồn kho",
+        ko: "목록"
     },
     "Items": {
-        zh_cn: "物品",
-        zh_Hant: "物品",
-        en: "Items"
+        en: "Items",
+        "zh-cn": "物品",
+        "zh-Hant": "物品",
+        es: "Articulos",
+        vi: "mục",
+        ko: "항목"
     },
     "Channel": {
-        zh_cn: "渠道",
-        zh_Hant: "渠道",
-        en: "Channel"
+        en: "Channel",
+        "zh-cn": "渠道",
+        "zh-Hant": "渠道",
+        es: "Canal",
+        vi: "kênh",
+        ko: "채널"
     },
     "Management": {
-        zh_cn: "管理",
-        zh_Hant: "管理",
-        en: "Management"
+        en: "Management",
+        "zh-cn": "管理",
+        "zh-Hant": "管理",
+        es: "Gerencia",
+        vi: "Quản lý",
+        ko: "조치"
     },
     "PriceAndPayment": {
-        icon: "dollar",
-        zh_cn: "价格与付款",
-        zh_Hant: "价格与付款",
-        en: "PriceAndPayment"
+        en: "Price & Payment",
+        "zh-cn": "价格与付款",
+        "zh-Hant": "價格與付款",
+        es: "Precio y Pago",
+        vi: "Giá & Thanh toán",
+        ko: "가격 및 지불"
     },
     "Tax": {
-        zh_cn: "祱",
-        zh_Hant: "祱",
-        en: "Tax"
+        en: "Tax",
+        "zh-cn": "税",
+        "zh-Hant": "稅",
+        es: "Impuestos",
+        vi: "thuế",
+        ko: "세"
     },
     "Discount": {
-        zh_cn: "折扣",
-        zh_Hant: "折扣",
-        en: "Discount"
+        en: "Discount",
+        "zh-cn": "折扣",
+        "zh-Hant": "折扣",
+        es: "Descuento",
+        vi: "giảm giá",
+        ko: "할인"
     },
     "Charge": {
-        zh_cn: "加收",
-        zh_Hant: "加收",
-        en: "Charge"
+        en: "Charge",
+        "zh-cn": "加收",
+        "zh-Hant": "加收",
+        es: "Carga",
+        vi: "thanh toán",
+        ko: "요금"
     },
     "Payment": {
-        zh_cn: "付款类型",
-        zh_Hant: "付款类型",
-        en: "Payment Type"
+        en: "Payment Type",
+        "zh-cn": "付款类型",
+        "zh-Hant": "付款類型",
+        es: "Tipo de pago",
+        vi: "Loại thanh toán",
+        ko: "지불 유형"
     },
     "Cash": {
-        zh_cn: "收银机",
-        zh_Hant: "收银机",
-        en: "Cash Register"
+        en: "Cash Register",
+        "zh-cn": "收银机",
+        "zh-Hant": "收銀機",
+        es: "Cajon de dinero",
+        vi: "Máy tính tiền",
+        ko: "금전 등록기"
     },
     "System": {
-        icon: "setting",
-        zh_cn: "系统设置",
-        zh_Hant: "系统设置",
-        en: "System"
+        en: "System",
+        "zh-cn": "系统设置",
+        "zh-Hant": "系統設置",
+        es: "Sistema",
+        vi: "hệ thống",
+        ko: "체계"
     },
     "Setting": {
-        zh_cn: "系统",
-        zh_Hant: "系统",
-        en: "Setting"
+        en: "Setting",
+        "zh-cn": "设置",
+        "zh-Hant": "設置",
+        es: "Configuracion",
+        vi: "thiết lập",
+        ko: "환경"
     },
     "Printer": {
-        zh_cn: "打印机和设备",
-        zh_Hant: "打印机和设备",
-        en: "Printer&Device"
+        en: "Printer&Device",
+        "zh-cn": "打印机&设备",
+        "zh-Hant": "印表機&設備",
+        es: "Impresora y el dispositivo",
+        vi: "Máy in & thiết bị",
+        ko: "프린터 및 장치"
     },
     "Print": {
-        zh_cn: "打印设置",
-        zh_Hant: "打印设置",
-        en: "Print-Setup"
+        en: "Print-Setup",
+        "zh-cn": "打印设置",
+        "zh-Hant": "打印設置",
+        es: "Configuracion de Impresora",
+        vi: "thiết lập in",
+        ko: "인쇄 설정"
     },
     "Language": {
-        zh_cn: "多语言",
-        zh_Hant: "多语言",
-        en: "Language"
+        en: "Language",
+        "zh-cn": "多语言",
+        "zh-Hant": "多語言",
+        es: "Idioma ",
+        vi: "ngôn ngữ",
+        ko: "언어"
     },
     "Partner": {
-        zh_cn: "整合功能应用",
-        zh_Hant: "整合功能应用",
-        en: "Partner Integration"
+        en: "Partner Integration",
+        "zh-cn": "整合功能应用",
+        "zh-Hant": "整合功能應用",
+        ko: "파트너 통합"
     },
     "Customer": {
-        icon: "team",
-        zh_cn: "顾客管理",
-        zh_Hant: "顾客管理",
-        en: "Customer"
+        en: "Customer",
+        "zh-cn": "顾客管理",
+        "zh-Hant": "顧客管理",
+        es: "Cliente",
+        vi: "khách hàng",
+        ko: "고객"
     },
     "Gift": {
-        zh_cn: "礼品卡",
-        zh_Hant: "礼品卡",
-        en: "Gift Card"
+        en: "Gift Card",
+        "zh-cn": "礼品卡",
+        "zh-Hant": "禮品卡",
+        es: "Regalo’",
+        vi: "thẻ quà tặng",
+        ko: "기프트 카드"
     },
     "Loyalty": {
-        zh_cn: "会员卡",
-        zh_Hant: "会员卡",
-        en: "Loyalty"
+        en: "Loyalty",
+        "zh-cn": "会员卡",
+        "zh-Hant": "會員卡",
+        es: "Lealtad",
+        vi: "lòng trung thành",
+        ko: "충의"
     },
     "Customer1": {
-        zh_cn: "顾客信息",
-        zh_Hant: "顾客信息",
-        en: "Customer"
+        en: "Customer",
+        "zh-cn": "顾客信息",
+        "zh-Hant": "顧客信息",
+        es: "Cliente",
+        vi: "khách hàng",
+        ko: "고객"
     }
 }

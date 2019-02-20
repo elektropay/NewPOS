@@ -1,8 +1,30 @@
 export default {
     language:{
-        en:'English',
-        "zh-cn":"中文",
-        "zh-Hant":"繁體中文"
+        en: "English",
+        French: "français",
+        es: "español",
+        "zh-cn": "中文",
+        "zh-Hant": "繁體中文",
+        ko: "한국어",
+        vi: "tiếng việt",
+        jp: "日本語",
+        it: "Italian",
+        de: "German",
+        th: "Thai",
+        id: "Indonesian",
+        el: "Greek",
+        hi: "Hindi",
+        pt: "Portuguese",
+        ru: "Russian"
+    },
+    loading:{
+        en: "Loading...",
+        "zh-cn": "加载中...",
+        "zh-Hant": "加載中...",
+        French: "Téléchargment...",
+        es: "Cargando...",
+        vi: "Đang tải...",
+        ko: "로드 중입니다..."
     },
     new: {
         en: 'New',

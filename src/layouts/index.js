@@ -19,7 +19,6 @@ if (pathname !== "") {
   Object.keys(route).forEach((parentKey) => {
     const children = route[parentKey].children;
     Object.keys(children).forEach((subKey) => {
-      console.log(children[subKey])
       if ((children[subKey].component && children[subKey].id === pathname) || (children[subKey].url && children[subKey].url === pathname + ".html")) {
         breadcrumb = [i18n[route[parentKey].id], i18n[children[subKey].id]]
         openKeys = [route[parentKey].id];
@@ -58,9 +57,12 @@ class App extends React.Component {
 
   languageMenu = (
     <Menu>
-      <Menu.Item onClick={this.changeLanguage.bind(this, "en")}>English</Menu.Item>
       <Menu.Item onClick={this.changeLanguage.bind(this, "zh-cn")}>中文</Menu.Item>
       <Menu.Item onClick={this.changeLanguage.bind(this, "zh-Hant")}>繁體中文</Menu.Item>
+      <Menu.Item onClick={this.changeLanguage.bind(this, "en")}>English</Menu.Item>
+      <Menu.Item onClick={this.changeLanguage.bind(this, "es")}>español</Menu.Item>
+      <Menu.Item onClick={this.changeLanguage.bind(this, "ko")}>한국어</Menu.Item>
+      <Menu.Item onClick={this.changeLanguage.bind(this, "vi")}>tiếng việt</Menu.Item>
     </Menu>
   )
 
@@ -78,8 +80,13 @@ class App extends React.Component {
   }
 
   toWelcome() {
+    if (document.getElementsByClassName("ant-menu-item-selected") && document.getElementsByClassName("ant-menu-item-selected")[0]){
+      document.getElementsByClassName("ant-menu-item-selected")[0].classList.remove("ant-menu-item-selected");
+    }
     this.setState({
-      breadcrumb: [""]
+      breadcrumb: [""],
+      openKeys:[],
+      defaultKey:[]
     })
   }
 
