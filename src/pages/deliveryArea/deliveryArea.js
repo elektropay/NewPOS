@@ -7,7 +7,6 @@ const { Header, Content } = Layout;
 
 class deliveryAreaPage extends React.Component {
     state = {
-        loading: true,
         editState: "wait",
         list: []
     }
@@ -16,7 +15,6 @@ class deliveryAreaPage extends React.Component {
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-                loading: false,
                 list: [{
                     id: "1",
                     city: "Brooklyn",
@@ -57,11 +55,8 @@ class deliveryAreaPage extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.setState({
-                    loading: true
-                })
                 setTimeout(() => {
-                    message.success(i18n.submitSuccess);
+                    message.success(i18n.saveSuccess);
                     if (this.state.editState === "create") {
                         values.id = this.state.list.length + 1;
                         this.state.list.push(values)
@@ -75,7 +70,6 @@ class deliveryAreaPage extends React.Component {
                         this.setState({ list })
                     }
                     this.setState({
-                        loading: false,
                         editState:"wait"
                     })
                 }, 500)
@@ -91,9 +85,6 @@ class deliveryAreaPage extends React.Component {
     // 删除数据
     deleteItem = (e, item) => {
         e.stopPropagation();
-        this.setState({
-            loading: true
-        });
 
         setTimeout(() => {
             message.success(i18n.deleteSuccess);
@@ -104,9 +95,6 @@ class deliveryAreaPage extends React.Component {
                 }
             }
             this.state.list.splice(index, 1)
-            this.setState({
-                loading: false
-            })
         }, 500)
     }
 
@@ -172,9 +160,6 @@ class deliveryAreaPage extends React.Component {
                             </Form.Item>
                         </Form>
                     </div>
-                </div>
-                <div className="loadMask" style={{ display: this.state.loading ? "block" : "none" }}>
-                    <Spin indicator={(<Icon type="loading" spin style={{ fontSize: '40px' }} />)} />
                 </div>
             </div>
         )

@@ -7,7 +7,6 @@ const { Header, Content } = Layout;
 
 class deliveryAreaPage extends React.Component {
     state = {
-        loading: true,
         editState: "wait",
         list: []
     }
@@ -16,7 +15,6 @@ class deliveryAreaPage extends React.Component {
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-                loading: false,
                 list: [{
                     id: "1",
                     city: "Brooklyn",
@@ -55,9 +53,6 @@ class deliveryAreaPage extends React.Component {
     // 提交数据
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            loading: true
-        })
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 setTimeout(() => {
@@ -75,7 +70,6 @@ class deliveryAreaPage extends React.Component {
                         this.setState({ list })
                     }
                     this.setState({
-                        loading: false,
                         editState: "wait"
                     })
                 }, 500)
@@ -91,10 +85,6 @@ class deliveryAreaPage extends React.Component {
     // 删除数据
     deleteItem = (e, item) => {
         e.stopPropagation();
-        this.setState({
-            loading: true
-        });
-
         setTimeout(() => {
             message.success(i18n.deleteSuccess);
             var index;
@@ -104,9 +94,6 @@ class deliveryAreaPage extends React.Component {
                 }
             }
             this.state.list.splice(index, 1)
-            this.setState({
-                loading: false
-            })
         }, 500)
     }
 

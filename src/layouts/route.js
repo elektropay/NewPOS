@@ -10,8 +10,8 @@ export default [
         icon: "shop",
         children: [{
             id: "Restaurant1",
-            url: "company.html"
-            // component: restaurant
+            // url: "company.html"
+            component: restaurant
         }, {
             id: "Staff",
             url: "staff.html"

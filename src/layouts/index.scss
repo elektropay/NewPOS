@@ -32,7 +32,7 @@
     margin: 20px;
     box-shadow: 2px 2px 4px #ddd;
     position: relative;
-    padding-top:0.5%;
+    padding-top: 0.5%;
 }
 
 .iframeCon iframe {
@@ -246,8 +246,42 @@
     font-size: 16px;
 }
 
-.ant-btn-lg{
-    width:320px;
+.ant-btn-lg {
+    width: 320px;
     height: 42px;
     line-break: 42px;
+}
+
+.ant-input-disabled {
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.ant-message-notice-content {
+    font-size: 16px;
+    padding: 0;
+    box-shadow: none;
+    background: none;
+}
+
+.ant-message-custom-content {
+    padding: 12px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    background: #fff;
+    border-radius: 5px;
+}
+
+.ant-message-error {
+    box-shadow: 0 4px 20px rgba(236, 6, 6, 0.3);
+}
+
+.ant-message-success {
+    box-shadow: 0 4px 20px rgba(82, 196, 26, 0.45);
+}
+
+.ant-message-warning {
+    box-shadow: 0 4px 20px rgba(250, 173, 20, 0.45);
+}
+
+.ant-message .anticon {
+    font-size: 18px;
 }

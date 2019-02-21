@@ -141,12 +141,14 @@ function callWebService(soapType, responseHandler, args) {
                 responseText = responseText.substring(start + 11, end);
 
                 var myJsonObject = xmlObjTree.parseXML(responseText);
+                console.log(JSON.stringify(myJsonObject))
                 responseHandler(myJsonObject, args);
             }
         }
         xmlhttp.send(soapXML);
 
-        // var requestObj = transRequest(soapXML)
+        var requestObj = transRequest(soapXML)
+        console.log(JSON.stringify(requestObj))
         // axios.post(requestObj.url,requestObj.data).then(function (response) {
         // var responseData={}
         // responseData[requestObj.api.toLowerCase() +"responsetype"] = transResponse(response)

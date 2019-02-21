@@ -1,32 +1,96 @@
 import React from 'react';
-import { Spin, Button, Icon, Form, Select, Input, Row, Col, message } from 'antd'
+import { Button, Form, Select, Input, Row, Col, message } from 'antd'
 import "./restaurant.scss"
 import { restaurant as i18n } from '../../i18n/index.js'
+import axios from '../../utils/axios';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => ({
+    tax: state.hours
+})
 const Option = Select.Option;
 
 class tabCompany extends React.Component {
     state = {
-        loading: true,
-        data: {}
+        appinfo: ""
     }
     componentDidMount() {
-        let data = { "id": 1, "merchantcode": 2020, "merchantgroupid": "dddd", "storeid": 33, "name": "Menusifu", "address1": "42-34 College Point Blvd", "city": "Flushing", "state": "NY", "zipcode": 11355, "telephone1": "888-809-8867", "fax": "rang", "email": "yangxiang@menusifu.com", "website": "www.baidu.com", "geocoordinate": "null,null", "appinfo": { "version": "1.8.0.4.83a9e76", "registered": "false", "licensestatus": "TRIAL", "licenseinfo": "POS License : 10, E-Menu License : 100, Tablet POS License : 10" }, "paymentserviceenabled": "false", "hours": { "id": 1, "name": "All Day", "description": "All Day", "from": "08:00", "to": "02:50", "systemgenerated": "false" }, "minamountforonlineorder": 0, "distancelimitforonlineorder": 0, "wechatqrcodeurl": "http://weixin.qq.com/r/mDqttSzEG3FkrWjW92_K", "timezoneoffset": 28800000, "reseller": "abcd", "menusifulogochecksum": "32037.17.3541.9961", "region": "NY", "connectedtocloudservice": "false", "appinstance": [{ "displayname": 11, "type": "POS", "inuse": "true" }, { "displayname": "QQ", "type": "POS", "inuse": "false" }, { "displayname": 22, "type": "POS", "inuse": "true" }] };
-        this.setState({
-            loading: false,
-            data: data
-        })
-        // this.props.form.setFieldsValue(data)
+        this.getRestaurantInfo()
+    }
+    // 获取餐厅信息
+    getRestaurantInfo(){
+        setTimeout(() => {
+            var response = {
+                code: 0,
+                info: "",
+                data: {
+                    "id": 1,
+                    "merchantId": "111",
+                    "merchantCode": 2020,
+                    "merchantGroupId": "dddd",
+                    "storeId": 33,
+                    "name": "Menusifu",
+                    "address1": "42-34 College Point Blvd",
+                    "address2": "444-34 College Point",
+                    "city": "Flushing",
+                    "state": "NY",
+                    "zipCode": 11355,
+                    "telephone1": 8888098867,
+                    "telephone2": 555888098867,
+                    "fax": "rang",
+                    "email": "yangxiang@menusifu.com",
+                    "website": "www.baidu.com",
+                    "geocoordinate": "null,null ",
+                    "appinfo": {
+                        "version": "1.8.0.4.83a9e76",
+                        "registered": "false",
+                        "licensestatus": "TRIAL",
+                        "licenseinfo": "POS License : 10,E - Menu License: 100,Tablet POS License: 10 "
+                    },
+                    "hours": 1,
+                    "timezoneoffset": 28800000,
+                    "reseller": "abcd",
+                    "region": "NY",
+                    "appinstance": [{
+                        "displayname": 11,
+                        "type": "POS",
+                        "inuse": "true"
+                    },
+                    {
+                        "displayname": "QQ",
+                        "type": "POS",
+                        "inuse": "true"
+                    },
+                    {
+                        "displayname": 22,
+                        "type": "POS",
+                        "inuse": "true"
+                    }
+                    ]
+                }
+            }
+            if (response.code == 0) {
+                this.setState({
+                    appinfo: response.data.appinfo.licensestatus + ". " + response.data.appinfo.licenseinfo
+                })
+                this.props.form.setFieldsValue(response.data)
+            } else {
+                message.error(i18n.loadFail + response.info ? (i18n.colon + response.info) : "")
+            }
+        }, 200)
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.setState({
-            loading: true
-        })
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log(values)
                 // 进行提交
+                axios.post("/api/saveCompanyProfile", values).then(() => {
+                    message.success(i18n.saveSuccess)
+                }, (err) => {
+                    // err是自动生成的提示文本，也可以自定义提示内容
+                    message.error(err)
+                })
             }
         });
     }
@@ -36,8 +100,7 @@ class tabCompany extends React.Component {
 
         return (
             <div className="tabCompany">
-
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     {getFieldDecorator('id')(<Input type="hidden" />)}
                     <Row gutter={24}>
                         <Col span={12}>
@@ -47,7 +110,7 @@ class tabCompany extends React.Component {
                         </Col>
                         <Col span={12}>
                             <Form.Item label={i18n.merchantId} >
-                                {getFieldDecorator('merchantId')(<Input />)}
+                                {getFieldDecorator('merchantId')(<Input disabled />)}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -103,7 +166,7 @@ class tabCompany extends React.Component {
                             {getFieldDecorator('state')(<Input />)}
                         </Form.Item></Col>
                         <Col span={8}><Form.Item label={i18n.zipCode} >
-                            {getFieldDecorator('zipcode')(<Input />)}
+                            {getFieldDecorator('zipCode')(<Input />)}
                         </Form.Item></Col>
                     </Row>
 
@@ -119,9 +182,7 @@ class tabCompany extends React.Component {
                             )}
                         </Form.Item></Col>
                         <Col span={12}><Form.Item label={i18n.licenseInfo} >
-                            {getFieldDecorator('licenseInfo')(
-                                <Input />
-                            )}
+                            <Input disabled value={this.state.appinfo} />
                         </Form.Item></Col>
                     </Row>
 
@@ -139,11 +200,8 @@ class tabCompany extends React.Component {
                         <Button style={{ marginLeft: "100px" }} size="large" onClick={this.handleActive.bind(this)}>{i18n.activeRequest}</Button>
                     </Form.Item>
                 </Form>
-                <div className="loadMask" style={{ display: this.state.loading ? "block" : "none" }}>
-                    <Spin indicator={(<Icon type="loading" spin style={{ fontSize: '40px' }} />)} />
-                </div>
             </div>
         )
     }
 }
-export default Form.create()(tabCompany)
+export default connect(mapStateToProps)(Form.create()(tabCompany))

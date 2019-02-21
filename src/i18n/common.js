@@ -17,6 +17,21 @@ export default {
         pt: "Portuguese",
         ru: "Russian"
     },
+    colon:{
+        en:": ",
+        "zh-cn":"：",
+        "zh-Hant": "：",
+    },
+    requestError:{
+        en:"Request Error",
+        "zh-cn":"请求错误",
+        "zh-Hant": "請求錯誤"
+    },
+    badRequest:{
+        en:"Request Failed: please check your network or connect the customer service",
+        "zh-cn": "请求失败：请检查网络设置或联系客服",
+        "zh-Hant":"請求失敗：請檢查網絡設定或聯系客服"
+    },
     loading:{
         en: "Loading...",
         "zh-cn": "加载中...",
@@ -64,7 +79,7 @@ export default {
     },
     loadFail:{
         en: 'Unable to load data',
-        'zh-cn': '读取数据失败',
+        'zh-cn': '数据加载失败',
         'zh-Hant': '讀取數據失敗',
         es: 'No se puede cargar datos',
         ko: '데이터 로드를 할 수 없습니다',
@@ -75,7 +90,7 @@ export default {
         'zh-cn':"选择列表中的项目进行编辑，或者新建一个项目",
         en:"Select a item in the list to edit, or create a new item"
     },
-    submitSuccess:{
+    saveSuccess:{
         en: 'Submitted Successfully!',
         'zh-cn': '保存成功',
         'zh-Hant': '保存成功',
@@ -83,7 +98,7 @@ export default {
         vi: 'Đã gửi thành công!',
         ms: 'ส่งเรียบร้อยแล้ว!'
     },
-    submitFail:{
+    saveFail:{
         en: 'Unable to submit your request.',
         'zh-cn': '保存失败.',
         'zh-Hant': '保存失敗.',
