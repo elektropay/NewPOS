@@ -6,8 +6,16 @@ import axios from '../../utils/axios';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
-    tax: state.hours
+    hours: state.restaurantHour
 })
+
+const mapDispatchToProps = dispatch => ({
+    setHours: (param) => dispatch({
+        type: "SET_HOURS",
+        param
+    })
+})
+
 const Option = Select.Option;
 
 class tabCompany extends React.Component {
@@ -15,68 +23,81 @@ class tabCompany extends React.Component {
         appinfo: ""
     }
     componentDidMount() {
+        this.getRestaurantHour()
         this.getRestaurantInfo()
     }
+    // 获取营业时间
+    getRestaurantHour() {
+        var response = [{
+            id: 1,
+            name: "All Day",
+            description: "All Day",
+            from: "08:00",
+            to: "02:50",
+            systemGenerated: "false"
+        }, {
+            id: 2,
+            name: " Lunch ",
+            description: "Lunch",
+            from: "08:00",
+            to: "13:50",
+            systemGenerated: "false"
+        }];
+        this.props.setHours(response)
+    }
+
     // 获取餐厅信息
-    getRestaurantInfo(){
+    getRestaurantInfo() {
         setTimeout(() => {
             var response = {
-                code: 0,
-                info: "",
-                data: {
-                    "id": 1,
-                    "merchantId": "111",
-                    "merchantCode": 2020,
-                    "merchantGroupId": "dddd",
-                    "storeId": 33,
-                    "name": "Menusifu",
-                    "address1": "42-34 College Point Blvd",
-                    "address2": "444-34 College Point",
-                    "city": "Flushing",
-                    "state": "NY",
-                    "zipCode": 11355,
-                    "telephone1": 8888098867,
-                    "telephone2": 555888098867,
-                    "fax": "rang",
-                    "email": "yangxiang@menusifu.com",
-                    "website": "www.baidu.com",
-                    "geocoordinate": "null,null ",
-                    "appinfo": {
-                        "version": "1.8.0.4.83a9e76",
-                        "registered": "false",
-                        "licensestatus": "TRIAL",
-                        "licenseinfo": "POS License : 10,E - Menu License: 100,Tablet POS License: 10 "
-                    },
-                    "hours": 1,
-                    "timezoneoffset": 28800000,
-                    "reseller": "abcd",
-                    "region": "NY",
-                    "appinstance": [{
-                        "displayname": 11,
-                        "type": "POS",
-                        "inuse": "true"
-                    },
-                    {
-                        "displayname": "QQ",
-                        "type": "POS",
-                        "inuse": "true"
-                    },
-                    {
-                        "displayname": 22,
-                        "type": "POS",
-                        "inuse": "true"
-                    }
-                    ]
+                "id": 1,
+                "merchantId": "111",
+                "merchantCode": 2020,
+                "merchantGroupId": "dddd",
+                "storeId": 33,
+                "name": "Menusifu",
+                "address1": "42-34 College Point Blvd",
+                "address2": "444-34 College Point",
+                "city": "Flushing",
+                "state": "NY",
+                "zipCode": 11355,
+                "telephone1": 8888098867,
+                "telephone2": 555888098867,
+                "fax": "rang",
+                "email": "yangxiang@menusifu.com",
+                "website": "www.baidu.com",
+                "geocoordinate": "null,null ",
+                "appinfo": {
+                    "version": "1.8.0.4.83a9e76",
+                    "registered": "false",
+                    "licensestatus": "TRIAL",
+                    "licenseinfo": "POS License : 10,E - Menu License: 100,Tablet POS License: 10 "
+                },
+                "hours": 1,
+                "timezoneoffset": 28800000,
+                "reseller": "abcd",
+                "region": "NY",
+                "appinstance": [{
+                    "displayname": 11,
+                    "type": "POS",
+                    "inuse": "true"
+                },
+                {
+                    "displayname": "QQ",
+                    "type": "POS",
+                    "inuse": "true"
+                },
+                {
+                    "displayname": 22,
+                    "type": "POS",
+                    "inuse": "true"
                 }
+                ]
             }
-            if (response.code == 0) {
-                this.setState({
-                    appinfo: response.data.appinfo.licensestatus + ". " + response.data.appinfo.licenseinfo
-                })
-                this.props.form.setFieldsValue(response.data)
-            } else {
-                message.error(i18n.loadFail + response.info ? (i18n.colon + response.info) : "")
-            }
+            this.setState({
+                appinfo: response.appinfo.licensestatus + ". " + response.appinfo.licenseinfo
+            })
+            this.props.form.setFieldsValue(response)
         }, 200)
     }
     handleSubmit(e) {
@@ -174,10 +195,9 @@ class tabCompany extends React.Component {
                         <Col span={12}><Form.Item label={i18n.hours} >
                             {getFieldDecorator('hours')(
                                 <Select style={{ width: "100%" }} >
-                                    <Option value="1" key="1">All Day: 08:00-02:50</Option>
-                                    <Option value="2" key="2"> Lunch : 08:00-15:30</Option>
-                                    <Option value="4" key="4">Dinner: 15:30-02:50</Option>
-                                    <Option value="6" key="6">abcdefg: 02:00-08:00</Option>
+                                {this.props.hours.map((item)=>{
+                                    return (<Option value={item.id} key={item.id}>{item.name+":"+item.from+"-"+item.to}</Option>)
+                                })}
                                 </Select>
                             )}
                         </Form.Item></Col>
@@ -204,4 +224,4 @@ class tabCompany extends React.Component {
         )
     }
 }
-export default connect(mapStateToProps)(Form.create()(tabCompany))
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(tabCompany))

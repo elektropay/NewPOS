@@ -1,3 +1,7 @@
+/**
+ * 遮罩模块，通过 redux mask 控制显示隐藏
+ * 默认嵌入在axios方法，有请求未返回时显示
+ */
 import React from 'react';
 import { connect } from 'react-redux'
 import { Spin, Icon } from 'antd'

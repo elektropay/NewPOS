@@ -8,17 +8,14 @@ import TabDataManagement from './tabDataManagement'
 import TabOther from './tabOther'
 import TabRestaurantHours from './tabRestaurantHours'
 
-
 const TabPane = Tabs.TabPane;
 
 export default class welcome extends React.Component {
-    tabClick(key){
-        console.log(key)
-    }
+
     render() {
         return (
             <div className="restaurantPage">
-                <Tabs defaultActiveKey="1" onChange={this.tabClick.bind(this)}>
+                <Tabs defaultActiveKey="1">
                     <TabPane tab={i18n.company} key="1"><TabCompany/></TabPane>
                     <TabPane tab={i18n.restaurantHours} key="2"><TabRestaurantHours/></TabPane>
                     <TabPane tab={i18n.other} key="3"><TabOther/></TabPane>
