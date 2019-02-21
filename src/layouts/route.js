@@ -2,6 +2,7 @@
 // route组件用component引入
 
 import deliveryArea from '../pages/deliveryArea/deliveryArea'
+import gallery from '../pages/Gallery/gallery'
 
 export default [
     {
@@ -21,7 +22,7 @@ export default [
             component: deliveryArea
         }, {
             id: "Gallery",
-            url: "gallery.html"
+            component: gallery
         }, {
             id: "Analysis",
             url: "report.html"
