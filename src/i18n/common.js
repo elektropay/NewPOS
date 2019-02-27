@@ -169,6 +169,15 @@ export default {
         vi: 'Tên',
         ms: 'ชื่อ'
     },
+    needName:{
+        en: 'Name cannot be empty',
+        'zh-cn': '名称不能为空',
+        'zh-Hant': '名稱不能為空',
+        es: 'Nombre no puede estar vacío',
+        ko: '이름을 빈칸으로 둘수 없습니다',
+        vi: 'Tên không thể để trống',
+        ms: 'ชื่อต้องไม่ว่างเปล่า'
+    },
     passcode:{
         en: 'Passcode',
         'zh-cn': '密码',

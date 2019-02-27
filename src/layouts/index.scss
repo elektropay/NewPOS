@@ -41,6 +41,10 @@
     height: 99%;
 }
 
+.iframeCon>div {
+    min-height: 99%;
+}
+
 .collapseBtn {
     font-size: 20px;
     width: 64px;
@@ -180,7 +184,7 @@
     padding: 20px 0;
 }
 
-.relativePage {
+.iframeCon>.relativePage {
     height: 100%;
     position: relative;
     .left {
@@ -201,21 +205,32 @@
     }
 }
 
+.ant-tabs-tabpane {
+    .relativePage {
+        display: flex;
+        .left {
+            flex: 1;
+            margin-right: 30px;
+        }
+        .right {
+            flex: 1;
+        }
+    }
+}
+
 .editTip {
     text-align: center;
     font-size: 16px;
     height: 100%;
     border: 1px dashed #ccc;
     color: #999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .editTipCon {
     height: 80px;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%)
 }
 
 .formBtn {
@@ -284,4 +299,9 @@
 
 .ant-message .anticon {
     font-size: 18px;
+}
+
+.ant-tabs .ant-tabs-top-content>.ant-tabs-tabpane-inactive,
+.ant-tabs .ant-tabs-bottom-content>.ant-tabs-tabpane-inactive {
+    padding: 20px !important;
 }

@@ -116,8 +116,20 @@ class App extends React.Component {
     })
   }
 
-  onCollapse = () => {
-    this.setState({ collapsed: !this.state.collapsed });
+  onCollapse = (e) => {
+    e.stopPropagation(); 
+    if (this.state.collapsed){
+      this.setState({
+        openKeys: this.state.oldOpen,
+        collapsed: !this.state.collapsed
+      });
+    }else{
+      this.setState({
+        oldOpen:this.state.openKeys,
+        openKeys: [],
+        collapsed: !this.state.collapsed
+      });
+    }
   }
 
   render() {
@@ -160,7 +172,7 @@ class App extends React.Component {
             <Layout>
               <Content>
                 <Header style={{ background: '#fff', boxShadow: "0 0 10px #ababab", padding: "0 15px 0 0" }}>
-                  <div className="collapseBtn" onClick={this.onCollapse} style={{ display: "inline-block" }}>
+                  <div className="collapseBtn" onClick={this.onCollapse.bind(this)} style={{ display: "inline-block" }}>
                     <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
                   </div>
                   <Breadcrumb style={{ display: "inline-block" }}>

@@ -1,7 +1,6 @@
 import React from 'react';
-import "./deliveryArea.scss"
 import { deliveryArea as i18n } from '../../i18n/index.js'
-import { Layout, Spin, Icon, List, Button, Form, Input, message } from 'antd';
+import { Layout, Icon, List, Button, Form, Input, message } from 'antd';
 
 const { Header, Content } = Layout;
 
@@ -130,7 +129,7 @@ class deliveryAreaPage extends React.Component {
                     </Layout>
                 </div>
                 <div className="right">
-                    <div style={{ display: this.state.editState === "wait" ? "block" : "none" }} className="editTip">
+                    <div style={{ display: this.state.editState === "wait" ? "flex" : "none" }} className="editTip">
                         <div className="editTipCon">
                             <p>{i18n.editOrCreate}</p>
                             <Button className="editTipBtn" type="primary" onClick={this.createNew.bind(this)}>{i18n.new}</Button>
